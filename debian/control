@@ -77,7 +77,6 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
 	jehon-base-minimal,
 	git-buildpackage,
-	shellcheck,
 	binutils-arm-linux-gnueabihf,
 	debhelper,
 	git, git-cola,
