@@ -21,4 +21,4 @@ before_install:
 
 script:
   - make all-test
-  - make-in-docker with-docker
+  - make-in-docker.sh with-docker
