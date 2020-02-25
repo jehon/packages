@@ -1,0 +1,13 @@
+addons:
+  # https://docs.travis-ci.com/user/installing-dependencies/
+  apt:
+    packages:
+      - wget
+      - make
+      - debhelper 
+      - git-buildpackage
+      - binutils-arm-linux-gnueabihf
+
+script:
+  - make all-test
+  - make packages-build
