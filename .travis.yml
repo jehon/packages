@@ -1,15 +1,24 @@
+# https://docs.travis-ci.com/user/reference/bionic/
+dist: bionic
+
 language: generic
+
+services:
+  - docker
 
 addons:
   # https://docs.travis-ci.com/user/installing-dependencies/
   apt:
     packages:
-      - wget
+      # - wget
       - make
-      - debhelper 
-      - git-buildpackage
-      - binutils-arm-linux-gnueabihf
+      # - debhelper
+      # - git-buildpackage
+      # - binutils-arm-linux-gnueabihf
+
+before_install:
+  - make dockers/jehon-docker-build.dockerbuild
 
 script:
   - make all-test
-  - make packages-build
+  - make-in-docker with-docker

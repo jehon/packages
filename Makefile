@@ -75,17 +75,6 @@ all-clean: dockers-clean packages-clean
 all-test: shell-test
 all-build: dockers-build packages-build
 
-# Use as `make with-docker TARGET=build` to run it inside docker
-with-docker:
-ifdef TARGET
-	docker run \
-		--mount "source=$(ROOT),target=/app,type=bind" \
-		jehon/ubuntu-package-build \
-		make "$(TARGET)"
-else
-	$(error with-docker: $$TARGET is not defined)
-endif
-
 debug:
 	$(info * PWD:     $(shell pwd))
 	$(info * DOCKERS: $(DOCKERS))
