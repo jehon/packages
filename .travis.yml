@@ -1,3 +1,5 @@
+language: generic
+
 addons:
   # https://docs.travis-ci.com/user/installing-dependencies/
   apt:
