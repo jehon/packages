@@ -1,6 +1,6 @@
-jehon-debs (1.3.0ubuntu6~11.gbp4832ff) UNRELEASED; urgency=medium
+jehon-debs (1.3.0ubuntu6~12.gbpb7c515) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @4832ff8a1ae0d5955352afa046829492581266cf **
+  ** SNAPSHOT build @b7c51509d1ec1e04031cf4fc05e561c2f3af6fc4 **
 
   * doc: explain how to release
   * chore: anonymize
@@ -17,8 +17,16 @@ jehon-debs (1.3.0ubuntu6~11.gbp4832ff) UNRELEASED; urgency=medium
   * fix: use jh-rsync-backup only in backup-computer
   * fix: script path
   * ci: remove from docker
+  * build: use temp for build to avoid files polution
+  * ci: fix call
+  * ci: deploy to github pages
+  * ci: fix warnings
+  * ci: fix scope of pages
+  * ci: fix cleanup
+  * feature: use github as public repository
+  * fix: move jh-backup-computer to home deb
 
- -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 26 Feb 2020 11:23:07 +0100
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 26 Feb 2020 21:09:05 +0100
 
 jehon-debs (1.3.0ubuntu5) eoan; urgency=medium
 

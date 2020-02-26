@@ -34,7 +34,7 @@ PATCHED="$CACHE/patched-files.txt"
 
 # Patch
 for S in "$ROOT"/patch/* ; do
-	/usr/bin/jh-patch-file.sh "$S" | tee -a "$PATCHING"
+	/usr/bin/jh-patch-file.sh "$S" >> "$PATCHING"
 done
 
 # Unpatch non patched files
@@ -50,7 +50,7 @@ while read L ; do
 	/usr/bin/jh-patch-file.sh "uninstall" "$FILE" "$TAG"
 done < <( diff --new-file "$PATCHED" "$PATCHING" | grep "<" )
 
-echo "Commiting the list of patched files"
+# echo "Commiting the list of patched files"
 cp "$PATCHING" "$PATCHED"
 rm -f "$PATCHING"
 
