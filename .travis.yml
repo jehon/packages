@@ -11,11 +11,7 @@ addons:
   # https://docs.travis-ci.com/user/installing-dependencies/
   apt:
     packages:
-      # - wget
       - make
-      # - debhelper
-      # - git-buildpackage
-      # - binutils-arm-linux-gnueabihf
 
 before_install:
   - make dockers/jehon-docker-build.dockerbuild
@@ -25,8 +21,10 @@ script:
   - make all-build
 
 deploy:
-  provider: pages # See https://docs.travis-ci.com/user/deployment/pages/
-  cleanup: false
+  # See https://docs.travis-ci.com/user/deployment/pages/
+  provider: pages
+  skip_cleanup: true
+  # cleanup: false
   token: $GITHUB_TOKEN  # From https://github.com/settings/tokens, scope "public_repo"
   keep_history: true
   local_dir: repo/
