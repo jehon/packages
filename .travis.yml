@@ -29,5 +29,6 @@ deploy:
   cleanup: false
   token: $GITHUB_TOKEN  # From https://github.com/settings/tokens, scope "public_repo"
   keep_history: true
+  local_dir: repo/
   on:
     branch: master
