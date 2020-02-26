@@ -65,6 +65,11 @@ define recursive-dependencies
 	)
 endef
 
+# 1: command to be run
+define in_docker
+	docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app/app,type=bind" jehon/jehon-docker-build "$1"
+endef
+
 #
 #
 # Generic targets
