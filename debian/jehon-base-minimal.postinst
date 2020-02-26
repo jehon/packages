@@ -100,7 +100,10 @@ case "$1" in
 		# Legacy migration
 		if [ -r /etc/jehon/restricted/backup_computer ]; then
 			mv /etc/jehon/restricted/backup_computer /etc/jehon/restricted/synology_auto
-			sed "s/backup_auto/synology_auto/" -i /etc/jehon/restricted/synology_auto
+		fi
+		if [ -r /etc/jehon/restricted/backup_computer.pub ]; then
+			mv /etc/jehon/restricted/backup_computer.pub /etc/jehon/restricted/synology_auto.pub
+			sed "s/backup-computer/synology_auto/" -i /etc/jehon/restricted/synology_auto
 		fi
 
 		if [ ! -r /etc/jehon/restricted/synology_auto ]; then
