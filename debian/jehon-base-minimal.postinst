@@ -97,6 +97,7 @@ case "$1" in
 		mkdir -p /etc/jehon/restricted/
 		chmod 500 /etc/jehon/restricted
 		
+		# Legacy migration
 		if [ -r /etc/jehon/restricted/backup_computer ]; then
 			mv /etc/jehon/restricted/backup_computer /etc/jehon/restricted/synology_auto
 			sed "s/backup_auto/synology_auto/" -i /etc/jehon/restricted/synology_auto
@@ -106,7 +107,16 @@ case "$1" in
 			ssh-keygen -N "" -C "synology_auto@$(hostname)" -f /etc/jehon/restricted/synology_auto
 			cat /etc/jehon/restricted/synology_auto.pub
 			#echo "!!! Generate a backup key in /etc/jehon/restricted/synology_auto"
-			ech "!! Store the public key into synology backup"
+			echo "!! Store the public key into synology backup"
+		fi
+
+		if [ -r /etc/apt/sources.list.d/jehon-etc-repo.list ]; then
+			echo "Legacy: Removing etc repo from sources"
+			rm -f /etc/apt/sources.list.d/jehon-etc-repo.list
+		fi
+		if [ -r /etc/jehon/repo/ ]; then
+			echo "Legacy: Removing etc repo folder"
+			rm -fr /etc/jehon/repo/
 		fi
     	;;
 
