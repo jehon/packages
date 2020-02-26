@@ -1,6 +1,6 @@
-jehon-debs (1.3.0ubuntu6~4.gbpd6f76a) UNRELEASED; urgency=medium
+jehon-debs (1.3.0ubuntu6~11.gbp4832ff) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @d6f76ad6338d7d37e2e0df403ccdf2ed78e56ac0 **
+  ** SNAPSHOT build @4832ff8a1ae0d5955352afa046829492581266cf **
 
   * doc: explain how to release
   * chore: anonymize
@@ -15,8 +15,10 @@ jehon-debs (1.3.0ubuntu6~4.gbpd6f76a) UNRELEASED; urgency=medium
   * fix: ~ resolution
   * fix: use ${HOME}
   * fix: use jh-rsync-backup only in backup-computer
+  * fix: script path
+  * ci: remove from docker
 
- -- Jean Honlet <jeanhonlet@gmail.com>  Sat, 15 Feb 2020 20:53:10 +0100
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 26 Feb 2020 11:23:07 +0100
 
 jehon-debs (1.3.0ubuntu5) eoan; urgency=medium
 

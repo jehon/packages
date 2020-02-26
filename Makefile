@@ -67,7 +67,7 @@ endef
 
 # 1: command to be run
 define in_docker
-	docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app/app,type=bind" jehon/jehon-docker-build "$1"
+	docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app,type=bind" jehon/jehon-docker-build "$1"
 endef
 
 #
@@ -128,9 +128,8 @@ packages-build: repo/Release
 # repo/Release.gpg:
 # 	gpg --sign --armor --default-key "6DF33296F4DC6F133D99AA62F0A71AB60D52FEBB" --output repo/Release.gpg repo/Release
 
-repo/Release: repo/Packages
-	cd repo && \
-		apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release
+repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
+	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 	git add debian/changelog
 
 repo/Packages: debian/debhelper-build-stamp
@@ -138,26 +137,22 @@ repo/Packages: debian/debhelper-build-stamp
 	cd repo && \
 		dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
 
-debian/debhelper-build-stamp: debian/changelog
+debian/debhelper-build-stamp: dockers/jehon-docker-build.dockerbuild debian/changelog
 	@mkdir -p repo
 	rm -f repo/jehon-*.deb
 #echo "************ build indep ******************"
-	debuild -rsudo --no-lintian -uc -us --build=binary
+	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 #echo "************ build arch:armhf *************"
-#debuild --no-lintian -uc -us --build=any --host-arch armhf
-	mv ../jehon-*.deb repo/
-	rm -f ../jehon-debs*.build
-	rm -f ../jehon-debs*.buildinfo
-	rm -f ../jehon-debs*.changes
+#call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 
-debian/changelog: \
+debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/control \
 		debian/*.postinst \
 		debian/*.install \
 		debian/*.templates \
 		debian/*.triggers \
 		$(shell find . -path "./jehon-*" -type f)
-	gbp dch --git-author --ignore-branch --snapshot
+	$(call in_docker,gbp dch --git-author --ignore-branch --snapshot)
 
 packages-release:
 	@echo "**"
