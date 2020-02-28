@@ -38,6 +38,7 @@ SHELL := /bin/bash
 #
 ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 SYNOLOGY_HOST = synology
+GPG_KEY="313DD85CEFADAF7E"
 
 #
 #
@@ -125,8 +126,8 @@ packages-clean:
 
 packages-build: repo/Release
 
-# repo/Release.gpg:
-# 	gpg --sign --armor --default-key "6DF33296F4DC6F133D99AA62F0A71AB60D52FEBB" --output repo/Release.gpg repo/Release
+repo/Release.gpg:
+ 	gpg --sign --armor --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
 
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)

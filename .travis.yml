@@ -14,9 +14,8 @@ addons:
       - make
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_1433052ca164_key -iv $encrypted_1433052ca164_iv
-    -in gpg.asc.enc -out gpg.asc -d
-  - gpg --import gpg.asc
+  - openssl aes-256-cbc -K $encrypted_1433052ca164_key -iv $encrypted_1433052ca164_iv -in secrets/gpg.asc.enc -out secrets/gpg.asc -d
+  - gpg --import secrets/gpg.asc
   - make dockers/jehon-docker-build.dockerbuild
 
 script:
