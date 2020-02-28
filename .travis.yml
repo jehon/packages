@@ -14,18 +14,22 @@ addons:
       - make
 
 before_install:
+  - openssl aes-256-cbc -K $encrypted_1433052ca164_key -iv $encrypted_1433052ca164_iv
+    -in gpg.asc.enc -out gpg.asc -d
+  - gpg --import gpg.asc
   - make dockers/jehon-docker-build.dockerbuild
 
 script:
   - make all-test
   - make all-build
+  - make repo/Release.gpg
 
 deploy:
   # See https://docs.travis-ci.com/user/deployment/pages/
   provider: pages
   skip_cleanup: true
   # cleanup: false
-  token: $GITHUB_TOKEN  # From https://github.com/settings/tokens, scope "public_repo"
+  token: $GITHUB_TOKEN # From https://github.com/settings/tokens, scope "public_repo"
   keep_history: true
   local_dir: repo/
   on:
