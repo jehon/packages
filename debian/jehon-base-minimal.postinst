@@ -84,8 +84,9 @@ case "$1" in
 			fi
 		fi
 
-		apt-key add /etc/jehon/gpg.packages.pub.asc
-
+		# Auto add all keys
+		/usr/sbin/jh-apt-install-common-keys
+		
 		groupadd -f docker || true
     	usermod -a -G "docker" "jehon" || true
 
