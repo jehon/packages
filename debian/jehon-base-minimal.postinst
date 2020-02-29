@@ -84,7 +84,7 @@ case "$1" in
 			fi
 		fi
 
-		apt-key add /etc/jehon/gpg.pacakges.pub.asc
+		apt-key add /etc/jehon/gpg.packages.pub.asc
 
 		groupadd -f docker || true
     	usermod -a -G "docker" "jehon" || true
