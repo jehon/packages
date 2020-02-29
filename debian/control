@@ -43,7 +43,9 @@ Depends: ${misc:Depends},
 	entr,
 	gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly,
 	exif, libimage-exiftool-perl,
-	gnupg2, dirmngr
+	gnupg2, dirmngr,
+	rsync,
+	git
 Description: Jehon minimal hooks
 
 
@@ -66,8 +68,7 @@ Package: jehon-env-home
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
-	jehon-base-minimal,
-	rsync
+	jehon-base-minimal
 Description: Jehon environnement
 
 
@@ -76,7 +77,6 @@ Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
 	jehon-base-minimal,
-	git, git-cola,
 	xvfb, libgtk2.0-0, libnotify-dev, libgconf-2-4, libnss3, libxss1, libasound2
 Description: Jehon environnement
 
@@ -87,6 +87,7 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
 	jehon-base-minimal,
 	jehon-base-snap,
+	git-cola,
 	xclip,
 	gparted,
 	pdfsam,
