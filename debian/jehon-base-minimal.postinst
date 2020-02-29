@@ -48,7 +48,7 @@ configureUserJehon() {
 			echo "Setting the password of account jehon"
 			echo "jehon:$PASSWD" | chpasswd
 			echo "Setting the samba passord of account jehon"
-			echo -ne "$PASSWD\n$PASSWD\n" | smbpasswd -s -a jehon > /dev/null
+			{ echo "$PASSWD"; echo "$PASSWD" } | smbpasswd -s -a jehon > /dev/null
 		else
 			echo "Bypassing setting the password of account jehon"
 		fi
@@ -83,6 +83,8 @@ case "$1" in
 				usermod -s /bin/bash jehon
 			fi
 		fi
+
+		apt-key add /etc/jehon/gpg.pacakges.pub.asc
 
 		groupadd -f docker || true
     	usermod -a -G "docker" "jehon" || true
