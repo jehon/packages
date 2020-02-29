@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SWD="$( dirname $( realpath "$0" ) )"
+
 if [[ "$( id -u )" != "0" ]]; then
     echo "You need to be root to do this" >&2
     exit 1
@@ -16,8 +18,9 @@ hasKeyOrImport() {
     fi
 }
 
-SELF_KEY=/etc/jehon/gpg.packages.pub.asc
-SELF_KEY_ID=$(gpg --with-fingerprint "$SELF_KEY" )
+SELF_KEY="$SWD"/../../etc/jehon/gpg.packages.pub.asc
+SELF_KEY_ID=$( gpg --show-keys --with-colons "$SELF_KEY" | grep "^pub" | cut -d : -f 5 )
+
 if ! hasKey "$SELF_KEY_ID" ; then
     echo "Adding self key $SELF_KEY_ID"
 	apt-key add "$SELF_KEY"
