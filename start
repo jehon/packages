@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $(whoami) != root ]; then
+if [[ "$(whoami)" != "root" ]]; then
     echo "You need to be root to run this script"
     exit 255
 fi
@@ -15,3 +15,15 @@ apt upgrade
 
 echo "*** Installing jehon-base-minimal"
 apt install jehon-base-minimal
+
+echo "*** Home ?"
+read -p "Are you home? " -n 1 -r YesNo
+
+if [[ "$YesNo" =~ ^[Yy]$ ]]; then
+    echo "*** Installing jehon-env-home"
+    apt install jehon-env-home
+    echo "*** Backup key for synology (vf.yml):"
+    cat /etc/jehon/restricted/synology_auto.pub
+else
+    echo "*** Skipping home install"
+fi
