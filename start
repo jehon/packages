@@ -13,19 +13,22 @@ SRC_LIST="/etc/apt/sources.list.d/jehon-github.list"
 #     -O "$SRC_LIST"
 echo "deb [trusted=yes] http://jehon.github.io/packages/ /" > "${SRC_LIST}"
 
+echo "*** Installing required packages"
+apt install -y apt-transport-https
+
 echo "*** Updating sources"
 apt update
 
 echo "*** Installing jehon-base-minimal"
-apt install jehon-base-minimal
+apt install -y jehon-base-minimal
 
 echo "*** Home ?"
 read -p "Are you home? " -n 1 -r YesNo
 
 if [[ "$YesNo" =~ ^[Yy]$ ]]; then
     echo "*** Installing jehon-env-home"
-    apt install jehon-env-home
-    echo "*** Backup key for synology (vf.yml):"
+    apt install - y jehon-env-home
+    echo "*** Backup key for synology (synology/root/authorized_keys):"
     cat /etc/jehon/restricted/synology_auto.pub
 else
     echo "*** Skipping home install"
