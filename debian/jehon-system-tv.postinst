@@ -6,7 +6,7 @@ case "$1" in
 			# https://github.com/patrikolausson/dispmanx_vnc
 			wget https://github.com/patrikolausson/dispmanx_vnc/archive/master.zip -O /opt/dispmanx.zip
 			unzip /opt/dispmanx.zip -d /opt/
-			mv dispmanx_vnc-master/ dispmanx
+			mv /opt/dispmanx_vnc-master/ /opt/dispmanx
 			cd /opt/dispmanx/
 			make
 		fi
