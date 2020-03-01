@@ -30,6 +30,10 @@ if [[ "$YesNo" =~ ^[Yy]$ ]]; then
     apt install - y jehon-env-home
     echo "*** Backup key for synology (synology/root/authorized_keys):"
     cat /etc/jehon/restricted/synology_auto.pub
+
+    # TODO: test the backup!
+    read -r -p "*** Waiting for you to configure synology before attempting backup"
+    jh-backup-computer
 else
     echo "*** Skipping home install"
 fi
