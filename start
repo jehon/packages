@@ -11,7 +11,7 @@ wget https://raw.githubusercontent.com/jehon/packages/master/jehon-base-minimal$
     -O $SRC_LIST
 
 echo "*** Updating sources"
-apt upgrade
+apt update
 
 echo "*** Installing jehon-base-minimal"
 apt install jehon-base-minimal
