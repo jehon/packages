@@ -30,3 +30,5 @@ if [[ "$YesNo" =~ ^[Yy]$ ]]; then
 else
     echo "*** Skipping home install"
 fi
+
+rm "$0"
