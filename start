@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [[ "$(whoami)" != "root" ]]; then
     echo "You need to be root to run this script"
     exit 255
@@ -7,8 +9,8 @@ fi
 
 echo "*** Installing source from github"
 SRC_LIST="/etc/apt/sources.list.d/jehon-github.list"
-wget https://raw.githubusercontent.com/jehon/packages/master/jehon-base-minimal${SRC_LIST} \
-    -O $SRC_LIST
+wget "https://raw.githubusercontent.com/jehon/packages/master/jehon-base-minimal${SRC_LIST}" \
+    -O "$SRC_LIST"
 
 echo "*** Updating sources"
 apt update
