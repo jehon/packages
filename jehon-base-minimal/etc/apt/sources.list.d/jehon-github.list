@@ -1,1 +1,1 @@
-deb [trusted=yes] http://jehon.github.io/packages/ /
+deb http://jehon.github.io/packages/ /
