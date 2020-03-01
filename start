@@ -6,8 +6,8 @@ if [[ "$(whoami)" != "root" ]]; then
 fi
 
 echo "*** Installing source from github"
-SRC_LIST=/etc/apt/sources/list.d/jehon-github.list
-wget https://github.com/jehon/packages/blob/master/jehon-base-minimal/$SRC_LIST \
+SRC_LIST="/etc/apt/sources/list.d/jehon-github.list"
+wget https://raw.githubusercontent.com/jehon/packages/master/jehon-base-minimal${SRC_LIST} \
     -O $SRC_LIST
 
 echo "*** Updating sources"
