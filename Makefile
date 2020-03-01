@@ -131,7 +131,6 @@ repo/Release.gpg:
 
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
-	git add debian/changelog
 
 repo/Packages: debian/debhelper-build-stamp
 	@mkdir -p repo
@@ -155,19 +154,19 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		$(shell find . -path "./jehon-*" -type f)
 	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date "+%Y.%m.%d.%H.%M.%S") --distribution main)
 
-packages-release:
-	@echo "**"
-	@echo "**"
-	@echo "** How to release ? **"
-	@echo "** Set the version on the first line of the changelog **"
-	@echo "**"
-	@echo "**"
-	gbp dch --git-author --release
-	git add debian/changelog
-	git commit -m "Releasing version $(shell dpkg-parsechangelog -l debian/changelog --show-field Version)"
-	gbp tag
-	git push
-	git push --tags
+# packages-release:
+# 	@echo "**"
+# 	@echo "**"
+# 	@echo "** How to release ? **"
+# 	@echo "** Set the version on the first line of the changelog **"
+# 	@echo "**"
+# 	@echo "**"
+# 	gbp dch --git-author --release
+# 	git add debian/changelog
+# 	git commit -m "Releasing version $(shell dpkg-parsechangelog -l debian/changelog --show-field Version)"
+# 	gbp tag
+# 	git push
+# 	git push --tags
 
 
 #
@@ -192,6 +191,17 @@ shell-test:
 #
 #
 deploy: deploy-local deploy-synology
+
+deploy-local-from-remote:
+	git push
+	date
+	sleep 1m
+	date
+	sleep 1m
+	date
+	sleep 1m
+	sudo apt update
+	sudo apt upgrade
 
 deploy-local: packages-build
 	sudo apt update || true
