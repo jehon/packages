@@ -142,7 +142,7 @@ debian/debhelper-build-stamp: dockers/jehon-docker-build.dockerbuild debian/chan
 	@mkdir -p repo
 	rm -f repo/jehon-*.deb
 #echo "************ build indep ******************"
-	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
+	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
 #echo "************ build arch:armhf *************"
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 
@@ -153,7 +153,7 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/*.templates \
 		debian/*.triggers \
 		$(shell find . -path "./jehon-*" -type f)
-	$(call in_docker,gbp dch --git-author --ignore-branch --snapshot)
+	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date "+%Y.%m.%d.%H.%M.%S") --distribution main)
 
 packages-release:
 	@echo "**"
