@@ -1,4 +1,3 @@
-# Use an official Python runtime as a parent image
 FROM ubuntu:rolling
 
 ENV LANG C.UTF-8
