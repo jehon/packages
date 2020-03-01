@@ -3,6 +3,8 @@
 This repository is for personal use only.
 It contains helper scripts tailored for my usage.
 
+wget https://raw.githubusercontent.com/jehon/packages/master/start; chmod +x start; less start; ./start
+
 ## Ubuntu
 
 ### Switch between windows of the current workspace
