@@ -48,7 +48,7 @@ configureUserJehon() {
 			echo "Setting the password of account jehon"
 			echo "jehon:$PASSWD" | chpasswd
 			echo "Setting the samba passord of account jehon"
-			{ echo "$PASSWD"; echo "$PASSWD" } | smbpasswd -s -a jehon > /dev/null
+			printf "$PASSWD\n$PASSWD\n" | smbpasswd -s -a jehon > /dev/null
 		else
 			echo "Bypassing setting the password of account jehon"
 		fi
