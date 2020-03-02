@@ -45,7 +45,8 @@ Depends: ${misc:Depends},
 	exif, libimage-exiftool-perl,
 	gnupg2, dirmngr,
 	rsync,
-	git
+	git,
+	gettext-base
 Description: Jehon minimal hooks
 
 
