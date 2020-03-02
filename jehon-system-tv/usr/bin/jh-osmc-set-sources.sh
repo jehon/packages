@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SWD="$(dirname "$(realpath "$0")")"
+
 # shellcheck disable=SC1091
 . /etc/jehon/restricted/jehon.env
 
@@ -13,4 +15,5 @@ if [ -z "$SYNOLOGY_PASSWORD" ]; then
     exit 255
 fi
 
-envsubst < ../lib/jehon/src/sources.xml > /home/osmc/.kodi/userdate/sources.xml
+envsubst < "$SWD"/../lib/jehon/src/sources.xml > /home/osmc/.kodi/userdata/sources.xml
+chown osmc.osmc /home/osmc/.kodi/userdata/sources.xml
