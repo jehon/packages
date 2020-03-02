@@ -1,0 +1,21 @@
+#!/bin/sh
+
+case "$1" in
+	configure)
+		if [ ! -r /etc/jehon/restricted/synology_auto ]; then
+			ssh-keygen -N "" -C "synology_auto@$(hostname)" -f /etc/jehon/restricted/synology_auto
+			cat /etc/jehon/restricted/synology_auto.pub
+			#echo "!!! Generate a backup key in /etc/jehon/restricted/synology_auto"
+			echo "!! Store the public key into synology backup"
+		fi
+        ;;
+	triggered|abort-upgrade|abort-remove|abort-deconfigure)
+	    ;;
+
+	*)
+	    echo "postinst called with unknown argument \`$1'" >&2
+	    exit 1
+	    ;;
+esac
+
+exit 0

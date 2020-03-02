@@ -109,13 +109,6 @@ case "$1" in
 			sed "s/backup-computer/synology_auto/" -i /etc/jehon/restricted/synology_auto
 		fi
 
-		if [ ! -r /etc/jehon/restricted/synology_auto ]; then
-			ssh-keygen -N "" -C "synology_auto@$(hostname)" -f /etc/jehon/restricted/synology_auto
-			cat /etc/jehon/restricted/synology_auto.pub
-			#echo "!!! Generate a backup key in /etc/jehon/restricted/synology_auto"
-			echo "!! Store the public key into synology backup"
-		fi
-
 		if [ -r /etc/apt/sources.list.d/jehon-etc-repo.list ]; then
 			echo "Legacy: Removing etc repo from sources"
 			rm -f /etc/apt/sources.list.d/jehon-etc-repo.list
