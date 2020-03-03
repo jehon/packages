@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-CRYPTED_SOURCE="${HOME}/.restricted"
+#CRYPTED_SOURCE="${HOME}/.restricted"
+CRYPTED_SOURCE="/media/jehon/JHN/.restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
 TO_BE_ENCRYPTED="${HOME}/tEnc"
 
@@ -22,7 +23,6 @@ function start() {
 
 	if stat "${CRYPTED_MOUNTED}"/* >/dev/null 2>&1; then
 		echo "ok, already mounted"
-		ALREADY=1
 	else
 		echo "Encore un secret???"
 		
@@ -41,8 +41,8 @@ function start() {
 function stop() {
 	echo "Stopping..."
 	echo "Purging trash"
-	if [ -x ${CRYPTED_MOUNTED}/.Trash-1000/ ]; then
-		rm -fr ${CRYPTED_MOUNTED}/.Trash-1000/*
+	if [ -x "${CRYPTED_MOUNTED}"/.Trash-1000/ ]; then
+		rm -fr "${CRYPTED_MOUNTED}"/.Trash-1000/*
 		echo "done"
 	else
 		echo "Purging trash: folder was not mounted"
@@ -96,6 +96,9 @@ function backupSecurity() {
 	# Dev secrets
 	backupSecurityOne "/home/jehon/Documents/src/bin/" "home-jehon-secrets" \
 		--include "secrets*" --exclude "*"
+
+	backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"
+	backupSecurityOne "root@kiosk:/etc" "kiosk-etc"
 }
 
 function treatAction() {
