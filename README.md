@@ -18,7 +18,6 @@ jehon-base-minimal/etc/profile.d/jehon_direct_access.sh
 jehon-env-dev/etc/profile.d/jehon_dev.sh
 jehon-base-minimal/usr/lib/jehon/conf/home/jehon/.inputrc
 
-TODO: !! password !! osmc -> sources.xml
 TODO: dev script
 
 # PXE Raspberry pi
