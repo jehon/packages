@@ -20,3 +20,23 @@ jehon-base-minimal/usr/lib/jehon/conf/home/jehon/.inputrc
 
 TODO: !! password !! osmc -> sources.xml
 TODO: dev script
+
+# PXE Raspberry pi
+https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/net_tutorial.md
+
+Identify model (https://www.raspberrypi-spy.co.uk/2012/09/checking-your-raspberry-pi-board-version/)
+osmc: a020d3 => Raspberry Pi 3B+ (Sony, UK)
+kiosk: a22082 => Raspberry Pi 3 Model B Rev 1.2
+
+## Model 3B
+Enable PXE:
+echo program_usb_boot_mode=1 | sudo tee -a /boot/config.txt
+reboot
+vcgencmd otp_dump | grep 17: 
+==> check 0x3020000a
+remove previous config
+
+
+remove the previous line
+
+
