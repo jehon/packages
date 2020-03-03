@@ -98,7 +98,9 @@ function backupSecurity() {
 		--include "secrets*" --exclude "*"
 
 	backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"
-	backupSecurityOne "root@kiosk:/etc" "kiosk-etc"
+	
+	backupSecurityOne "root@kiosk:/etc" "kiosk-etc" \
+		--include "kiosk.yml" --exclude "*"
 }
 
 function treatAction() {
