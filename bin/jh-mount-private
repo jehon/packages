@@ -73,6 +73,8 @@ function backupSecurityOne() {
 	# 1: source
 	# 2: target name
 
+	echo "** Backup of $1 to $2"
+
 	BACKUP="${SECURITY_BACKUP_AUTO}/$2"
 	BACKUP_DIR="${SECURITY_BACKUP_AUTO}/$DD-$2"
 
@@ -99,8 +101,8 @@ function backupSecurity() {
 
 	backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"
 	
-	backupSecurityOne "root@kiosk:/etc" "kiosk-etc" \
-		--include "kiosk.yml" --exclude "*"
+	backupSecurityOne "root@kiosk:/etc/" "kiosk-etc" \
+		--include "jehon" --include "jehon/**" --exclude "*"
 }
 
 function treatAction() {
