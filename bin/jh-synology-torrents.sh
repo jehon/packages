@@ -2,7 +2,7 @@
 
 REMOTE_UPLOAD_TORRENT_FILES="/volume3/temporary/torrents/"
 REMOTE_DOWNLOADED_FILES="/var/services/homes/admin/downloaded/"
-LOCAL_DOWNLOADED="/home/jehon/Downloads/"
+LOCAL_DOWNLOADED="/home/jehon/Downloads/syn/"
 
 jh-rsync.sh /home/jehon/Downloads/ "synology:$REMOTE_UPLOAD_TORRENT_FILES" \
 	"--rsync-path=/bin/rsync" \
@@ -16,4 +16,5 @@ jh-rsync.sh "synology:$REMOTE_DOWNLOADED_FILES" "$LOCAL_DOWNLOADED/" \
 
 /bin/chown jehon -R "$LOCAL_DOWNLOADED/"
 
+# shellcheck disable=SC2029
 ssh "synology" "find '$REMOTE_DOWNLOADED_FILES' -depth -type d -mindepth 1 -delete" 
