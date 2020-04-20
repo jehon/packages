@@ -1,1 +1,35 @@
+jehon-debs (2020.03.14.08.43.37) main; urgency=medium
+
+  * fix: typo in postinst
+  * chore: clean up
+  * fix: do not add changelog
+  * fix: untrusted github
+  * feature: add kick start script
+  * feature: start go home too
+  * fix: start
+  * fix: start?
+  * fix: start?
+  * fix: add set -e
+  * fix: initialy trusted
+  * fix: auto remove start at the end
+  * doc: add script to start
+  * fix: auto -y
+  * fix: path
+  * fix: keys
+  * feature: auto test backup
+  * chore: update todo
+  * fix: export password in osmc config
+  * fix: synology_backup at the correct place
+  * fix: chmod
+  * doc: pxe
+  * fix: jh-mount-private
+  * wip: video stabilize
+  * fix: some targets
+  * doc: updated readme
+  * fix: some backups
+  * fix: mount encrypted
+  * fix: torrents in subdirs
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sat, 14 Mar 2020 08:43:43 +0100
+
 jehon-debs (1.2.3) main; urgency=medium

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# CRYPTED_SOURCE="${HOME}/.restricted"
-CRYPTED_SOURCE="/media/jehon/JHN/.restricted"
+CRYPTED_SOURCE="${HOME}/.restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
 TO_BE_ENCRYPTED="${HOME}/tEnc"
 
