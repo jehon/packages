@@ -126,7 +126,7 @@ packages-clean:
 
 packages-build: repo/Release
 
-repo/Release.gpg:
+repo/Release.gpg: repo/Release
 	gpg --sign --armor --detach-sign --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
 
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
