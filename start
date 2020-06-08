@@ -22,20 +22,4 @@ apt update
 echo "*** Installing jehon-base-minimal"
 apt install -y jehon-base-minimal
 
-echo "*** Home ?"
-read -p "Are you home? " -n 1 -r YesNo
-
-if [[ "$YesNo" =~ ^[Yy]$ ]]; then
-    echo "*** Installing jehon-env-home"
-    apt install - y jehon-env-home
-    echo "*** Backup key for synology (synology/root/authorized_keys):"
-    cat /etc/jehon/restricted/synology_auto.pub
-
-    # TODO: test the backup!
-    read -r -p "*** Waiting for you to configure synology before attempting backup"
-    jh-backup-computer
-else
-    echo "*** Skipping home install"
-fi
-
 rm "$0"
