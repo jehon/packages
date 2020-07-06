@@ -2,7 +2,7 @@
 
 CRYPTED_SOURCE="${HOME}/.restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
-TO_BE_ENCRYPTED="${HOME}/tEnc"
+TO_BE_ENCRYPTED="${HOME}/Download/enc"
 
 SECURITY_BACKUP="${CRYPTED_MOUNTED}/Security_Backup/"
 SECURITY_BACKUP_AUTO="${SECURITY_BACKUP}/auto"
@@ -105,10 +105,10 @@ function backupSecurity() {
 	backupSecurityOne "/home/jehon/Documents/src/bin/" "home-jehon-secrets" \
 		--include "secrets*" --exclude "*"
 
-	backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"
+	# backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"
 	
-	backupSecurityOne "root@kiosk:/etc/" "kiosk-etc" \
-		--include "jehon" --include "jehon/**" --exclude "*"
+	# backupSecurityOne "root@kiosk:/etc/" "kiosk-etc" \
+	# 	--include "jehon" --include "jehon/**" --exclude "*"
 }
 
 function treatAction() {
