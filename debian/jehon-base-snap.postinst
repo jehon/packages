@@ -83,6 +83,7 @@ case "$1" in
 		ensure_snap_installed "node" classic "13"
 		ensure_snap_installed "code-insiders" classic
 		ensure_snap_installed "shellcheck"
+		ensure_snap_installed "mkvtoolnix-jz"
     	;;
 	
 	abort-upgrade|abort-remove|abort-deconfigure)
