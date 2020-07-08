@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+set -e
+
 CRYPTED_SOURCE="${HOME}/.restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
-TO_BE_ENCRYPTED="${HOME}/Download/enc"
+TO_BE_ENCRYPTED="${HOME}/Downloads/enc"
 
 SECURITY_BACKUP="${CRYPTED_MOUNTED}/Security_Backup/"
 SECURITY_BACKUP_AUTO="${SECURITY_BACKUP}/auto"
@@ -35,10 +37,10 @@ function start() {
 
 	if stat "${TO_BE_ENCRYPTED}"/* >/dev/null 2>&1; then
 		echo "Copying all files from ${TO_BE_ENCRYPTED} to encrypted dir"
-		cd "${TO_BE_ENCRYPTED}" || exit 255
-		# Thanks to http://askubuntu.com/a/259481/638656
-		mv -v $(ls -A .) "${CRYPTED_MOUNTED}/"
-		cd - || exit 255
+		for F in "$TO_BE_ENCRYPTED"/* ; do
+			echo "Moving $F"
+			mv "$F" "${CRYPTED_MOUNTED}/"
+		done
 	fi
 
 	echo "Started!"
