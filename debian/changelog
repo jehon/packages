@@ -1,3 +1,19 @@
+jehon-debs (2020.07.26.21.37.18) main; urgency=medium
+
+  * fix: add vscode insiders
+  * feature: add quick files to setup env
+  * build: fix dependency
+  * feature: fstab.d
+  * build: fix travis from online check
+  * feature: jh-reenable-repo-after-upgrade
+  * fix: tenc location
+  * feature(snap): mkvtoolnix
+  * feature: setup kiosk
+  * fix: to be encrypted
+  * fix: revoke evs key access
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sun, 26 Jul 2020 21:37:21 +0200
+
 jehon-debs (2020.03.14.08.43.37) main; urgency=medium
 
   * fix: typo in postinst
