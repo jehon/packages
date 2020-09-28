@@ -15,7 +15,7 @@ GEOMETRY=$1
 
 function reduce() {
 	echo -n "$1"
-	MIME=`mimetype -b "$1"`
+	MIME=$(mimetype -b "$1" )
 	if [[ $MIME = image/* ]]; then
 		echo -n ""
 	else
@@ -28,7 +28,7 @@ function reduce() {
 	SN=$( stat -c%s "$1.tmp" )
 	SCO=$(( $SO * 100 ))
 	SCN=$(( $SN * 110 ))
-	
+
 	if [ $SCN -lt $SCO  ]; then
 		echo " is resized: $SO vs. $SN"
 		rm "$1"

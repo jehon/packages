@@ -2,6 +2,8 @@
 
 set -e
 
+ROOT="$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )"
+
 CRYPTED_SOURCE="${HOME}/.restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
 TO_BE_ENCRYPTED="${HOME}/Downloads/enc"
@@ -24,7 +26,7 @@ function start() {
 		echo "ok, already mounted"
 	else
 		echo "Encore un secret???"
-		
+
 		if encfs -o allow_other -o uid=1000 -o gid=33 "${CRYPTED_SOURCE}" "${CRYPTED_MOUNTED}" ; then
 			echo "Mounted"
 		else
@@ -102,13 +104,13 @@ function backupSecurityOne() {
 function backupSecurity() {
 	# Personal keys
 	backupSecurityOne "/home/jehon/.ssh/" "home-jehon"
-	
+
 	# Dev secrets
-	backupSecurityOne "/home/jehon/Documents/src/bin/" "home-jehon-secrets" \
+	backupSecurityOne "$ROOT/bin/" "home-jehon-secrets" \
 		--include "secrets*" --exclude "*"
 
 	# backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"
-	
+
 	# backupSecurityOne "root@kiosk:/etc/" "kiosk-etc" \
 	# 	--include "jehon" --include "jehon/**" --exclude "*"
 }

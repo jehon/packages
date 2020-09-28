@@ -3,11 +3,10 @@
 gspid=$(pgrep "gnome-session")
 dbsavn="DBUS_SESSION_BUS_ADDRESS"
 dbsadd=""
-dtdir="$HOME/Desktop"
-dtfile=""
+shortcutFile=""
 istrusted=0
 
-echo "DESKTOP ICONS CONFIGURATION..."
+echo "Desktop icon configurations..."
 if ! (( gspid )) ; then
 	echo "GNOME session not found"
 	exit 1
@@ -20,11 +19,13 @@ if [[ "$dbsadd" = "" ]]; then
 fi
 
 eval "export $dbsadd"
-dtfile="$1"
-istrusted=$(gio info "$dtfile" | awk '$1 == "metadata::trusted:" && $2 == "yes" {print 1 ; exit}')
+
+shortcutFile="$1"
+istrusted=$(gio info "$shortcutFile" | awk '$1 == "metadata::trusted:" && $2 == "yes" {print 1 ; exit}')
 if (( istrusted )) ; then
-	echo "ALREADY TRUSTED  $dtfile"
+	echo "Icon already trusted  $shortcutFile"
 	exit 0
 fi
 
-gio set "$dtfile" "metadata::trusted" yes
+echo "Trusting $shortcutFile"
+gio set "$shortcutFile" "metadata::trusted" "yes"

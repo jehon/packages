@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-if [ -r /home/jehon/Documents/src/packages/bin/jh-synology-torrents.sh ]; then
-    runuser -u jehon -- /home/jehon/Documents/src/packages/bin/jh-synology-torrents.sh
-fi

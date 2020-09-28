@@ -16,7 +16,7 @@ status=$( \
         -o StrictHostKeyChecking=no \
         -o HashKnownHosts=no \
         -o ConnectTimeout=10 \
-        $TARGET_HOST echo pong 2>&1 | grep -oE 'pong|denied|sftp' \
+        "$TARGET_HOST" echo pong 2>&1 | grep -oE 'pong|denied|sftp' \
 )
 
 if [[ $status != pong && $status != denied && $status != sftp ]]; then
