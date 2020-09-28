@@ -84,8 +84,10 @@ case "$1" in
 		ensure_snap_installed "code-insiders" classic
 		ensure_snap_installed "shellcheck"
 		ensure_snap_installed "mkvtoolnix-jz"
+		ensure_snap_installed "go" classic
+		ensure_snap_installed "wifi-ap"
     	;;
-	
+
 	abort-upgrade|abort-remove|abort-deconfigure)
 	    ;;
 
