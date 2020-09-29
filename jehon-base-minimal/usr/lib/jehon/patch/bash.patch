@@ -2,6 +2,8 @@
 # File: /home/jehon/.bashrc
 #
 
+# TODO: push that into profile.d ?
+
 # See https://unix.stackexchange.com/a/26782/240487
 # interactive => if [[ $- == *i* ]]
 # login       => if shopt -q login_shell
@@ -53,15 +55,17 @@ __cmd_result() {
     PS1+="${RCol}@${BBlu}\h ${Pur}\W${BYel}$ ${RCol}"
 }
 
-# Start with a white line
-PS1=''
-# last command result / git status / screen id
-PS1=$PS1'\n$(__cmd_result) \033[33m$(__parse_git_branch)\[\033[00m\] ${STY:+(screen) }'
+if [ "$( id -u )" =! "0" ]; then
+    # Only if not root
 
-# user@host / folder
-PS1=$PS1'\n${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;37m\]\w\[\033[00m\] \$ '
+    # Start with a white line
+    PS1=''
+    # last command result / git status / screen id
+    PS1=$PS1'\n$(__cmd_result) \033[33m$(__parse_git_branch)\[\033[00m\] ${STY:+(screen) }'
 
-CDPATH=".:~/Documents/src"
+    # user@host / folder
+    PS1=$PS1'\n${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;37m\]\w\[\033[00m\] \$ '
 
-HOST_UID="$(id -u)"
-HOST_GID="$(id -g)"
+    HOST_UID="$(id -u)"
+    HOST_GID="$(id -g)"
+fi
