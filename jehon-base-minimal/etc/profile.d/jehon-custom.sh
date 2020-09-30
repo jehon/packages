@@ -1,8 +1,9 @@
-#
-# File: /home/jehon/.bashrc
-#
+#!/usr/bin/env bash
 
-# TODO: push that into profile.d ?
+# For pip (python) local install
+if [ -x /home/jehon/.local/bin ]; then
+	export PATH=~/.local/bin/:"$PATH"
+fi
 
 # See https://unix.stackexchange.com/a/26782/240487
 # interactive => if [[ $- == *i* ]]
@@ -55,7 +56,7 @@ __cmd_result() {
     PS1+="${RCol}@${BBlu}\h ${Pur}\W${BYel}$ ${RCol}"
 }
 
-if [ "$( id -u )" =! "0" ]; then
+if [[ "$( id -u )" != "0" ]]; then
     # Only if not root
 
     # Start with a white line
