@@ -71,12 +71,15 @@ configureUserJehon() {
 	fi
 }
 
+dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_direct_access.sh -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_custom.sh -- "$@"
+
 case "$1" in
 	configure)
 		# Create user jehon if it does not exists
 		if ! id -u jehon >/dev/null 2>&1; then
 			U1000GRPS=$(id -Gn 1000 | sed -e 's/ /,/g' )
-			
+
 			useradd --groups "$U1000GRPS" jehon || true
 
 		 	if [ -x /bin/bash ]; then
@@ -86,11 +89,11 @@ case "$1" in
 
 		# Auto add all keys
 		/usr/sbin/jh-apt-install-common-keys
-		
+
 		groupadd -f docker || true
     	usermod -a -G "docker" "jehon" || true
 
-		configureUserJehon	
+		configureUserJehon
 
 		apply_special
 
@@ -99,7 +102,7 @@ case "$1" in
 
 		mkdir -p /etc/jehon/restricted/
 		chmod 500 /etc/jehon/restricted
-		
+
 		# Legacy migration
 		if [ -r /etc/jehon/restricted/backup_computer ]; then
 			mv /etc/jehon/restricted/backup_computer /etc/jehon/restricted/synology_auto

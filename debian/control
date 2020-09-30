@@ -18,6 +18,7 @@ Vcs-Browser: https://bitbucket.org/jehon/packages/
 Package: jehon-base-minimal
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
+	dpkg (>= 1.17.14)
 Depends: ${misc:Depends},
 	debconf, sed,
 	bash,

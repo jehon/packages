@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 
-set -e
+# set -e
 
-ROOT="$( realpath "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
+ROOT="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
+echo "$ROOT"
 SRC="$ROOT/.."
 
 # shellcheck source=/dev/null
-. "$ROOT"/jehon-base-minimal/etc/profile.d/jehon_custom.sh
+. "$ROOT"/jehon-base-minimal/etc/profile.d/jehon-custom.sh
 
 export PATH="$ROOT/bin:$PATH"
 
-echo "Looking for custom profile"
+echo "Looking for custom profile in $SRC"
 while read F ; do
 	echo "Importing $F"
-	. "$F"
-done < <( find "$SRC" -name "custom-profile.sh" )
+	source "$F"
+done < <( find "$SRC" -type d \
+	\( -name "node_modules" -o -name "vendor" -o -name "tmp" \) \
+	-prune -false \
+	-o -name "custom-profile.sh" )
 
 CDPATH=".:$(realpath "$SRC")"
+
