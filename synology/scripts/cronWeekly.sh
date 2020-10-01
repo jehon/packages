@@ -22,4 +22,4 @@ chmod -R a+rwX /volume3/photo/
 )
 
 # Check if a movie is not in the correct form for other media players
-# "$SWD"/normalize-movies.sh
+# "$SWD"/jh-movies-normalize.sh

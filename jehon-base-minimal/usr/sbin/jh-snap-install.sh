@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+getSnapConfigFor() {
+	snap list | grep "^$1 " 2>/dev/null
+}
+
+ensure_snap_installed() {
+	#
+	# 1: name
+	# 2: confinment
+	# 3: channel
+	#
+
+	NAME="$1"
+	shift
+	if [ -n "$1" ] ; then
+		CONFIN="$1"
+		shift
+	else
+		CONFIN="jailmode"
+	fi
+	if [ "$CONFIN" = "jailmode" ]; then
+		CONFIN_PARSE="([[:blank:]]-|jailmode)"
+	else
+		CONFIN_PARSE=$CONFIN
+	fi
+
+
+	if [ -n "$1" ] ; then
+		CHANNEL="$1"
+		shift
+	else
+		CHANNEL="stable"
+	fi
+	# echo "**************** $NAME ************************"
+	# echo "confinment: $CONFIN"
+	# echo "confinment: $CONFIN_PARSE"
+	# echo "channel:    $CHANNEL"
+
+	if getSnapConfigFor "$NAME" >/dev/null; then
+		# Test the installed version
+		if ! getSnapConfigFor "$NAME" | grep -E "$CONFIN_PARSE" >/dev/null ; then
+			#echo "Snap $NAME: changing confinment to $CONFIN"
+			snap remove "$NAME"
+		fi
+
+		if ! getSnapConfigFor "$NAME" | grep "$CHANNEL" >/dev/null; then
+			#echo "Snap $NAME: Setting channel to $CHANNEL"
+			snap refresh "$NAME" --channel=$CHANNEL
+		fi
+	fi
+
+	if ! getSnapConfigFor "$NAME" >/dev/null; then
+		#echo "Snap $NAME: installing $CHANNEL with confinment to $CONFIN"
+		snap install $NAME --$CONFIN --channel="$CHANNEL"
+	fi
+}
+
+# ensure_snap_installed "docker"
+ensure_snap_installed "vlc"
+ensure_snap_installed "filezilla" jailmode beta
+ensure_snap_installed "gimp"
+# ensure_snap_installed "git-cola" classic
+ensure_snap_installed "snapcraft" classic
+ensure_snap_installed "intellij-idea-community" classic
+ensure_snap_installed "chromium"
+ensure_snap_installed "node" classic "13"
+ensure_snap_installed "code-insiders" classic
+ensure_snap_installed "shellcheck"
+ensure_snap_installed "mkvtoolnix-jz"
+ensure_snap_installed "go" classic
+ensure_snap_installed "wifi-ap"

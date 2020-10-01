@@ -1,1 +1,1 @@
-post-invoke=/usr/sbin/jehon-apply-special
+post-invoke=/usr/sbin/jh-system-apply-special

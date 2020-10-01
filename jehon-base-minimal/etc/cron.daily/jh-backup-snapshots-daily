@@ -9,4 +9,4 @@ fi
 # Monthly backups are taken, so 40 days is ok
 find "/var/backups/daily" -mtime +40 -delete
 
-/usr/share/jehon-base-minimal/takeSnapshot.sh daily
+/usr/share/jehon-base-minimal/jh-backup-take-snapshot.sh daily

@@ -24,8 +24,8 @@ if [ -e "/usr/share/debconf/confmodule" ]; then
 fi
 
 apply_special() {
-	if [ -x /usr/sbin/jehon-apply-special ]; then
-		/usr/sbin/jehon-apply-special
+	if [ -x /usr/sbin/jh-system-apply-special ]; then
+		/usr/sbin/jh-system-apply-special
 
 		# Only if ssh is installed:
 		if systemctl list-units --full -all | grep -Fq "ssh.service"; then

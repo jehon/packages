@@ -180,7 +180,7 @@ shell-test:
 
 ######################
 #
-# Runtime 
+# Runtime
 #
 ######################
 
@@ -204,6 +204,7 @@ deploy-local-from-remote:
 	sudo apt upgrade
 
 deploy-local: packages-build
+	sudo ./bin/jh-apt-config-repositories
 	sudo apt update || true
 	sudo apt upgrade -y
 

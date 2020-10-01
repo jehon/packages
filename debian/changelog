@@ -1,3 +1,69 @@
+jehon-debs (2020.10.01.08.56.31) main; urgency=medium
+
+  * chore: add missing executables
+  * feature: snap go and wifi-ap
+  * Squashed 'externals/shuttle-go/' content from commit f2e8b63
+  * chore: clean up a bit after some times
+  * fix: try to abstract location and create setup-profile on non-install
+  * fix: rename and typo
+  * fix: rename config files
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Thu, 01 Oct 2020 08:56:35 +0200
+
+jehon-debs (2020.09.30.09.25.32) main; urgency=medium
+
+  * chore: add missing executables
+  * feature: snap go and wifi-ap
+  * Squashed 'externals/shuttle-go/' content from commit f2e8b63
+  * chore: clean up a bit after some times
+  * fix: try to abstract location and create setup-profile on non-install
+  * fix: rename and typo
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 30 Sep 2020 09:25:34 +0200
+
+jehon-debs (2020.09.30.09.24.36) main; urgency=medium
+
+  * chore: add missing executables
+  * feature: snap go and wifi-ap
+  * Squashed 'externals/shuttle-go/' content from commit f2e8b63
+  * chore: clean up a bit after some times
+  * fix: try to abstract location and create setup-profile on non-install
+  * fix: rename and typo
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 30 Sep 2020 09:24:38 +0200
+
+jehon-debs (2020.09.30.09.23.31) main; urgency=medium
+
+  * chore: add missing executables
+  * feature: snap go and wifi-ap
+  * Squashed 'externals/shuttle-go/' content from commit f2e8b63
+  * chore: clean up a bit after some times
+  * fix: try to abstract location and create setup-profile on non-install
+  * fix: rename and typo
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 30 Sep 2020 09:23:33 +0200
+
+jehon-debs (2020.09.30.09.08.42) main; urgency=medium
+
+  * chore: add missing executables
+  * feature: snap go and wifi-ap
+  * Squashed 'externals/shuttle-go/' content from commit f2e8b63
+  * chore: clean up a bit after some times
+  * fix: try to abstract location and create setup-profile on non-install
+  * fix: rename and typo
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 30 Sep 2020 09:08:45 +0200
+
+jehon-debs (2020.09.30.08.45.59) main; urgency=medium
+
+  * chore: add missing executables
+  * feature: snap go and wifi-ap
+  * Squashed 'externals/shuttle-go/' content from commit f2e8b63
+  * chore: clean up a bit after some times
+  * fix: try to abstract location and create setup-profile on non-install
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 30 Sep 2020 08:46:02 +0200
+
 jehon-debs (2020.07.26.21.37.18) main; urgency=medium
 
   * fix: add vscode insiders
