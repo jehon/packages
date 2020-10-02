@@ -1,0 +1,6 @@
+/usr/share/jehon-base-minimal/99-jehon-periodic               /etc/apt/apt.conf.d/99-jehon-periodic
+/usr/share/jehon-base-minimal/jehon-github.list               /etc/apt/sources.list.d/jehon-github.list
+/usr/share/jehon-base-minimal/bash_completion.d/npm           /etc/bash_completion.d/npm
+/usr/share/jehon-base-minimal/bash_completion.d/prefix        /etc/bash_completion.d/prefix
+/usr/share/jehon-base-minimal/jh-rsync-backup-computer-filter /etc/jh-rsync-backup-computer-filter
+/usr/share/jehon-base-minimal/npmrc                           /etc/npmrc

@@ -5,5 +5,6 @@
 #
 
 dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_dev.sh -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon-dev.sh -- "$@"
 
 exit 0

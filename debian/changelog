@@ -1,3 +1,33 @@
+jehon-debs (2020.10.02.16.09.59) main; urgency=medium
+
+  * UNRELEASED
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Fri, 02 Oct 2020 16:10:00 +0200
+
+jehon-debs (2020.10.02.16.06.46) main; urgency=medium
+
+  * UNRELEASED
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Fri, 02 Oct 2020 16:06:47 +0200
+
+jehon-debs (2020.10.02.14.27.28) main; urgency=medium
+
+  * UNRELEASED
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Fri, 02 Oct 2020 14:27:29 +0200
+
+jehon-debs (2020.10.02.14.25.31) main; urgency=medium
+
+  * UNRELEASED
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Fri, 02 Oct 2020 14:25:33 +0200
+
+jehon-debs (2020.10.02.10.20.06) main; urgency=medium
+
+  * UNRELEASED
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Fri, 02 Oct 2020 10:20:08 +0200
+
 jehon-debs (2020.10.01.08.56.31) main; urgency=medium
 
   * chore: add missing executables
