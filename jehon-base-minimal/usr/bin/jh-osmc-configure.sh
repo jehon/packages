@@ -1,3 +1,21 @@
+#!/usr/bin/env bash
+
+SWD="$(dirname "$(realpath "$0")")"
+
+# shellcheck disable=SC1091
+. /etc/jehon/restricted/jehon.env
+
+if [ -z "$SYNOLOGY_USERNAME" ]; then
+    echo "Need a SYNOLOGY_USERNAME in /etc/jehon/restricted/jehon.env" >&2
+    exit 255
+fi
+
+if [ -z "$SYNOLOGY_PASSWORD" ]; then
+    echo "Need a SYNOLOGY_PASSWORD in /etc/jehon/restricted/jehon.env" >&2
+    exit 255
+fi
+
+cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
 <sources>
     <video>
         <default pathversion="1"></default>
@@ -34,3 +52,24 @@
         <default pathversion="1"></default>
     </files>
 </sources>
+EOC
+
+cat > /home/osmc/.kodi/userdata/keymaps/zKeymap.xml <<EOC
+<keymap>
+	<!-- https://kodi.wiki/view/Window_IDs -->
+	<!-- https://github.com/xbmc/xbmc/blob/master/system/keymaps/keyboard.xml -->
+	<FullscreenVideo>
+		<remote>
+			<!-- https://kodi.wiki/view/CEC -->
+			<!-- https://github.com/xbmc/xbmc/blob/master/system/keymaps/remote.xml -->
+			<red>AudioNextLanguage</red>
+			<green>ShowSubtitles</green>
+			<yellow>NextSubtitle</yellow>
+			<blue></blue>
+		</remote>
+	</FullscreenVideo>
+</keymap>
+EOC
+
+# envsubst < "$SWD"/../lib/jehon/src/sources.xml > /home/osmc/.kodi/userdata/sources.xml
+chown osmc.osmc /home/osmc/.kodi/userdata/sources.xml

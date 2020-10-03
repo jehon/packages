@@ -14,7 +14,7 @@ case "$1" in
 		if [ ! -r /etc/jehon/restricted/jehon.env ]; then
 			echo "!! You need to specify config in /etc/jehon.jehon.env" >&2
 		fi
-		/usr/bin/jh-set-sources.sh
+		/usr/bin/jh-osmc-configure.sh
 
 		;;
 	abort-upgrade|abort-remove|abort-deconfigure)
