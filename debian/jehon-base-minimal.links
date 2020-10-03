@@ -4,3 +4,13 @@
 /usr/share/jehon-base-minimal/bash_completion.d/prefix        /etc/bash_completion.d/prefix
 /usr/share/jehon-base-minimal/jh-rsync-backup-computer-filter /etc/jh-rsync-backup-computer-filter
 /usr/share/jehon-base-minimal/npmrc                           /etc/npmrc
+/usr/share/jehon-base-minimal/jehon-custom.sh                 /etc/profile.d/jehon-custom.sh
+/usr/share/jehon-base-minimal/jh-backup-mysql                 /etc/cron.daily/jh-backup-mysql
+/usr/share/jehon-base-minimal/jh-backup-postgres              /etc/cron.daily/jh-backup-postgres
+/usr/share/jehon-base-minimal/jh-backup-snapshots-daily       /etc/cron.daily/jh-backup-snapshots-daily
+/usr/share/jehon-base-minimal/jh-backup-snapshots-monthly     /etc/cron.monthly/jh-backup-snapshots-monthly
+/usr/share/jehon-base-minimal/root                            /etc/ssh/authorized_keys/root
+/usr/share/jehon-base-minimal/jehon                           /etc/ssh/authorized_keys/jehon
+/usr/share/jehon-base-minimal/jehon-patch                     /etc/dpkg/dpkg.cfg.d/jehon-patch
+/usr/share/jehon-base-minimal/gpg.packages.pub.asc            /etc/jehon/gpg.packages.pub.asc
+/usr/share/jehon-base-minimal/99-shuttlepro.rules             /etc/udev/rules.d/99-shuttlepro.rules

@@ -7,7 +7,7 @@ echo "$ROOT"
 SRC="$ROOT/.."
 
 # shellcheck source=/dev/null
-. "$ROOT"/jehon-base-minimal/etc/profile.d/jehon-custom.sh
+. "$ROOT"/jehon-base-minimal/usr/share/jehon-base-minimal/jehon-custom.sh
 
 export PATH="$ROOT/bin:$PATH"
 

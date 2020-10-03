@@ -4,7 +4,7 @@
 # Activate the local copy of the repo
 #
 
-ROOT="$( realpath "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
+ROOT="$( dirname "$( dirname "$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )" )" )"
 
 echo "Found root: $ROOT"
 
