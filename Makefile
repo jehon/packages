@@ -40,6 +40,8 @@ ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 SYNOLOGY_HOST = synology
 GPG_KEY="313DD85CEFADAF7E"
 
+export PATH := $(ROOT)/jehon-base-minimal/usr/bin:$(PATH)
+
 #
 #
 # Product variables
@@ -81,9 +83,11 @@ all-clean: dockers-clean packages-clean
 all-test: shell-test
 all-build: dockers-build packages-build
 
+.PHONY: debug
 debug:
 	$(info * PWD:     $(shell pwd))
 	$(info * DOCKERS: $(DOCKERS))
+	$(info * PATH:    $(shell echo $$PATH))
 
 publish: deploy-local deploy-synology-repo
 	git push
