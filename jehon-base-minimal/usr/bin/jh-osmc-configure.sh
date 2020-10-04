@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-SWD="$(dirname "$(realpath "$0")")"
-
 # shellcheck disable=SC1091
 . /etc/jehon/restricted/jehon.env
 

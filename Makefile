@@ -204,7 +204,7 @@ deploy-local-from-remote:
 	sudo apt upgrade
 
 deploy-local: packages-build
-	sudo ./jehon-base-minimal/usr/bin/jh-apt-config-repositories
+	sudo ./setup-profile.sh
 	sudo apt update || true
 	sudo apt upgrade -y
 

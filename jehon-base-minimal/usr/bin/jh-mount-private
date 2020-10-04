@@ -2,7 +2,8 @@
 
 set -e
 
-ROOT="$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )"
+# shellcheck source=/dev/null
+. jh-lib.sh
 
 CRYPTED_SOURCE="${HOME}/.restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
@@ -91,7 +92,7 @@ function backupSecurityOne() {
 	mkdir -p "$BACKUP"
 	mkdir -p "$BACKUP_DIR"
 
-	/usr/bin/jh-rsync-backup.sh \
+	jh-rsync-backup.sh \
 		"$1" "$BACKUP" \
 		--backup --backup-dir "$BACKUP_DIR" \
 		"${@:3}"
@@ -99,6 +100,7 @@ function backupSecurityOne() {
 	if [ -z "$( ls -A "$BACKUP_DIR" )" ]; then
 		rmdir "$BACKUP_DIR"
 	fi
+	echo "** Backup $1 done"
 }
 
 function backupSecurity() {
@@ -106,7 +108,7 @@ function backupSecurity() {
 	backupSecurityOne "/home/jehon/.ssh/" "home-jehon"
 
 	# Dev secrets
-	backupSecurityOne "$ROOT/bin/" "home-jehon-secrets" \
+	backupSecurityOne "$PKG_FOLDER/bin/" "home-jehon-secrets" \
 		--include "secrets*" --exclude "*"
 
 	# backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"

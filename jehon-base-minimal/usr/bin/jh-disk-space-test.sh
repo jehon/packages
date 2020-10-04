@@ -12,7 +12,7 @@ fi
 
 MIN_SPACE="$2"
 
-AVAIL=`df -B 1G --output="used" "$1" | grep -v "Used"`
+AVAIL="$( df -B 1G --output="used" "$1" | grep -v "Used" )"
 if [ "$AVAIL" -lt "$MIN_SPACE" ]; then
     exit 1
 fi

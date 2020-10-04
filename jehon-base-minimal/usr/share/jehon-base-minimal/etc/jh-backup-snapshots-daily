@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# shellcheck source=/dev/null
+. jh-lib.sh
+
 if [ ! -t 1 ] ; then
 	exec > >(systemd-cat -t "$(realpath "$0")" -p info ) \
 	    2> >(systemd-cat -t "$(realpath "$0")" -p err  )
@@ -9,4 +12,4 @@ fi
 # Monthly backups are taken, so 40 days is ok
 find "/var/backups/daily" -mtime +40 -delete
 
-/usr/share/jehon-base-minimal/jh-backup-take-snapshot.sh daily
+"/usr/share/$PKG_NAME/jh-backup-take-snapshot.sh" daily

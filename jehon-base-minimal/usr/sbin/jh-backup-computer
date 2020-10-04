@@ -8,7 +8,12 @@ fi
 REMOTE_ROOT=/volume3/Backups/$(hostname)
 REMOTE_BACKUP=/volume3/transferts/auto/$(hostname)
 
+export REMOTE_ROOT
+export REMOTE_BACKUP
+
+# This key is not delivered with packages
 KEY="/etc/jehon/restricted/synology_auto"
+
 if [ -r "$KEY" ]; then
 	/usr/bin/jh-rsync-backup.sh \
 		/ root@synology:/synology/backup \
@@ -18,5 +23,4 @@ if [ -r "$KEY" ]; then
 else
 	echo "No $KEY found, no backup will run" >&2
 	exit 1
-
 fi

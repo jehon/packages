@@ -1,3 +1,38 @@
+jehon-debs (2020.10.04.20.47.58) main; urgency=medium
+
+  * feature(osmc): use one file to generate config
+  * chore: move all files to jehon-base-minimal
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sun, 04 Oct 2020 20:48:01 +0200
+
+jehon-debs (2020.10.04.20.40.08) main; urgency=medium
+
+  * feature(osmc): use one file to generate config
+  * chore: move all files to jehon-base-minimal
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sun, 04 Oct 2020 20:40:13 +0200
+
+jehon-debs (2020.10.04.18.29.36) main; urgency=medium
+
+  * feature(osmc): use one file to generate config
+  * chore: move all files to jehon-base-minimal
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sun, 04 Oct 2020 18:29:40 +0200
+
+jehon-debs (2020.10.03.17.10.32) main; urgency=medium
+
+  * feature(osmc): use one file to generate config
+  * chore: move all files to jehon-base-minimal
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sat, 03 Oct 2020 17:10:33 +0200
+
+jehon-debs (2020.10.03.17.07.40) main; urgency=medium
+
+  * feature(osmc): use one file to generate config
+  * chore: move all files to jehon-base-minimal
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sat, 03 Oct 2020 17:07:42 +0200
+
 jehon-debs (2020.10.03.12.03.54) main; urgency=medium
 
   * UNRELEASED

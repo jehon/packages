@@ -13,7 +13,7 @@ backupOne() {
 	# http://stackoverflow.com/a/16783253/1954789
 	if runuser -u postgres psql -lqt | cut -d \| -f 1 | grep -qw "$db"; then
 		echo "[$db] Start backup database"
-		FILE=$(echo "$db" | sed "s/[^[:alnum:]]/_/g")
+		FILE=$( echo "$db" | sed "s/[^[:alnum:]]/_/g" )
 		FILE="$ROOT/postgres-$FILE"
 		if [ -r "$FILE.gz" ]; then
 			rm "$FILE.gz"

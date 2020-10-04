@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: use jh-lib.sh
+
 # The root of the repository
 ROOT="$(dirname "$(dirname "$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" )" )" )"
 export ROOT
@@ -28,12 +30,12 @@ relative_to_root() {
 }
 
 # Create a "3"rd out where all structured messages will go
-# This allow us to capture stdout and stderr everywhere, 
+# This allow us to capture stdout and stderr everywhere,
 # while still letting passing through the messages "Success / failure / ..."
 exec 3>&2
 
 #
-# Loglevel can be: 
+# Loglevel can be:
 #   0 - normal
 #  10 - debug
 #
@@ -101,7 +103,7 @@ log_failure() {
 
 assert_true() {
 	local V=$?
-	if [ ! -z "$2" ]; then
+	if [ -n "$2" ]; then
 		V="$2"
 	fi
     if (( V != 0 )) ; then
@@ -112,7 +114,7 @@ assert_true() {
 
 assert_equals() {
 	local V=$?
-	if [ ! -z "$2" ]; then
+	if [ -n "$2" ]; then
 		V="$2"
 	fi
     if [[ "$2" != "$3" ]] ; then
@@ -137,19 +139,7 @@ capture() {
 		exit 255
 	fi
 
-    EXIT=0
-    while read -r LINE ; do
-        log_debug "$LINE"
-        if [ "$CAPTURED_OUTPUT" = "" ]; then
-            CAPTURED_OUTPUT="${LINE}"
-        else
-            CAPTURED_OUTPUT="${CAPTURED_OUTPUT}\n${LINE}"
-        fi
-        EXIT="$LINE"
-    done < <( "$@" 2>&1 ; echo "$?" )
-	CAPTURED_EXITCODE="$EXIT"
-
-	wait "$!" || true
+    CAPTURED_OUTPUT="$( "$@" 2>&1 )" || CAPTURED_EXITCODE="$?" || true
 
     log_debug ""
 	return 0

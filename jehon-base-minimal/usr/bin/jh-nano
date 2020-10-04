@@ -13,12 +13,12 @@ if [ -e "$1" ]; then
 		sudo $RUN "$@"
 	fi
 else
-	DIR=`dirname $1`
-	if [ -w $DIR ]; then
+	DIR="$(dirname $1)"
+	if [ -w "$DIR" ]; then
 		$RUN "$@"
 	else
 		echo "This file can not be created by you!"
-		read -p "Press any key"
+		read -r -p "Press any key"
 		sudo $RUN "$@"
 	fi
 fi

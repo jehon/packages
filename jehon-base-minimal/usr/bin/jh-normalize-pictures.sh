@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 EXIF="/usr/bin/exif"
-if [ ! - $EXIF ]; then
+if [[ ! -x "$EXIF" ]]; then
 	echo "EXIF $EXIF not found runnable"
 	exit 255
 fi
@@ -15,11 +15,11 @@ function treatOneJPG() {
 	# 1: comment
 	# 2: file
 	FILE="$2"
-	NFILE=`basename "$FILE"`
-	DFILE=`dirname "$FILE"`
-	COMP=`$EXIF -t 0x0132 "$FILE" 2>/dev/null | grep "Value" | cut -d ':' -f 2- `
+	NFILE="$(basename "$FILE")"
+	DFILE="$(dirname "$FILE")"
+	COMP="$($EXIF -t 0x0132 "$FILE" 2>/dev/null | grep "Value" | cut -d ':' -f 2- )"
 	if [ "$COMP" = "" ]; then
-		DATE=`date -r "$FILE" "+%F %Hh%Mm%S" `
+		DATE="$(date -r "$FILE" "+%F %Hh%Mm%S" )"
 		echo "no data $FILE: $COMP"
 		treatOneOther "$1" "$2"
 		return
@@ -28,11 +28,11 @@ function treatOneJPG() {
 			treatOneOther "$1" "$2"
 			return
 		else
-			DATE=`echo $COMP | cut -d ' ' -f 1 | tr ':' '-' `
-			TIME=`echo $COMP | cut -d ' ' -f 2 `
-			HUR=`echo $TIME | cut -d ':' -f 1 `
-			MIN=`echo $TIME | cut -d ':' -f 2 `
-			SEC=`echo $TIME | cut -d ':' -f 3 `
+			DATE="$(echo $COMP | cut -d ' ' -f 1 | tr ':' '-' )"
+			TIME="$(echo $COMP | cut -d ' ' -f 2 )"
+			HUR="$(echo $TIME | cut -d ':' -f 1 )"
+			MIN="$(echo $TIME | cut -d ':' -f 2 )"
+			SEC="$(echo $TIME | cut -d ':' -f 3 )"
 			DATE="${DATE} ${HUR}-${MIN}-${SEC}"
 		fi
 	fi
@@ -44,7 +44,7 @@ function treatOneJPG() {
 		NEWFILE="$DFILE/${DATE} $1.$EXT"
 	fi
 	echo "pict : $FILE -\> $NEWFILE"
-	if [ "$FILE" != "$NEWFILE" ]; then 
+	if [ "$FILE" != "$NEWFILE" ]; then
 		mv -i "$FILE" "$NEWFILE";
 	fi
 }
@@ -53,9 +53,9 @@ function treatOneOther() {
 	# 1: subname
 	# 2: file
 	FILE="$2"
-	NFILE=`basename "$FILE"`
-	DFILE=`dirname "$FILE"`
-	DATE=`date -r "$FILE" "+%F %H.%M.%S" `
+	NFILE="$( basename "$FILE" )"
+	DFILE="$( dirname "$FILE" )"
+	DATE="$( date -r "$FILE" "+%F %H.%M.%S" )"
 	if [ "$1" = "" ]
 	then
 		NEWFILE="$DFILE/${DATE} - $NFILE"
@@ -63,9 +63,9 @@ function treatOneOther() {
 		NEWFILE="$DFILE/${DATE} $1 - $NFILE"
 	fi
 	echo "other: $FILE -\> $NEWFILE"
-	if [ "$FILE" != "$NEWFILE" ]; then 
+	if [ "$FILE" != "$NEWFILE" ]; then
 		# true
-		mv -i "$FILE" "$NEWFILE"; 
+		mv -i "$FILE" "$NEWFILE";
 	fi
 }
 
@@ -74,8 +74,8 @@ function treatOne() {
 	T1=${1//\//_}
 	if [ "$T1" != "$1" ]; then
 		C2="$2"
-		R2=`realpath "$C2"`
-		C2=`dirname "$R2"`
+		R2="$( realpath "$C2")"
+		C2="$( dirname "$R2")"
 		C2=${C2#$COMMENT}
 		C2=${C2#\/}
 		C3=${C2//\// - }

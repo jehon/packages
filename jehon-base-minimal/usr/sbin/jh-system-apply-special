@@ -16,7 +16,7 @@ mkdir -p "$CACHE"
 CONF="$ROOT/conf"
 mkdir -p "$CONF"
 
-if [ ! -z  "$(ls -A $CONF/)" ]; then
+if [ -n  "$(ls -A $CONF/)" ]; then
 	cp --no-dereference -r "$CONF"/* /
 fi
 

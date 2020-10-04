@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-SWD="$( dirname $( realpath "$0" ) )"
+set -e
 
-if [[ "$( id -u )" != "0" ]]; then
-    echo "You need to be root to do this" >&2
-    exit 1
-fi
+# shellcheck source=/dev/null
+. jh-lib.sh
 
 hasKey() {
     gpg --keyring /etc/apt/trusted.gpg --no-default-keyring --list-key "$1" >/dev/null 2>/dev/null
@@ -18,16 +16,21 @@ hasKeyOrImport() {
     fi
 }
 
-SELF_KEY="$SWD"/../../etc/jehon/gpg.packages.pub.asc
+# TODO: jh-lib (get config)
+SELF_KEY="$( jhGetConfigFile "/etc/jehon/gpg.packages.pub.asc" )"
 SELF_KEY_ID=$( gpg --show-keys --with-colons "$SELF_KEY" | grep "^pub" | cut -d : -f 5 )
+
+echo "SELF_KEY=$SELF_KEY"
+echo "SELF_KEY_ID=$SELF_KEY_ID"
 
 if ! hasKey "$SELF_KEY_ID" ; then
     echo "Adding self key $SELF_KEY_ID"
-	apt-key add "$SELF_KEY"
+	sudo apt-key add "$SELF_KEY"
 fi
 
 hasKeyOrImport "1655A0AB68576280" "nodejs"
 hasKeyOrImport "1397BC53640DB551" "Chrome (ubuntu)"
 hasKeyOrImport "78BD65473CB3BD13" "Chrome (raspberrypi)"
+
 # hasKeyOrImport "7EA0A9C3F273FCD8" "Docker"
 

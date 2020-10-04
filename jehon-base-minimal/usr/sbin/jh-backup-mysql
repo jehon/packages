@@ -7,7 +7,7 @@ fi
 
 ROOT="/var/backups/live"
 
-if [ -z /etc/myqsl/debian.cnf ]; then
+if [ ! -a /etc/myqsl/debian.cnf ]; then
 	echo "Not installed"
 	exit 0
 fi
@@ -18,7 +18,7 @@ backupOne() {
 	db="$1"
 	echo "[$db] Start backup database"
 
-	FILE=`echo "$db" | sed "s/[^[:alnum:]]/_/g"`
+	FILE="$( echo "$db" | sed "s/[^[:alnum:]]/_/g" )"
 	FILE="$ROOT/mysql-$FILE.mysql"
 	if [ -r "$FILE.gz" ]; then
 		rm "$FILE.gz"
@@ -30,7 +30,7 @@ backupOne() {
 		if [ ! -s "$FILE" ]; then
 			echo "[$db] File is empty ! Removing it"
 			rm "$FILE"
-			continue;
+			return;
 		fi
 		echo "[$db] Compress backup"
 		gzip --no-name "$FILE"
@@ -38,7 +38,7 @@ backupOne() {
 	else
 		echo "[$db] Backup generate no file"
 	fi
-done
+}
 
 if [ -z "$2" ]; then
 	# for db in "${monthlyBackups[@]}"; do

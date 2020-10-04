@@ -2,16 +2,20 @@
 
 # set -e
 
-ROOT="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
-echo "$ROOT"
-SRC="$ROOT/.."
+# We need to calculate it us-self to be able to import jh-lib.sh
+SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
 # shellcheck source=/dev/null
-. "$ROOT"/jehon-base-minimal/usr/share/jehon-base-minimal/jehon-custom.sh
+. "$SWD/jehon-base-minimal/usr/bin/jh-lib.sh"
 
-export PATH="$ROOT/bin:$PATH"
+SRC="$( realpath "$PKG_FOLDER/.." )"
 
-echo "Looking for custom profile in $SRC"
+# shellcheck source=/dev/null
+. "$PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc/jehon-custom.sh"
+
+export PATH="$PKG_FOLDER/bin:$PKG_FOLDER/$PKG_NAME/usr/bin:$PATH"
+
+header "** Looking for custom profile in $SRC"
 while read F ; do
 	echo "Importing $F"
 	source "$F"
@@ -20,5 +24,18 @@ done < <( find "$SRC" -type d \
 	-prune -false \
 	-o -name "custom-profile.sh" )
 
-CDPATH=".:$(realpath "$SRC")"
+header "** Configure CDPATH **"
+CDPATH=".:$SRC"
 
+header "** Configure APT **"
+FILE="/etc/apt/sources.list.d/jehon-package-repo.list"
+
+LINE="deb [trusted=yes] file://$PKG_FOLDER/repo /"
+ORIGINAL="$( cat "$FILE" )"
+
+if [ "$ORIGINAL" != "$LINE" ]; then
+    warning "!! Need to update $FILE (as root) !!"
+    echo "original:  $ORIGINAL"
+    echo "should be: $LINE"
+    echo "$LINE" | sudo tee /etc/apt/sources.list.d/jehon-package-repo.list
+fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Searching for old configuration files..."
-purgelist=`sudo dpkg -l | grep ^rc | awk '{print $2}'`
+purgelist="$( sudo dpkg -l | grep ^rc | awk '{print $2}' )"
 
 echo "Purge list: $purgelist"
 apt-get purge $purgelist

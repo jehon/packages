@@ -2,7 +2,7 @@
 
 set -e
 
-if [ ! -z "$1" ]; then
+if [ -n "$1" ]; then
 	pushd "$1"
 fi
 
