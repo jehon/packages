@@ -1,3 +1,10 @@
+jehon-debs (2020.10.05.15.41.47) main; urgency=medium
+
+  * build: add path in makefile
+  * feature: wifi access point
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 05 Oct 2020 15:41:50 +0200
+
 jehon-debs (2020.10.04.20.47.58) main; urgency=medium
 
   * feature(osmc): use one file to generate config
