@@ -1,3 +1,7 @@
-# https://forums.opensuse.org/showthread.php/522805
 
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="0b33", MODE:="660", GROUP="input" 
+# Other solution ?
+# https://forums.opensuse.org/showthread.php/522805
+# SUBSYSTEMS=="usb", ATTRS{idVendor}=="0b33", MODE:="660", GROUP="input"
+
+ACTION=="add", ATTRS{name}=="Contour Design ShuttlePRO v2", MODE="0644"
+ACTION=="remove", ATTRS{name}=="Contour Design ShuttlePRO v2", RUN+="/usr/bin/pkill shuttle-go"

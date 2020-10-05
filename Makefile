@@ -79,9 +79,9 @@ endef
 #
 #
 
-all-clean: dockers-clean packages-clean
+all-clean: externals-clean dockers-clean packages-clean
 all-test: shell-test
-all-build: dockers-build packages-build
+all-build: externals-build dockers-build packages-build
 
 .PHONY: debug
 debug:
@@ -92,6 +92,22 @@ debug:
 publish: deploy-local deploy-synology-repo
 	git push
 
+#
+#
+# Externals
+#
+#
+externals-clean:
+	rm -f externals/shuttle-go/shuttle-go
+
+externals-update:
+	# TODO: check this !
+	git subtree pull --prefix externals/shuttle-go git@github.com:abourget/shuttle-go.git master --squash
+
+externals-build: externals/shuttle-go/shuttle-go
+
+externals/shuttle-go/shuttle-go: externals/shuttle-go/*.go
+	cd externals/shuttle-go && ./build.sh
 #
 #
 # Dockers
@@ -128,7 +144,8 @@ packages-clean:
 	rm -f $(ROOT)/repo/*
 	rm -f $(ROOT)/jehon-debs_
 
-packages-build: repo/Release
+packages-build: repo/Release externals-build
+
 
 repo/Release.gpg: repo/Release
 	gpg --sign --armor --detach-sign --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
@@ -141,7 +158,10 @@ repo/Packages: debian/debhelper-build-stamp
 	cd repo && \
 		dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
 
-debian/debhelper-build-stamp: dockers/jehon-docker-build.dockerbuild debian/changelog
+debian/debhelper-build-stamp: dockers/jehon-docker-build.dockerbuild \
+		debian/changelog \
+		externals-build
+
 	@mkdir -p repo
 	rm -f repo/jehon-*.deb
 #echo "************ build indep ******************"
@@ -239,3 +259,12 @@ deploy-synology-repo: packages-build
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
 		"repo/" "$(SYNOLOGY_HOST):/volume3/temporary/repo" \
 			--rsync-path=/bin/rsync
+
+#
+#
+# Logs
+#
+#
+udev-logs: logs-udev
+logs-udev:
+	sudo udevadm monitor -u

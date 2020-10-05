@@ -1,3 +1,15 @@
+jehon-debs (2020.10.05.21.39.06) main; urgency=medium
+
+  * UNRELEASED
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 05 Oct 2020 21:39:08 +0200
+
+jehon-debs (2020.10.05.21.32.14) main; urgency=medium
+
+  * UNRELEASED
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 05 Oct 2020 21:32:16 +0200
+
 jehon-debs (2020.10.05.15.41.47) main; urgency=medium
 
   * build: add path in makefile
