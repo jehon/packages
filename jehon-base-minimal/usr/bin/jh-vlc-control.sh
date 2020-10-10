@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
 
-WID="$( xdotool search --name "VLC media player" | head -n 1 )"
-
-if [ -z "$WID" ]; then
-    echo "VLC not found"
-    exit 101
-fi
-
 # https://www.vlchelp.com/vlc-media-player-shortcuts/
 # https://gitlab.com/cunidev/gestures/-/wikis/xdotool-list-of-key-codes
 
-PRESSED_KEY=""
+# #
+# # Be the only one remaining
+# #
+# SELF="$(basename "$0" )"
+# ME="$$"
+# echo "Me: $ME"
+# OTHER="$( ps x | grep bash | grep "$SELF" | awk '{print $1}' | grep -v "$ME" | head -n 1 )"
+# if [ -n "$OTHER" ]; then
+#     echo "Killing '$OTHER'"
+#     kill "$OTHER"
+# fi
 
+#
+# Auto release other keys
+#
+PRESSED_KEY=""
 release() {
     local LL="$PRESSED_KEY"
     # Forget it to avoid loop
@@ -21,9 +28,12 @@ release() {
     fi
 }
 
+#
+# Send a key
+#
 xdt() {
     KEY="$1"
-    ACT="${2:="key"}"
+    ACT="${2:-"key"}"
     if [ -n "$PRESSED_KEY" ]; then
         release
     fi
@@ -32,9 +42,15 @@ xdt() {
             PRESSED_KEY="$KEY"
             ;;
     esac
-    xdotool "$ACT" --window "$WID" "$KEY"
+    set -x
+    xdotool search -name "VLC media player" "$ACT" --clearmodifiers "$KEY"
+    set +x
 }
 
+
+#
+# Main: send a key
+#
 case "$1" in
     "release" )
         release
@@ -42,7 +58,7 @@ case "$1" in
 
     "play" )
         # Custom key
-        xdt "shift+threesuperior"
+        xdt "BackSpace"
         # xdt "space"
         ;;
     "pause" )
@@ -66,26 +82,26 @@ case "$1" in
         xdt "Shift+Left"
         ;;
     "start-prev-1" )
-        xdt "Shift+Left" "keydown"
+        xdt "Shift+Left"
         ;;
     "start-prev-2" )
-        xdt "Alt+Left" "keydown"
+        xdt "Alt+Left"
         ;;
     "start-prev-3" )
-        xdt "Ctrl+Left" "keydown"
+        xdt "Ctrl+Left"
         ;;
 
     "next-frame" )
         xdt "e"
         ;;
     "start-next-1" )
-        xdt "Shift+Right" "keydown"
+        xdt "Shift+Right"
         ;;
     "start-next-2" )
-        xdt "Alt+Right" "keydown"
+        xdt "Alt+Right"
         ;;
     "start-next-3" )
-        xdt "Ctrl+Right" "keydown"
+        xdt "Ctrl+Right"
         ;;
 
     * )
@@ -93,5 +109,3 @@ case "$1" in
         exit 102
         ;;
 esac
-
-
