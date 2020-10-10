@@ -13,8 +13,8 @@ if [ -n "$PKG_FOLDER" ]; then
     CFG="$PKG_FOLDER/jehon-base-minimal/usr/share/jehon-base-minimal/shuttle-go.json"
 fi
 
-echo "EXE: $EXE"
-echo "CFG: $CFG"
+# echo "EXE: $EXE"
+# echo "CFG: $CFG"
 
 "$EXE" \
     -config "$CFG" \
