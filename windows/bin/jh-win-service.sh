@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-case "$1" in 
+case "$1" in
 	"test" )
-		RUNNING=`sc.exe queryex "$2" | grep STATE | grep "RUNNING"`
+		RUNNING="$( sc.exe queryex "$2" | grep STATE | grep "RUNNING" )"
 		if [ "$RUNNING" != "" ]; then
 			# echo "Service is running"
 			exit 0

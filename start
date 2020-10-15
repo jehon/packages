@@ -7,14 +7,14 @@ if [[ "$(whoami)" != "root" ]]; then
     exit 255
 fi
 
+echo "*** Installing required packages"
+apt install -y apt-transport-https
+
 echo "*** Installing source from github"
 SRC_LIST="/etc/apt/sources.list.d/jehon-github.list"
 # wget "https://raw.githubusercontent.com/jehon/packages/master/jehon-base-minimal${SRC_LIST}" \
 #     -O "$SRC_LIST"
 echo "deb [trusted=yes] http://jehon.github.io/packages/ /" > "${SRC_LIST}"
-
-echo "*** Installing required packages"
-apt install -y apt-transport-https
 
 echo "*** Updating sources"
 apt update

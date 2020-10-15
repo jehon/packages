@@ -15,6 +15,11 @@ if [ -z "$2" ]; then
 	exit 255
 fi
 
-scp start "$2@$1":/tmp/start
+if [ -z "$3" ]; then
+	echo "Need password as [2]"
+	exit 255
+fi
 
-ssh "$2@$1" "chmod +x /tmp/start; sudo /tmp/start"
+sshpass -p"$3" scp start "$2@$1":/tmp/start
+
+sshpass -p"$3" ssh "$2@$1" "chmod +x /tmp/start; sudo /tmp/start"
