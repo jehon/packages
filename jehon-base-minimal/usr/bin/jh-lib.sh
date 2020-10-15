@@ -60,3 +60,5 @@ warning() {
 
 export SWD
 export PKG_FOLDER
+
+export JH_SYNOLOGY_IP=192.168.1.9
