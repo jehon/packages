@@ -1,3 +1,63 @@
+jehon-debs (2020.10.19.17.57.15) main; urgency=medium
+
+  * fix: try to enhance jh-vlc-control
+  * feature: merge with old windows repository
+  * fix: reinstall kiosk
+  * fix: relative path
+  * bug: fix shuttle go being available everywhere
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 19 Oct 2020 17:57:17 +0200
+
+jehon-debs (2020.10.19.17.56.04) main; urgency=medium
+
+  * fix: try to enhance jh-vlc-control
+  * feature: merge with old windows repository
+  * fix: reinstall kiosk
+  * fix: relative path
+  * bug: fix shuttle go being available everywhere
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 19 Oct 2020 17:56:06 +0200
+
+jehon-debs (2020.10.19.17.55.30) main; urgency=medium
+
+  * fix: try to enhance jh-vlc-control
+  * feature: merge with old windows repository
+  * fix: reinstall kiosk
+  * fix: relative path
+  * bug: fix shuttle go being available everywhere
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 19 Oct 2020 17:55:32 +0200
+
+jehon-debs (2020.10.19.17.52.17) main; urgency=medium
+
+  * fix: try to enhance jh-vlc-control
+  * feature: merge with old windows repository
+  * fix: reinstall kiosk
+  * fix: relative path
+  * bug: fix shuttle go being available everywhere
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 19 Oct 2020 17:52:19 +0200
+
+jehon-debs (2020.10.19.17.51.03) main; urgency=medium
+
+  * fix: try to enhance jh-vlc-control
+  * feature: merge with old windows repository
+  * fix: reinstall kiosk
+  * fix: relative path
+  * bug: fix shuttle go being available everywhere
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 19 Oct 2020 17:51:06 +0200
+
+jehon-debs (2020.10.19.09.06.19) main; urgency=medium
+
+  * fix: try to enhance jh-vlc-control
+  * feature: merge with old windows repository
+  * fix: reinstall kiosk
+  * fix: relative path
+  * bug: fix shuttle go being available everywhere
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Mon, 19 Oct 2020 09:06:22 +0200
+
 jehon-debs (2020.10.10.17.36.36) main; urgency=medium
 
   * UNRELEASED

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+BOOTLINE=$( mount | grep "/boot " ) || true
+
+if [[ -n "$BOOTLINE" ]] ; then
+    echo "Found a distinct boot partition"
+    mkdir -p /boot.cpy
+    rsync -ai --delete /boot/ /boot.cpy
+fi
