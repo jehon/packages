@@ -3,7 +3,8 @@
         {
             "name": "vlc",
             "matchwindow_titles": [
-                "VLC"
+                "VLC",
+                ".*"
             ],
             "driver": "exec",
             "slow_jog": 0,
