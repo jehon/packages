@@ -22,4 +22,7 @@ apt update
 echo "*** Installing jehon-base-minimal"
 apt install -y jehon-base-minimal
 
-rm "$0"
+ROOT="$(dirname "$0")"
+if [ ! -r "$ROOT/.git" ] then
+	rm "$0"
+fi
