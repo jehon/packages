@@ -71,7 +71,6 @@ Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
 	jehon-base-minimal,
-	jehon-base-snap,
 	git-cola,
 	xclip,
 	gparted,
@@ -100,8 +99,8 @@ Package: jehon-system-private
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
+	jehon-base-minimal,
     jehon-env-home,
-	jehon-env-dev,
 	jehon-env-desktop,
 	rar,unrar,
 	encfs

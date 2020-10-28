@@ -35,7 +35,14 @@ ORIGINAL="$( cat "$FILE" )"
 
 if [ "$ORIGINAL" != "$LINE" ]; then
     warning "!! Need to update $FILE (as root) !!"
-    echo "original:  $ORIGINAL"
-    echo "should be: $LINE"
-    echo "$LINE" | sudo tee /etc/apt/sources.list.d/jehon-package-repo.list
+    echo "original :  $ORIGINAL" >&2
+    echo "should be: $LINE" >&2
+	echo "--- Do that as root ---"
+	if [ -w /etc/apt/sources.list.d/jehon-package-repo.list ]; then
+    	echo "$LINE" | sudo tee /etc/apt/sources.list.d/jehon-package-repo.list
+	else
+		echo "$LINE" > ~/jehon-package-repo.list
+		echo "Copy it to target:"
+		echo "sudo cp jehon-package-repo.list /etc/apt/sources.list.d"
+	fi
 fi
