@@ -25,6 +25,12 @@ ensure_snap_installed() {
 		CONFIN_PARSE=$CONFIN
 	fi
 
+	CONFIN_ARG="--$CONFIN"
+
+	if jh-wsl-detect.sh ; then
+		# In some cases, we can not specify the confinment type
+		CONFIN_ARG=""
+	fi
 
 	if [ -n "$1" ] ; then
 		CHANNEL="$1"
@@ -39,9 +45,11 @@ ensure_snap_installed() {
 
 	if getSnapConfigFor "$NAME" >/dev/null; then
 		# Test the installed version
-		if ! getSnapConfigFor "$NAME" | grep -E "$CONFIN_PARSE" >/dev/null ; then
-			#echo "Snap $NAME: changing confinment to $CONFIN"
-			snap remove "$NAME"
+		if [ -n "$CONFIN_ARG" ]; then
+			if ! getSnapConfigFor "$NAME" | grep -E "$CONFIN_PARSE" >/dev/null ; then
+				#echo "Snap $NAME: changing confinment to $CONFIN"
+				snap remove "$NAME"
+			fi
 		fi
 
 		if ! getSnapConfigFor "$NAME" | grep "$CHANNEL" >/dev/null; then
@@ -51,12 +59,12 @@ ensure_snap_installed() {
 	fi
 
 	if ! getSnapConfigFor "$NAME" >/dev/null; then
-		#echo "Snap $NAME: installing $CHANNEL with confinment to $CONFIN"
-		snap install $NAME --$CONFIN --channel="$CHANNEL"
+		# echo "Snap $NAME: installing $CHANNEL with confinment to $CONFIN ($CONFIN_ARG)"
+		snap install $NAME $CONFIN_ARG --channel="$CHANNEL"
 	fi
 }
 
-# ensure_snap_installed "docker"
+ensure_snap_installed "docker"
 ensure_snap_installed "vlc"
 ensure_snap_installed "filezilla" jailmode beta
 ensure_snap_installed "gimp"
