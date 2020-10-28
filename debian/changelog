@@ -1,3 +1,12 @@
+jehon-debs (2020.10.28.21.10.45) main; urgency=medium
+
+  * chore: update snap's
+  * chore: adapt keys
+  * chore: remove dead code
+  * feature: snap on wsl
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Wed, 28 Oct 2020 21:10:47 +0100
+
 jehon-debs (2020.10.28.13.39.56) main; urgency=medium
 
   * fix: startup script
