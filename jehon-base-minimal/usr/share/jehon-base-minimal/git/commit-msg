@@ -25,16 +25,10 @@ if [[ $MSG =~ ^[[:alnum:]]+(\(.+\))?: ]]; then
 	exit 0
 fi
 
-if [[ $REMOTE =~ .+bitbucket.evs.tv.+ ]]; then
-	# EVS
-	if [[ $MSG =~ ^[A-Z]+-[0-9]+ ]]; then
-		exit 0
-	fi
-
-	echo "[EVS] You message does not start with a JIRA ticket, chore: or doc:"
-	echo "$MSG"
-	exit 255
-fi
+## Must start with a jira ticket
+# if [[ $MSG =~ ^[A-Z]+-[0-9]+ ]]; then
+# 	exit 0
+# fi
 
 echo "[OTHER] You message does not start with a conventional commit"
 exit 255
