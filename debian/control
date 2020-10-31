@@ -103,6 +103,8 @@ Depends: ${misc:Depends}
     jehon-env-home,
 	jehon-env-desktop,
 	rar,unrar,
+	libnss3-dev,
+	libatk1.0-dev,
 	encfs
 Description: Jehon environnement
 
