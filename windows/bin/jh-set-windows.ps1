@@ -12,12 +12,12 @@ Function My-Set-Screen-For {
         $Screen,
         $Title
     )
- 
+
     Begin {
         $screenWA = $Screen.WorkingArea
 
         $threads = Get-Process | Where-Object { $_.MainWindowTitle -like $Title }
-         
+
         foreach($t in $threads) {
             $uPid = $t | select Id
             echo "Setting $Title $uPid"
