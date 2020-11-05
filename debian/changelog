@@ -1,3 +1,15 @@
+jehon-debs (2020.11.05.17.51.05) main; urgency=medium
+
+  * style: align
+  * chore: strength wsl profile
+  * chore: unused since docker implement it
+  * fix: dependencies
+  * fix: add backup
+  * chore: style
+  * chore: update keys
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Thu, 05 Nov 2020 17:51:08 +0100
+
 jehon-debs (2020.10.28.21.10.45) main; urgency=medium
 
   * chore: update snap's
