@@ -1,8 +1,9 @@
 # https://docs.travis-ci.com/user/reference/bionic/
 os: linux
-dist: bionic
+dist: focal
 
-language: generic
+# Needed for go being installed
+language: go
 
 services:
   - docker
@@ -12,6 +13,9 @@ addons:
   apt:
     packages:
       - make
+
+go: "1.13"
+
 
 install:
   - openssl aes-256-cbc -K $encrypted_1433052ca164_key -iv $encrypted_1433052ca164_iv -in secrets/gpg.packages.asc.enc -out secrets/gpg.packages.asc -d
