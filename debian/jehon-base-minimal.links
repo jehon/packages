@@ -12,6 +12,6 @@
 /usr/share/jehon-base-minimal/etc/jehon-patch                     /etc/dpkg/dpkg.cfg.d/jehon-patch
 /usr/share/jehon-base-minimal/etc/gpg.packages.pub.asc            /etc/jehon/gpg.packages.pub.asc
 /usr/share/jehon-base-minimal/etc/99-shuttlepro.rules             /etc/udev/rules.d/99-shuttlepro.rules
-/usr/share/jehon-base-minimal/etc/jehon                           /etc/ssh/authorized_keys/jehon
 
-/etc/ssh/authorized_keys/jehon                           /etc/ssh/authorized_keys/root
+/usr/share/jehon-base-minimal/etc/jehon                           /etc/ssh/authorized_keys/jehon
+/usr/share/jehon-base-minimal/etc/jehon                           /etc/ssh/authorized_keys/root
