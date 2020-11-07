@@ -35,8 +35,8 @@ host kiosk
   user          root
 
 host synology-auto
-	hostname      synology
-	port          2022
-	user          root
-	CheckHostIP   no
-	IdentityFile  /etc/jehon/restricted/synology_auto
+  hostname      synology
+  port          2022
+  user          root
+  CheckHostIP   no
+  IdentityFile  /etc/jehon/restricted/synology_auto

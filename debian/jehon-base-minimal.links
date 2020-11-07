@@ -9,7 +9,9 @@
 /usr/share/jehon-base-minimal/etc/jh-backup-postgres              /etc/cron.daily/jh-backup-postgres
 /usr/share/jehon-base-minimal/etc/jh-backup-snapshots-daily       /etc/cron.daily/jh-backup-snapshots-daily
 /usr/share/jehon-base-minimal/etc/jh-backup-snapshots-monthly     /etc/cron.monthly/jh-backup-snapshots-monthly
-/usr/share/jehon-base-minimal/etc/jehon                           /etc/ssh/authorized_keys/jehon
 /usr/share/jehon-base-minimal/etc/jehon-patch                     /etc/dpkg/dpkg.cfg.d/jehon-patch
 /usr/share/jehon-base-minimal/etc/gpg.packages.pub.asc            /etc/jehon/gpg.packages.pub.asc
 /usr/share/jehon-base-minimal/etc/99-shuttlepro.rules             /etc/udev/rules.d/99-shuttlepro.rules
+/usr/share/jehon-base-minimal/etc/jehon                           /etc/ssh/authorized_keys/jehon
+
+/etc/ssh/authorized_keys/jehon                           /etc/ssh/authorized_keys/root

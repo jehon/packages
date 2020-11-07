@@ -1,3 +1,10 @@
+jehon-debs (2020.11.07.09.44.53) main; urgency=medium
+
+  * feature: no root login
+  * build: fix go version
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Sat, 07 Nov 2020 09:44:54 +0100
+
 jehon-debs (2020.11.05.17.51.05) main; urgency=medium
 
   * style: align
