@@ -14,11 +14,13 @@ export REMOTE_BACKUP
 # This key is not delivered with packages
 KEY="/etc/jehon/restricted/synology_auto"
 
+# TODO: use get config file
+
 if [ -r "$KEY" ]; then
 	/usr/bin/jh-rsync-backup.sh \
 		/ root@synology:/synology/backup \
 		-e "ssh -i $KEY" \
-		--filter ". /etc/jh-rsync-backup-computer-filter" \
+		--filter ". /etc/jehon/jh-rsync-backup-computer-filter" \
 
 else
 	echo "No $KEY found, no backup will run" >&2

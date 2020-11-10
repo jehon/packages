@@ -47,7 +47,8 @@ Depends: ${misc:Depends},
 	gnupg2, dirmngr,
 	rsync,
 	git,
-	gettext-base
+	gettext-base,
+	nodejs
 Description: Jehon minimal hooks
 
 
