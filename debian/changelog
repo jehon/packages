@@ -1,3 +1,10 @@
+jehon-debs (2020.11.10.13.50.30) main; urgency=medium
+
+  * chore: root can ssh
+  * chore: use node as package instead of snap
+
+ -- Jean Honlet <jehon@users.noreply.github.com>  Tue, 10 Nov 2020 13:50:32 +0100
+
 jehon-debs (2020.11.07.09.44.53) main; urgency=medium
 
   * feature: no root login

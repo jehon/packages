@@ -1,6 +1,7 @@
 #
 # File: /etc/ssh/ssh_config
 # Tag: minimal_ssh_config
+# Emtpy: 1
 #
 
 Host *

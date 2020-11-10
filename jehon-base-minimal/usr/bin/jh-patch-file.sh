@@ -5,7 +5,7 @@
 # - "uninstall" <file> [tag]
 
 #
-# File format example: 
+# File format example:
 #
 # File: /etc/ssh/ssh_config
 # Tag: minimal_ssh_config
@@ -14,9 +14,9 @@
 if [ "$1" == "uninstall" ]; then
 	INCLUDE=""
 	FILE="$2"
-	TAG="$3"	
+	TAG="$3"
 	echo "Uninstalling from $FILE with $TAG"
-else 
+else
 	INCLUDE="$1"
 	if [ ! -f "$INCLUDE" ]; then
 		echo "Include file does not exists [1]: $INCLUDE" >&2
@@ -27,11 +27,14 @@ else
 	# s="$( basename "$s" )"
 	# ${s%.*}
 	while read -r line; do
-		if [[ $line =~ \#[[:blank:]]+Tag:[[:blank:]]*(.*) ]] ; then 
+		if [[ $line =~ \#[[:blank:]]+Tag:[[:blank:]]*(.*) ]] ; then
 			TAG=${BASH_REMATCH[1]};
 		fi
-		if [[ $line =~ \#[[:blank:]]+File:[[:blank:]]*(.*) ]] ; then 
+		if [[ $line =~ \#[[:blank:]]+File:[[:blank:]]*(.*) ]] ; then
 			FILE=${BASH_REMATCH[1]};
+		fi
+		if [[ $line =~ \#[[:blank:]]+Empty:[[:blank:]]*(.*) ]] ; then
+			EMPTY=${BASH_REMATCH[1]};
 		fi
 	done < $INCLUDE
 fi
@@ -50,8 +53,10 @@ if [ "$FILE" = "" ]; then
 fi
 
 if [ ! -r "$FILE" ]; then
-	echo "File $FILE does not exists, bailing out..." >&2
-	exit 0
+	if [ -z "$EMPTY"]; then
+		echo "File $FILE does not exists, bailing out..." >&2
+		exit 0
+	fi
 fi
 
 BACKUP="$FILE-before-patch-file"
