@@ -97,9 +97,6 @@ case "$1" in
 
 		apply_special
 
-		# Add node source
-		echo "deb https://deb.nodesource.com/node_13.x $( lsb_release -s -c ) main" > /etc/apt/sources.list.d/nodesource.list
-
 		mkdir -p /etc/jehon/restricted/
 		chmod 500 /etc/jehon/restricted
 
