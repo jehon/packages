@@ -7,6 +7,9 @@ if [[ "$(whoami)" != "root" ]]; then
     exit 255
 fi
 
+echo "*** Setting timezone ***"
+timedatectl set-timezone Europe/Brussels
+
 echo "*** Installing required packages"
 apt install -y apt-transport-https
 
