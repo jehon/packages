@@ -24,6 +24,12 @@ done < <( find "$SRC" -type d \
 	-prune -false \
 	-o -name "custom-profile.sh" )
 
+EBIN="$( realpath "$SWD/../bin" )"
+if [ -d "$EBIN" ]; then
+	header "** Adding $EBIN"
+	export PATH="$EBIN:$PATH"
+fi
+
 header "** Configure CDPATH **"
 CDPATH=".:$SRC"
 
