@@ -60,7 +60,8 @@ EOC
 
 # echo "Starting $*"
 # DISPLAY=:1 "$@" &
-DISPLAY="$(/sbin/ip route | awk '/default/ { print $3 }'):0"
+# DISPLAY="$(/sbin/ip route | awk '/default/ { print $3 }'):0"
+# echo "Initial display: $DISPLAY"
 
 if [ "$PID_SYSTEMD" != 1 ]; then
 	# exec: remplace the current shell with the rest of the command
@@ -70,7 +71,8 @@ if [ "$PID_SYSTEMD" != 1 ]; then
 	#          runuser -u $LOGNAME => come back as user
 	#              $@ => a potential command
 	#
-    ##
+	#
+
 	if [ -n "$1" ]; then
 		# With a command
 		echo "Launching command $@"
