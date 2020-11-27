@@ -25,7 +25,19 @@ apt update
 echo "*** Installing jehon-base-minimal"
 apt install -y jehon-base-minimal
 
+echo "*** Enabling firewall"
+ufw allow ssh
+ufw enable
+ufw status
+
 ROOT="$(dirname "$0")"
-if [ ! -r "$ROOT/.git" ] then
+if [ ! -r "$ROOT/.git" ]; then
 	rm "$0"
 fi
+
+echo ""
+echo ""
+echo ""
+echo ""
+echo "*** Install done ***"
+echo "SSH is enabled"
