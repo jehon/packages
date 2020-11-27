@@ -1,0 +1,4 @@
+
+# For WSL entering systemd system
+
+%sudo ALL = NOPASSWD: /usr/bin/nsenter *

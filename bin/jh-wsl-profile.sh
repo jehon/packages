@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "** Using systemd"
+
 if [[ ! -x /usr/bin/daemonize ]] || [[ ! -x /usr/bin/fc-list ]] ||[[ ! -r /usr/lib/systemd/user/dbus.service ]]; then
     echo "You should install these packages: daemonize dbus-user-session fontconfig"
     # sudo apt-get install -yqq daemonize dbus-user-session fontconfig
@@ -10,7 +12,7 @@ fi
 while true; do
 	sleep 0.1s
 	PID_SYSTEMD="$(pidof systemd)"
-	echo "Found: $PID_SYSTEMD"
+	echo "** Found: $PID_SYSTEMD"
 
 	if [ -z "$PID_SYSTEMD" ]; then
 		echo "Launching systemd"
@@ -32,10 +34,10 @@ while true; do
 		fi
 
 		# Clean up mutiples values
-		echo "Killing $PID1"
-		echo ""
-		cat /proc/$PID1/cmdline
-		echo ""
+		echo "** Killing $PID1"
+		# echo ""
+		# cat /proc/$PID1/cmdline
+		# echo ""
 		kill "$PID1"
 	fi
 done
@@ -76,10 +78,10 @@ if [ "$PID_SYSTEMD" != 1 ]; then
 	if [ -n "$1" ]; then
 		# With a command
 		echo "Launching command $@"
-    	exec sudo nsenter -t $(pidof systemd) -a runuser -u "$LOGNAME" --whitelist-environment=DISPLAY "$@"
+    	exec sudo /usr/bin/nsenter -t "$(pidof systemd)" -a runuser -u "$LOGNAME" --whitelist-environment=DISPLAY "$@"
 	else
 		# Without a command (shell)
-		exec sudo nsenter -t $(pidof systemd) -a su --login "$LOGNAME" --whitelist-environment=DISPLAY
+		exec sudo /usr/bin/nsenter -t "$(pidof systemd)" -a su --login "$LOGNAME" --whitelist-environment=DISPLAY
 	fi
 else
     echo "Already in systemd = 1"
