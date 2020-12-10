@@ -10,7 +10,8 @@ Add-Type -name NativeMethods -namespace Win32 `
 Function My-Set-Screen-For {
     Param (
         $Screen,
-        $Title
+        $Title,
+        $Maximize = $TRUE
     )
 
     Begin {
@@ -24,19 +25,26 @@ Function My-Set-Screen-For {
 
             # Restore window (4)
             # [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 4) | Out-Null
-            Start-Sleep -Seconds 1
-
+            # Start-Sleep -Seconds 1
+            
             # Move the window
+            echo "- Moving it"
             My-Set-Window -ProcessId $uPid.Id -X $screenWA.X -Y  $screenWA.Y
             Start-Sleep -Seconds 1
 
-            # Maximize the window (3)
-            [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 3) | Out-Null
-            Start-Sleep -Seconds 1
+            if ($Maximize) {
+                # Maximize the window (3)
+                echo "- Maximize it"
+                [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 3) | Out-Null
+                Start-Sleep -Seconds 1
+            } else {
+                echo "- Leaving like that"
+            }
 
             # Activate the window (5)
+            echo "- Activating it"
             [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 5) | Out-Null
-            Start-Sleep -Seconds 1
+            # Start-Sleep -Seconds 1
         }
     }
 }
@@ -45,6 +53,10 @@ Function My-Set-Screen-For {
 $primary = My-Get-Screen -Primary
 $secondary = My-Get-Screen -Secondary
 
-
 My-Set-Screen-For -Screen $secondary -Title "*- Outlook"
 My-Set-Screen-For -Screen $secondary -Title "*Microsoft Teams*"
+My-Set-Screen-For -Screen $secondary -Title "*Mozilla Firefox*"
+
+My-Set-Screen-For -Screen $primary -Title "*- Excel" -Maximize $FALSE
+My-Set-Screen-For -Screen $primary -Title "*- Word" -Maximize $FALSE
+My-Set-Screen-For -Screen $primary -Title "*- PowerPoint" -Maximize $FALSE
