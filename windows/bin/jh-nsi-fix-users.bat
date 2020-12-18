@@ -1,6 +1,6 @@
+@echo off
 
 echo "Starting..."
-pause
 
 RD /S /Q "%WinDir%\System32\GroupPolicyUsers"
 
