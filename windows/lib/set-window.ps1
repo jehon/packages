@@ -1,5 +1,11 @@
 # Thanks to 
 
+# Set state of the window:
+#   See https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+
+Add-Type -name NativeMethods -namespace Win32 `
+    -MemberDefinition '[DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);' `
+
 Function My-Set-Window {
     <#
         .SYNOPSIS
@@ -94,6 +100,48 @@ Function My-Set-Window {
         }
         If ($Return) {
             $Return = [Window]::MoveWindow($Handle, $x, $y, $Width, $Height, $True)
+        }
+    }
+}
+
+Function My-Set-Screen-For {
+    Param (
+        $Screen,
+        $Name,
+        $Maximize = $TRUE
+    )
+
+    Begin {
+        $screenWA = $Screen.WorkingArea
+
+        $threads = Get-Process | Where-Object { $_.Name -like $Name} | Where-Object { $_.MainWindowTitle }
+
+        foreach($t in $threads) {
+            $uPid = $t | select Id
+            echo "Setting $Name $uPid"
+    
+            echo "- Restore size"
+            # Restore window (4)
+            [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 4) | Out-Null
+            Start-Sleep -Seconds 1
+            
+            # Move the window
+            echo "- Moving it"
+            My-Set-Window -ProcessId $uPid.Id -X $screenWA.X -Y  $screenWA.Y
+            Start-Sleep -Seconds 1
+
+            if ($Maximize) {
+                # Maximize the window (3)
+                echo "- Maximize it"
+                [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 3) | Out-Null
+                # Start-Sleep -Seconds 1
+            } else {
+                echo "- Leaving like that"
+            }
+
+            # Activate the window (5)
+            #echo "- Activating it"
+            #[Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 5) | Out-Null
         }
     }
 }
