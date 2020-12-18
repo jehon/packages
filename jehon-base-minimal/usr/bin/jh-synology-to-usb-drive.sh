@@ -13,7 +13,7 @@ jhrsync() {
 		mkdir "$TARGET"
 	fi
 
-	rsync --recursive --links --times --perms --inplace --itemize-changes --progress --delete \
+	rsync --recursive --links --times --no-perms --inplace --itemize-changes --progress --delete \
 		--exclude "@eaDir" \
 		--exclude "#recycle" \
 		--delete-excluded \

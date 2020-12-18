@@ -19,6 +19,7 @@ setup-computer:
 	sudo apt install -f -y
 	sudo jh-apt-install-common-keys
 	sudo apt update
+	sudo snap install --classic go
 	@echo "You should add "
 	@echo ". $(ROOT)/setup-profile.sh "
 	@echo "in your profile"

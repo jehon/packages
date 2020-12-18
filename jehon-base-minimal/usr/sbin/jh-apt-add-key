@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-apt-key adv --recv-keys --keyserver keyserver.ubuntu.com "$1"
+# apt-key adv --recv-keys --keyserver keyserver.ubuntu.com "$1"
 
-# curl -sL "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x$1" | sudo apt-key add
+curl -sL "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x$1" | sudo apt-key add
