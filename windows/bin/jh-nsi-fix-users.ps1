@@ -1,4 +1,6 @@
 
+#Requires -RunAsAdministrator
+
 # must be at C:\ to work !  how bizarre
 
 Write-Output "Starting..."

@@ -1,4 +1,5 @@
-# Thanks to 
+
+# Thanks to
 
 # Set state of the window:
 #   See https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
@@ -6,11 +7,63 @@
 Add-Type -name NativeMethods -namespace Win32 `
     -MemberDefinition '[DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);' `
 
-Function My-Set-Window {
+Function Get-Screen {
+
     <#
         .SYNOPSIS
+            Get infos about the screens
+
+        .DESCRIPTION
+            Return the size of the screen
+
+        .PARAMETER Primary
+            Wether it is a primary screen or not
+
+        .PARAMETER Secondary
+            Wether it is a secondary screen or not
+
+        .OUTPUT
+            System.Drawing.Rectangle
+
+    #>
+
+    [OutputType('System.Windows.Forms')]
+    [cmdletbinding()]
+    Param (
+        [switch]$Primary,
+        [switch]$Secondary
+    )
+    Begin {
+        Add-Type -AssemblyName System.Windows.Forms
+    }
+    Process {
+        # https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.screen.workingarea?view=netcore-3.1#System_Windows_Forms_Screen_WorkingArea
+
+        $selected_list = [System.Windows.Forms.Screen]::AllScreens | Sort-Object -Property { $_.WorkingArea.X }
+        If ($PSBoundParameters.ContainsKey('Primary')) {
+            $selected_list = $selected_list | Where-Object Primary
+        }
+
+        If ($PSBoundParameters.ContainsKey('Secondary')) {
+            $selected_list = $selected_list | Where-Object { ! $_.Primary }
+        }
+
+        # $selected_list = selected_list | select -First $ScreenId
+
+        # Only take a screen
+        $selected = $selected_list | select -First 1
+
+        return $selected
+
+    }
+}
+
+Function Set-Window-To-Screen {
+    <#
+        .SYNOPSIS
+            !! Helper for below function !!
             Sets the window size (height,width) and coordinates (x,y) of
-            a process window.
+                a process window.
 
         .DESCRIPTION
             Sets the window size (height,width) and coordinates (x,y) of
@@ -31,32 +84,14 @@ Function My-Set-Window {
         .PARAMETER Height
             Set the height of the window.
 
-        .NOTES
-            Name: Set-Window
-            Author: Boe Prox
-            Version History
-                1.0//Boe Prox - 11/24/2015
-                    - Initial build
-
         .OUTPUT
             System.Automation.WindowInfo
 
-        .EXAMPLE
-            Get-Process powershell | Set-Window -X 2040 -Y 142 -Passthru
-
-            ProcessName Size     TopLeft  BottomRight
-            ----------- ----     -------  -----------
-            powershell  1262,642 2040,142 3302,784   
-
-            Description
-            -----------
-            Set the coordinates on the window for the process PowerShell.exe
-        
     #>
     [OutputType('System.Automation.WindowInfo')]
     [cmdletbinding()]
     Param (
-        [parameter(ValueFromPipelineByPropertyName=$True)]
+        [parameter(ValueFromPipelineByPropertyName = $True)]
         $ProcessId,
         [int]$X,
         [int]$Y,
@@ -64,10 +99,11 @@ Function My-Set-Window {
         [int]$Height
     )
     Begin {
-        Try{
+        Try {
             [void][Window]
-        } Catch {
-        Add-Type @"
+        }
+        Catch {
+            Add-Type @"
               using System;
               using System.Runtime.InteropServices;
               public class Window {
@@ -91,9 +127,9 @@ Function My-Set-Window {
     Process {
         $Rectangle = New-Object RECT
         $Handle = (Get-Process -Id $ProcessId).MainWindowHandle
-        $Return = [Window]::GetWindowRect($Handle,[ref]$Rectangle)
-        If (-NOT $PSBoundParameters.ContainsKey('Width')) {            
-            $Width = $Rectangle.Right - $Rectangle.Left            
+        $Return = [Window]::GetWindowRect($Handle, [ref]$Rectangle)
+        If (-NOT $PSBoundParameters.ContainsKey('Width')) {
+            $Width = $Rectangle.Right - $Rectangle.Left
         }
         If (-NOT $PSBoundParameters.ContainsKey('Height')) {
             $Height = $Rectangle.Bottom - $Rectangle.Top
@@ -104,44 +140,70 @@ Function My-Set-Window {
     }
 }
 
-Function My-Set-Screen-For {
+Function Move-Window-To-Screen {
+    <#
+        .SYNOPSIS
+            Move a process (by name) to a specific window
+
+        .PARAMETER Screen
+            Id of the screen (0 = primary, 1 = secondary)
+
+        .PARAMETER Name
+            Name of the process to move
+
+        .PARAMETER Maximize
+            Maximize the window on the screen
+    #>
+
     Param (
         $Screen,
         $Name,
-        $Maximize = $TRUE
+        [switch]$Maximize
     )
 
     Begin {
-        $screenWA = $Screen.WorkingArea
+        $screenWA = $screens[$Screen].WorkingArea
 
-        $threads = Get-Process | Where-Object { $_.Name -like $Name} | Where-Object { $_.MainWindowTitle }
+        $threads = Get-Process $Name | Where-Object { $_.MainWindowTitle }
 
-        foreach($t in $threads) {
-            $uPid = $t | select Id
-            echo "Setting $Name $uPid"
-    
-            echo "- Restore size"
+        foreach ($t in $threads) {
+            $uPid = $t | Select-Object Id
+            Write-Output "Setting $Name $uPid"
+
+            Write-Output "- Restore size"
             # Restore window (4)
             [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 4) | Out-Null
             Start-Sleep -Seconds 1
-            
+
             # Move the window
-            echo "- Moving it"
-            My-Set-Window -ProcessId $uPid.Id -X $screenWA.X -Y  $screenWA.Y
+            Write-Output "- Moving it"
+            Set-Window-To-Screen -ProcessId $uPid.Id -X $screenWA.X -Y  $screenWA.Y
             Start-Sleep -Seconds 1
 
             if ($Maximize) {
                 # Maximize the window (3)
-                echo "- Maximize it"
+                Write-Output "- Maximize it"
                 [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 3) | Out-Null
                 # Start-Sleep -Seconds 1
-            } else {
-                echo "- Leaving like that"
+            }
+            else {
+                Write-Output "- Leaving like that"
             }
 
             # Activate the window (5)
-            #echo "- Activating it"
+            #Write-Output "- Activating it"
             #[Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 5) | Out-Null
         }
     }
 }
+
+#
+# Initialization
+#
+
+$screens = @()
+$screens += Get-Screen -Primary
+$screens += Get-Screen -Secondary
+
+$primary = 0
+$secondary = 1

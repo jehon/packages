@@ -26,8 +26,6 @@ const projects = [
 	{ "id": 24822, "wo": "SWCS006", "status": "en cours", "title": "consultance securite-signature type Eid & Itsme" },
 ]
 
-
-
 var items = projects.map(v => v.wo + " - " + v.title + '(' + v.status + ')');
 
 term.singleColumnMenu(items, function (error, response) {
