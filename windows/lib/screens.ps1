@@ -92,7 +92,7 @@ Function Set-Window-To-Screen {
     [cmdletbinding()]
     Param (
         [parameter(ValueFromPipelineByPropertyName = $True)]
-        $ProcessId,
+        [int]$windowHandle,
         [int]$X,
         [int]$Y,
         [int]$Width,
@@ -126,8 +126,7 @@ Function Set-Window-To-Screen {
     }
     Process {
         $Rectangle = New-Object RECT
-        $Handle = (Get-Process -Id $ProcessId).MainWindowHandle
-        $Return = [Window]::GetWindowRect($Handle, [ref]$Rectangle)
+        $Return = [Window]::GetWindowRect($windowHandle, [ref]$Rectangle)
         If (-NOT $PSBoundParameters.ContainsKey('Width')) {
             $Width = $Rectangle.Right - $Rectangle.Left
         }
@@ -135,7 +134,7 @@ Function Set-Window-To-Screen {
             $Height = $Rectangle.Bottom - $Rectangle.Top
         }
         If ($Return) {
-            $Return = [Window]::MoveWindow($Handle, $x, $y, $Width, $Height, $True)
+            $Return = [Window]::MoveWindow($windowHandle, $x, $y, $Width, $Height, $True)
         }
     }
 }
@@ -164,26 +163,26 @@ Function Move-Window-To-Screen {
     Begin {
         $screenWA = $screens[$Screen].WorkingArea
 
-        $threads = Get-Process $Name | Where-Object { $_.MainWindowTitle }
+        $threads = Get-Process | Where-Object { $_.Name -eq $Name } | Where-Object { $_.MainWindowTitle }
 
         foreach ($t in $threads) {
-            $uPid = $t | Select-Object Id
+            $wHandle = $t.MainWindowHandle
             Write-Output "Setting $Name $uPid"
 
             Write-Output "- Restore size"
             # Restore window (4)
-            [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 4) | Out-Null
+            [Win32.NativeMethods]::ShowWindow($wHandle, 4) | Out-Null
             Start-Sleep -Seconds 1
 
             # Move the window
             Write-Output "- Moving it"
-            Set-Window-To-Screen -ProcessId $uPid.Id -X $screenWA.X -Y  $screenWA.Y
+            Set-Window-To-Screen -windowHandle $wHandle -X $screenWA.X -Y  $screenWA.Y
             Start-Sleep -Seconds 1
 
             if ($Maximize) {
                 # Maximize the window (3)
                 Write-Output "- Maximize it"
-                [Win32.NativeMethods]::ShowWindow($t.MainWindowHandle, 3) | Out-Null
+                [Win32.NativeMethods]::ShowWindow($wHandle, 3) | Out-Null
                 # Start-Sleep -Seconds 1
             }
             else {
