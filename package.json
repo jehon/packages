@@ -1,0 +1,25 @@
+{
+  "name": "packages",
+  "version": "1.0.0",
+  "description": "This repository is for personal use only.\r It contains helper scripts tailored for my usage.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jehon/packages.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jehon/packages/issues"
+  },
+  "homepage": "https://github.com/jehon/packages#readme",
+  "dependencies": {
+    "terminal-kit": "^1.44.0"
+  }
+}
