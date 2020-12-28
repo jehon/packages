@@ -13,10 +13,11 @@ BRANCH="$(git name-rev --name-only HEAD)"
 echo "Looking for"
 echo "- slug: $SLUG"
 echo "- branch: $BRANCH"
+echo ""
 
 # LOCAL COMMIT NOT PUSHED
-AHEAD=$(git status --ahead-behind --porcelain)
-if [ -n "$AHEAD" ]; then
+AHEAD=$(git status -sb | grep -E '\[(ahead|behind)' | sed -r 's/^.*\[//g' | sed -r 's/\].*$//g' )
+if [ -z "$AHEAD" ]; then
     ok "Remote branch up-to-date"
 else
     ko "Remote branch: $AHEAD"
