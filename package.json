@@ -20,6 +20,12 @@
   },
   "homepage": "https://github.com/jehon/packages#readme",
   "dependencies": {
-    "terminal-kit": "^1.44.0"
+    "terminal-kit": "1.44.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "11.0.0",
+    "@commitlint/config-conventional": "11.0.0",
+    "commitizen": "4.2.2",
+    "husky": "^4.3.6"
   }
 }
