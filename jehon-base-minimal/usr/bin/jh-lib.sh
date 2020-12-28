@@ -51,11 +51,19 @@ jhGetConfigFile() {
 }
 
 header() {
-    echo -e "\e[93m$1\e[00m"
+    echo -e "\e[93m$*\e[00m"
 }
 
 warning() {
-    echo -e "\e[91m$1\e[00m"
+    echo -e "\e[91m$*\e[00m"
+}
+
+ok() {
+	echo -e "\033[01;32m✓\033[0m $*"
+}
+
+ko() {
+	echo -e "\033[01;31m✗\033[0m $*"
 }
 
 export SWD
