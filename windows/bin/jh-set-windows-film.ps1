@@ -9,4 +9,5 @@ Move-Window-To-Screen -Name "Word"       -Screen $secondary
 Move-Window-To-Screen -Name "PowerPoint" -Screen $secondary
 
 Move-Window-To-Screen -Name "firefox"    -Screen $secondary -Maximize
+Move-Window-To-Screen -Name "MobaXterm"  -Screen $secondary -Maximize
 Move-Window-To-Screen -Name "Code"       -Screen $secondary -Maximize
