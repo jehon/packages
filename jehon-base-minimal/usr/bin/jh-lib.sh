@@ -51,11 +51,35 @@ jhGetConfigFile() {
 }
 
 header() {
-    echo -e "\e[93m$1\e[00m"
+    if test -t 1 ; then
+        echo -e "\e[93m$*\e[00m"
+    else
+        echo "* $*"
+    fi
 }
 
 warning() {
-    echo -e "\e[91m$1\e[00m"
+    if test -t 1 ; then
+        echo -e "\e[91m$*\e[00m"
+    else
+        echo "! $*"
+    fi
+}
+
+ok() {
+    if test -t 1 ; then
+    	echo -e "\033[01;32m✓\033[0m $*"
+    else
+        echo "✓ $*"
+    fi
+}
+
+ko() {
+    if test -t 1 ; then
+    	echo -e "\033[01;31m✗\033[0m $*"
+    else
+        echo "✗ $*"
+    fi
 }
 
 export SWD
