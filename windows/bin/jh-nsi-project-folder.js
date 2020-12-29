@@ -24,9 +24,12 @@ const projects = [
 	{ "id": 24882, "wo": "GIG-010", "status": "en cours", "title": "Voiries 2 - Sprint 2" },
 	{ "id": 24923, "wo": "GIG-011", "status": "en cours", "title": "Contrat cadre GIG 2018-2024" },
 	{ "id": 24822, "wo": "SWCS006", "status": "en cours", "title": "consultance securite-signature type Eid & Itsme" },
+	{ "id": 25223, "wo": "-", "status": "en cours", "title": "SPW M23 Coditax" },
+	{ "id": 25224, "wo": "-", "status": "en cours", "title": "SPW M23 Aquatax" },
 ]
 
-var items = projects.map(v => v.wo + " - " + v.title + '(' + v.status + ')');
+process.stdout.write(` ${'id'.padStart(7, ' ')} | ${'wo'.padStart(7)} | title\n`);
+var items = projects.map(v => `${('' + v.id).padStart(7, ' ')} | ${v.wo.padStart(7)} | ${v.title} (${v.status})`);
 
 term.singleColumnMenu(items, function (error, response) {
 	// response.selectedIndex

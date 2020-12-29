@@ -1,4 +1,4 @@
-
+﻿
 # Thanks to
 
 # Set state of the window:
@@ -251,8 +251,11 @@ Function Move-Window-To-Screen {
 
         $threads = Get-Process | Where-Object { $_.Name -eq $Name } | Where-Object { $_.MainWindowTitle }
 
+        # $threads = Get-Process $Name | where-object { $_.mainwindowhandle -ne 0 } | Get-ChildWindow
+
         foreach ($t in $threads) {
             $wHandle = $t.MainWindowHandle
+            # # $wHandle = $t.childId
             Write-Output "Setting $Name $wHandle"
 
             Write-Output "- Restore size"
