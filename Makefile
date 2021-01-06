@@ -179,8 +179,16 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/*.install \
 		debian/*.templates \
 		debian/*.triggers \
+		debian/jehon-base-minimal.links \
 		$(shell find . -path "./jehon-*" -type f)
 	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date "+%Y.%m.%d.%H.%M.%S") --distribution main)
+
+debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
+		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f ) \
+		Makefile
+	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
+		&& find * -type f -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
+	cat debian/jehon-base-minimal.links.add >> "$@"
 
 # packages-release:
 # 	@echo "**"

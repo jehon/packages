@@ -4,3 +4,4 @@ jehon-*/
 files
 *.substvars
 *.debhelper
+jehon-base-minimal.links

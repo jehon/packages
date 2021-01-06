@@ -1,0 +1,4 @@
+#
+# Custom addition from jehon-base-minimal.links.add
+#
+/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon   /etc/ssh/authorized_keys/root

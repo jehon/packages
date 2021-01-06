@@ -1,3 +1,10 @@
+jehon-debs (2021.01.06.12.24.11) main; urgency=medium
+
+  * feat: jenkins repository
+  * fix: build without docker
+
+ -- Jean Honlet <husr@43d89432eca9>  Wed, 06 Jan 2021 12:24:13 +0100
+
 jehon-debs (2021.01.06.09.02.10) main; urgency=medium
 
   * feature: corp
