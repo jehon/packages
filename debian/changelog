@@ -1,3 +1,30 @@
+jehon-debs (2021.01.06.09.02.10) main; urgency=medium
+
+  * feature: corp
+  * chore: fix gitattributes
+  * feature: jh-with-timestamp
+  * fix: syno to usb without perms
+  * feature: add powershell helpers
+  * feature: arrange windows
+  * fix: fix-user
+  * feature: project folders
+  * feat: jh-network-find-hosts
+  * feat(nsi): fix some scripts
+  * feat: enforce scripts
+  * feat: requires-admin
+  * refactor(screens): work by handle
+  * feat(screen): wip about child windows
+  * feat: jh-travis-status
+  * feat: travis status
+  * feat: commitlint
+  * feat: no color when not supported
+  * fix: ahead/behind
+  * chore: update data & comments
+  * chore: add MobaXTerm
+  * wip: trust desktop icon
+
+ -- Jean Honlet <husr@0b1adeb95016>  Wed, 06 Jan 2021 09:02:13 +0100
+
 jehon-debs (2020.11.27.11.50.14) main; urgency=medium
 
   * feature: timezone is set
