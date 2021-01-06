@@ -148,7 +148,7 @@ packages-clean:
 	rm -f $(ROOT)/repo/*
 	rm -f $(ROOT)/jehon-debs_
 
-packages-build: repo/Release externals-build
+packages-build: dockers-build repo/Release externals-build
 
 
 repo/Release.gpg: repo/Release
