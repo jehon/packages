@@ -6,7 +6,8 @@ set -e
 . jh-lib.sh
 
 hasKey() {
-    gpg --keyring /etc/apt/trusted.gpg --no-default-keyring --list-key "$1" >/dev/null 2>/dev/null
+    gpg --keyring /etc/apt/trusted.gpg --no-default-keyring --list-key "$1" >/dev/null
+    # 2>/dev/null
 }
 
 hasKeyOrImport() {
@@ -20,6 +21,8 @@ hasKeyOrImport() {
 hasKeyOrImport "1397BC53640DB551" "Chrome (ubuntu)"
 hasKeyOrImport "78BD65473CB3BD13" "Chrome (raspberrypi)"
 hasKeyOrImport "1655A0AB68576280" "nodejs"
+hasKeyOrImport "FCEF32E745F2C3D5" "jenkins"
+
 # hasKeyOrImport "7EA0A9C3F273FCD8" "Docker"
 
 # TODO: jh-lib (get config)
