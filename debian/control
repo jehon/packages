@@ -15,10 +15,18 @@ Vcs-Browser: https://bitbucket.org/jehon/packages/
 #
 ##########################
 
-Package: jehon-base-minimal
+Package: jehon-base-repositories
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 	dpkg (>= 1.17.14)
+Depends: ${misc:Depends},
+ 	apt-transport-https
+
+Package: jehon-base-minimal
+Architecture: all
+Pre-Depends: ${misc:Pre-Depends}
+	dpkg (>= 1.17.14),
+	jehon-base-repositories
 Depends: ${misc:Depends},
 	debconf, sed,
 	bash,
@@ -49,7 +57,8 @@ Depends: ${misc:Depends},
 	rsync,
 	git,
 	gettext-base,
-	nodejs
+	nodejs,
+	xvfb
 Description: Jehon minimal hooks
 
 
@@ -84,7 +93,8 @@ Depends: ${misc:Depends}
 	exfat-fuse, exfat-utils,
 	xprintidle,
 	snapd,
-	xvfb, libgtk2.0-0, libnotify-dev, libgconf-2-4, libnss3, libxss1, libasound2
+	libgtk2.0-0, libnotify-dev, libgconf-2-4, libnss3, libxss1, libasound2,
+	google-chrome
 Description: Jehon environnement
 
 # Provides: jehon-env-dev, jehon-base-snap

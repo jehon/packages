@@ -1,19 +1,6 @@
 #!/bin/sh
-#
+
 # see: dh_installdeb(1)
-
-# summary of how this script can be called:
-#        * <postinst> `configure' <most-recently-configured-version>
-#        * <old-postinst> `abort-upgrade' <new version>
-#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
-#          <new-version>
-#        * <postinst> `abort-remove'
-#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
-#          <failed-install-package> <version> `removing'
-#          <conflicting-package> <version>
-# for details, see http://www.debian.org/doc/debian-policy/ or
-# the debian-policy package
-
 
 if [ -e "/usr/share/debconf/confmodule" ]; then
 	# export DEBCONF_DEBUG=developer
@@ -71,7 +58,6 @@ configureUserJehon() {
 	fi
 }
 
-dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_direct_access.sh -- "$@"
 dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_custom.sh -- "$@"
 
 case "$1" in
@@ -87,11 +73,10 @@ case "$1" in
 			fi
 		fi
 
-		# Auto add all keys
-		/usr/sbin/jh-apt-install-common-keys
-
 		groupadd -f docker || true
     	usermod -a -G "docker" "jehon" || true
+
+		timedatectl set-timezone Europe/Brussels
 
 		configureUserJehon
 
@@ -100,23 +85,10 @@ case "$1" in
 		mkdir -p /etc/jehon/restricted/
 		chmod 500 /etc/jehon/restricted
 
-		# Legacy migration
-		if [ -r /etc/jehon/restricted/backup_computer ]; then
-			mv /etc/jehon/restricted/backup_computer /etc/jehon/restricted/synology_auto
-		fi
-		if [ -r /etc/jehon/restricted/backup_computer.pub ]; then
-			mv /etc/jehon/restricted/backup_computer.pub /etc/jehon/restricted/synology_auto.pub
-			sed "s/backup-computer/synology_auto/" -i /etc/jehon/restricted/synology_auto
-		fi
-
-		if [ -r /etc/apt/sources.list.d/jehon-etc-repo.list ]; then
-			echo "Legacy: Removing etc repo from sources"
-			rm -f /etc/apt/sources.list.d/jehon-etc-repo.list
-		fi
-		if [ -r /etc/jehon/repo/ ]; then
-			echo "Legacy: Removing etc repo folder"
-			rm -fr /etc/jehon/repo/
-		fi
+		echo "*** Enabling firewall"
+		ufw allow ssh
+		ufw enable
+		ufw status
     	;;
 
 	triggered)

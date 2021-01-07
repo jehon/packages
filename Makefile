@@ -17,7 +17,7 @@ setup-computer:
 	make packages-build
 	sudo dpkg -i repo/jehon-base-minimal_*.deb || true
 	sudo apt install -f -y
-	sudo jh-apt-install-common-keys
+	sudo jehon-base-repositories/usr/bin/jh-apt-add-packages-key.sh
 	sudo apt update
 	sudo snap install --classic go
 	@echo "You should add "

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This script can be run more than once
+
 set -e
 
 if [[ "$(whoami)" != "root" ]]; then
@@ -7,37 +9,29 @@ if [[ "$(whoami)" != "root" ]]; then
     exit 255
 fi
 
-echo "*** Setting timezone ***"
-timedatectl set-timezone Europe/Brussels
-
 echo "*** Installing required packages"
 apt install -y apt-transport-https
 
 echo "*** Installing source from github"
-SRC_LIST="/etc/apt/sources.list.d/jehon-github.list"
-# wget "https://raw.githubusercontent.com/jehon/packages/master/jehon-base-minimal${SRC_LIST}" \
-#     -O "$SRC_LIST"
-echo "deb [trusted=yes] http://jehon.github.io/packages/ /" > "${SRC_LIST}"
+
+echo "deb [trusted=yes] http://jehon.github.io/packages/ /" \
+    > "/etc/apt/sources.list.d/jehon-github.list"
 
 echo "*** Updating sources"
 apt update
 
 echo "*** Installing jehon-base-minimal"
+apt install -y jehon-base-repositories
+/usr/bin/jh-apt-configure-repositories.sh
+
+apt update
+
+echo "*** Installing jehon-base-minimal"
 apt install -y jehon-base-minimal
-
-echo "*** Enabling firewall"
-ufw allow ssh
-ufw enable
-ufw status
-
-ROOT="$(dirname "$0")"
-if [ ! -r "$ROOT/.git" ]; then
-	rm "$0"
-fi
 
 echo ""
 echo ""
 echo ""
 echo ""
 echo "*** Install done ***"
-echo "SSH is enabled"
+echo "SSH is enabled through the firewall"

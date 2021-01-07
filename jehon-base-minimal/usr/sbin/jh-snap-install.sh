@@ -64,7 +64,7 @@ ensure_snap_installed() {
 	fi
 }
 
-ensure_snap_installed "docker"
+# ensure_snap_installed "docker"
 ensure_snap_installed "vlc"
 ensure_snap_installed "filezilla" jailmode beta
 ensure_snap_installed "gimp"
