@@ -58,7 +58,8 @@ Depends: ${misc:Depends},
 	git,
 	gettext-base,
 	nodejs,
-	xvfb
+	xvfb,
+	docker-ce, docker-ce-cli, containerd.io
 Description: Jehon minimal hooks
 
 
