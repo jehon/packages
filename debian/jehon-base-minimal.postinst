@@ -85,10 +85,11 @@ case "$1" in
 		mkdir -p /etc/jehon/restricted/
 		chmod 500 /etc/jehon/restricted
 
-		echo "*** Enabling firewall"
+		echo "*** Firewall: adapting"
 		ufw allow ssh
-		ufw enable
-		ufw status
+		ufw --force enable
+		# ufw status
+		echo "*** Firewall: adapted"
     	;;
 
 	triggered)

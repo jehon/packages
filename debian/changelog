@@ -1,3 +1,10 @@
+jehon-debs (2021.01.07.14.59.22) main; urgency=medium
+
+  * feat: jehon-base-repositories
+  * feat: use docker from docker.io
+
+ -- Jean Honlet <husr@bdc312cd6c74>  Thu, 07 Jan 2021 14:59:24 +0100
+
 jehon-debs (2021.01.06.12.24.11) main; urgency=medium
 
   * feat: jenkins repository
