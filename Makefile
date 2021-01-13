@@ -87,6 +87,7 @@ all-clean: externals-clean dockers-clean packages-clean
 all-test: shell-test
 all-build: externals-build dockers-build packages-build
 all-lint: shell-lint
+all-dump:
 
 .PHONY: debug
 debug:
