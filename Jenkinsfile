@@ -22,6 +22,11 @@ pipeline {
         sh 'make all-build'
       }
     }
+    stage('sign') {
+      steps {
+        sh 'make repo/Release.gpg'
+      }
+    }
     stage('test') {
       steps {
         sh 'make all-test'
@@ -37,7 +42,6 @@ pipeline {
         branch 'master'
       }
       steps {
-        sh 'make repo/Release.gpg'
         lock('packages_deploy') {
           sh 'make deploy-github'
         }
