@@ -97,6 +97,9 @@ debug:
 publish: deploy-local deploy-synology-repo
 	git push
 
+stop:
+	echo "Done"
+
 #
 #
 # Externals

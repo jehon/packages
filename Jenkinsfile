@@ -50,7 +50,7 @@ pipeline {
   }
   post {
     always {
-      // sh 'make stop'
+      sh 'make stop'
       // deleteDir() /* clean up our workspace */
     }
   }
