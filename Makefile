@@ -98,6 +98,7 @@ publish: deploy-local deploy-synology-repo
 	git push
 
 stop:
+	docker image prune
 	echo "Done"
 
 #
