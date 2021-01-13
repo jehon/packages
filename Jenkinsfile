@@ -37,14 +37,13 @@ pipeline {
       }
     }
     stage('Deploy') {
-      options {
-        lock resource: 'packages_deploy'
-      }
       when {
         branch 'master'
       }
       steps {
-        sh 'make deploy-github'
+        lock('packages_deploy') {
+          sh 'make deploy-github'
+        }
       }
     }
   }
