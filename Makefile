@@ -147,9 +147,9 @@ dockers-build: $(addsuffix .dockerexists, $(DOCKERS)) $(addsuffix .dockerbuild, 
 # Node
 #
 #
-node-build: package.json package-lock.json node_modules/.dependencies
+node-build: node_modules/.dependencies
+node_modules/.dependencies: package.json package-lock.json
 	npm ci
-
 
 #
 #
