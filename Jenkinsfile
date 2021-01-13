@@ -9,7 +9,6 @@ pipeline {
   stages {
     stage('setup') {
       steps {
-        sh 'make dockers/jehon-docker-build.dockerbuild'
         sh 'gpg --import $PACKAGES_GPG_FILE'
       }
     }
@@ -23,11 +22,6 @@ pipeline {
         sh 'make all-build'
       }
     }
-    stage('sign') {
-      steps {
-        sh 'make repo/Release.gpg'
-      }
-    }
     stage('test') {
       steps {
         sh 'make all-test'
@@ -39,10 +33,11 @@ pipeline {
       }
     }
     stage('Deploy') {
-      // when {
-      //   branch 'master'
-      // }
+      when {
+        branch 'master'
+      }
       steps {
+        sh 'make repo/Release.gpg'
         lock('packages_deploy') {
           sh 'make deploy-github'
         }

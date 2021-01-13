@@ -84,8 +84,8 @@ endef
 #
 
 all-clean: externals-clean dockers-clean packages-clean
+all-build: node-build externals-build dockers-build packages-build
 all-test: shell-test
-all-build: externals-build dockers-build packages-build
 all-lint: shell-lint
 all-dump:
 
@@ -140,6 +140,15 @@ dockers-build: $(addsuffix .dockerexists, $(DOCKERS)) $(addsuffix .dockerbuild, 
 	cd $(basename $@) && \
 		docker build -t "jehon/$(notdir $(basename $@))" .
 	@touch "$@"
+
+
+#
+#
+# Node
+#
+#
+node-build: package.json package-lock.json node_modules/.dependencies
+	npm ci
 
 
 #
@@ -242,18 +251,19 @@ shell-lint:
 deploy: deploy-local deploy-synology
 
 deploy-github: packages-build
-	REMOTE := git config remote.origin.url
-	echo "Remote: $$REMOTE"
-	mkdir -p tmp/website
-	rsync -a repo tmp/website
-	cd tmp/website \
-		&& git init \
-		&& git add remote website $(cd ../../ && pwd && git remote && git remote get-url origin) \
-		&& git checkout -b gh-pages \
-		&& git add . \
-		&& git commit -m "doc: update repo"
+	./node_modules/.bin/gh-pages --dists repo --no-push --no-history
+	# REMOTE := git config remote.origin.url
+	# echo "Remote: $$REMOTE"
+	# mkdir -p tmp/website
+	# rsync -a repo tmp/website
+	# cd tmp/website \
+	# 	&& git init \
+	# 	&& git add remote website $(cd ../../ && pwd && git remote && git remote get-url origin) \
+	# 	&& git checkout -b gh-pages \
+	# 	&& git add . \
+	# 	&& git commit -m "doc: update repo"
 
-	cd tmp && rm -fr website
+	# cd tmp && rm -fr website
 
 # # See https://docs.travis-ci.com/user/deployment/pages/
 # provider: pages
