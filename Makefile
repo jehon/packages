@@ -163,7 +163,7 @@ packages-clean:
 	rm -f $(ROOT)/repo/*
 	rm -f $(ROOT)/jehon-debs_
 
-packages-build: dockers-build repo/Release externals-build
+packages-build: repo/Release
 
 
 repo/Release.gpg: repo/Release
