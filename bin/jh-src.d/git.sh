@@ -32,7 +32,7 @@ case "$1" in
 		git "$@"
 		;;
 	"pull" )
-		if ! git_has_remote ; then	
+		if ! git_has_remote ; then
 			echo "No remote - skipping"
 		else
 			git pull --all --prune --autostash --rebase
@@ -50,7 +50,7 @@ case "$1" in
 					BRANCH="${BRANCH// /}"
 
 					echo "!! New branch: '$BRANCH'"
-				
+
 					echo "Going on the new branch: $BRANCH"
 					git checkout "$BRANCH"
 					git pull --all --prune --autostash --rebase
@@ -61,10 +61,10 @@ case "$1" in
 		fi
 		;;
 	"push" )
-		if ! git_has_remote ; then	
+		if ! git_has_remote ; then
 			echo "No remote - skipping"
 		else
-			if [ "`git status | grep ahead`" = "" ]; then
+			if git status | grep "ahead"; then
 				echo "No local changes, skipping..."
 			else
 				git "$@"

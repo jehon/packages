@@ -86,6 +86,7 @@ endef
 all-clean: externals-clean dockers-clean packages-clean
 all-test: shell-test
 all-build: externals-build dockers-build packages-build
+all-lint: shell-lint
 
 .PHONY: debug
 debug:
@@ -213,6 +214,13 @@ debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
 shell-test:
 	run-parts --verbose --regex "test-.*" ./tests/shell/tests
 
+shell-lint:
+	@shopt -s globstar; \
+	RES=0; \
+	for f in jehon-*/**/*.sh bin/**/*.sh; do \
+		shellcheck -x "$$f"; RES=$$? || $$RES; \
+	done ; \
+	exit $$RES
 
 ######################
 #
@@ -227,6 +235,8 @@ shell-test:
 #
 #
 deploy: deploy-local deploy-synology
+
+deploy-github:
 
 deploy-local-from-remote:
 	git push

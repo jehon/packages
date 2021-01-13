@@ -26,8 +26,8 @@ function reduce() {
 	/usr/bin/convert -geometry "$GEOMETRY" "$1" "$1.tmp"
 	SO=$( stat -c%s "$1" )
 	SN=$( stat -c%s "$1.tmp" )
-	SCO=$(( $SO * 100 ))
-	SCN=$(( $SN * 110 ))
+	SCO=$(( SO * 100 ))
+	SCN=$(( SN * 110 ))
 
 	if [ $SCN -lt $SCO  ]; then
 		echo " is resized: $SO vs. $SN"

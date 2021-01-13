@@ -54,13 +54,13 @@ ensure_snap_installed() {
 
 		if ! getSnapConfigFor "$NAME" | grep "$CHANNEL" >/dev/null; then
 			#echo "Snap $NAME: Setting channel to $CHANNEL"
-			snap refresh "$NAME" --channel=$CHANNEL
+			snap refresh "$NAME" --channel="$CHANNEL"
 		fi
 	fi
 
 	if ! getSnapConfigFor "$NAME" >/dev/null; then
 		# echo "Snap $NAME: installing $CHANNEL with confinment to $CONFIN ($CONFIN_ARG)"
-		snap install $NAME $CONFIN_ARG --channel="$CHANNEL"
+		snap install "$NAME" "$CONFIN_ARG" --channel="$CHANNEL"
 	fi
 }
 

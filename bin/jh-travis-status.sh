@@ -2,6 +2,7 @@
 
 set -e
 
+# shellcheck source=/dev/null
 . jh-lib.sh
 
 ORIGIN="$(git remote get-url origin)"

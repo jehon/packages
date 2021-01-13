@@ -4,7 +4,6 @@ set -e
 
 case "$1" in
 	"10x15" )
-		OPT=""
 		OPT="-x 108 -y 152"
 		;;
 	"15x10" )
@@ -26,6 +25,8 @@ case "$1" in
 		echo "Unsupported"
 		exit 1
 esac
+# Transform into an array
+read -r -a OPT <<< "$OPT"
 
 scan() {
 
@@ -37,7 +38,7 @@ scan() {
 	# https://askubuntu.com/a/575213/638656
 	scanimage --progress  --format tiff \
 		--mode Color --resolution 300 \
-		$OPT \
+		"${OPT[@]}" \
 		| convert - -quality 75 "$RES.jpg"
 
 	echo ""

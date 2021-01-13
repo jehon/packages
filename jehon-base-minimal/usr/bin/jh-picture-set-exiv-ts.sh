@@ -10,7 +10,8 @@ shift
 
 check() {
 	# Char are counted from 1
-	C=$( expr substr "$TS" $1 1)
+	# shellcheck disable=SC2003 # (expr is outdated)
+	C="$( expr index "$TS" "$1" 1 )"
 	if [ "$C" != ":" ]; then
 		echo "Separator ':' not found at $1 - found $C of $TS"
 		exit 1
