@@ -11,7 +11,7 @@ SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 SRC="$( realpath "$PKG_FOLDER/.." )"
 
 # shellcheck source=/dev/null
-. "$PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc/jehon-custom.sh"
+. "$PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc/profile.d/jehon-custom.sh"
 
 export PATH="$PKG_FOLDER/bin:$PKG_FOLDER/$PKG_NAME/usr/bin:$PATH"
 
