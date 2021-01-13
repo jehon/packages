@@ -3,12 +3,14 @@ pipeline {
   options {
     skipStagesAfterUnstable()
   }
+  environment {
+    PACKAGES_GPG_FILE = credentials('packages-gpg-key')
+  }
   stages {
     stage('setup') {
       steps {
-        // sh ''
-        // sh 'gpg --import secrets/gpg.packages.asc'
         sh 'make dockers/jehon-docker-build.dockerbuild'
+        sh 'gpg --import $PACKAGES_GPG_FILE'
       }
     }
     stage('dump') {
@@ -21,11 +23,11 @@ pipeline {
         sh 'make all-build'
       }
     }
-    // stage('sign') {
-    //   steps {
-    //     sh 'make repo/Release.gpg'
-    //   }
-    // }
+    stage('sign') {
+      steps {
+        sh 'make repo/Release.gpg'
+      }
+    }
     stage('test') {
       steps {
         sh 'make all-test'
@@ -49,8 +51,10 @@ pipeline {
   }
   post {
     always {
+      sh 'ls -l repo/'
+      sh 'md5sum repo/*'
       sh 'make stop'
-      // deleteDir() /* clean up our workspace */
+      deleteDir() /* clean up our workspace */
     }
   }
 }
