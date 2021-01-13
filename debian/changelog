@@ -1,3 +1,106 @@
+jehon-debs (2021.01.13.22.04.27) main; urgency=medium
+
+  * fix: path to profile for local install
+  * doc: jenkins
+  * doc: docker auto start
+  * build: jenkins initial
+  * build: jenkins try
+  * build: auto prune legacy images
+  * build: all-dump
+  * fix: shellcheck
+  * build: fix lock
+  * build: sign result?
+  * build(wip): publish to github
+  * build: reorder steps
+  * build: reorder steps
+  * build: get npm gh-pages
+  * build: makefile cleanup
+  * build(wip): publish to github
+
+ -- Jean Honlet <husr@4eee2a8395b8>  Wed, 13 Jan 2021 22:04:29 +0100
+
+jehon-debs (2021.01.13.22.03.38) main; urgency=medium
+
+  * fix: path to profile for local install
+  * doc: jenkins
+  * doc: docker auto start
+  * build: jenkins initial
+  * build: jenkins try
+  * build: auto prune legacy images
+  * build: all-dump
+  * fix: shellcheck
+  * build: fix lock
+  * build: sign result?
+  * build(wip): publish to github
+  * build: reorder steps
+  * build: reorder steps
+  * build: get npm gh-pages
+  * build: makefile cleanup
+  * build(wip): publish to github
+
+ -- Jean Honlet <husr@0fe8f5582012>  Wed, 13 Jan 2021 22:03:40 +0100
+
+jehon-debs (2021.01.13.22.02.15) main; urgency=medium
+
+  * fix: path to profile for local install
+  * doc: jenkins
+  * doc: docker auto start
+  * build: jenkins initial
+  * build: jenkins try
+  * build: auto prune legacy images
+  * build: all-dump
+  * fix: shellcheck
+  * build: fix lock
+  * build: sign result?
+  * build(wip): publish to github
+  * build: reorder steps
+  * build: reorder steps
+  * build: get npm gh-pages
+  * build: makefile cleanup
+  * build(wip): publish to github
+
+ -- Jean Honlet <husr@bdf0cef7a628>  Wed, 13 Jan 2021 22:02:17 +0100
+
+jehon-debs (2021.01.13.22.01.33) main; urgency=medium
+
+  * fix: path to profile for local install
+  * doc: jenkins
+  * doc: docker auto start
+  * build: jenkins initial
+  * build: jenkins try
+  * build: auto prune legacy images
+  * build: all-dump
+  * fix: shellcheck
+  * build: fix lock
+  * build: sign result?
+  * build(wip): publish to github
+  * build: reorder steps
+  * build: reorder steps
+  * build: get npm gh-pages
+  * build: makefile cleanup
+
+ -- Jean Honlet <husr@d01fcbcff75d>  Wed, 13 Jan 2021 22:01:35 +0100
+
+jehon-debs (2021.01.13.21.51.55) main; urgency=medium
+
+  * fix: path to profile for local install
+  * doc: jenkins
+  * doc: docker auto start
+  * build: jenkins initial
+  * build: jenkins try
+  * build: auto prune legacy images
+  * build: all-dump
+  * fix: shellcheck
+  * build: fix lock
+  * build: sign result?
+  * build(wip): publish to github
+  * build: reorder steps
+  * build: reorder steps
+  * build: get npm gh-pages
+  * build: makefile cleanup
+
+ -- Jean Honlet <husr@0d7e0927b836>  Wed, 13 Jan 2021 21:51:57 +0100
+
 jehon-debs (2021.01.07.14.59.22) main; urgency=medium
 
   * feat: jehon-base-repositories
