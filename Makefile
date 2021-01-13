@@ -241,7 +241,25 @@ shell-lint:
 #
 deploy: deploy-local deploy-synology
 
-deploy-github:
+deploy-github: packages-build
+	REMOTE := git config remote.origin.url
+	echo "Remote: $$REMOTE"
+	mkdir -p tmp/website
+	rsync -a repo tmp/website
+	cd tmp/website \
+		&& git init \
+		&& git add remote website $(cd ../../ && pwd && git remote && git remote get-url origin) \
+		&& git checkout -b gh-pages \
+		&& git add . \
+		&& git commit -m "doc: update repo"
+
+	cd tmp && rm -fr website
+
+# # See https://docs.travis-ci.com/user/deployment/pages/
+# provider: pages
+# strategy: git
+# token: $GITHUB_TOKEN # From https://github.com/settings/tokens, scope "public_repo"
+# local_dir: repo/
 
 deploy-local-from-remote:
 	git push
