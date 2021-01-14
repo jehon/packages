@@ -53,7 +53,7 @@ pipeline {
     always {
       sh 'ls -l repo/'
       sh 'md5sum repo/*'
-      sh 'make stop'
+      sh 'make all-stop'
       deleteDir() /* clean up our workspace */
     }
   }
