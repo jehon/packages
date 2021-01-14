@@ -198,7 +198,7 @@ repo/Packages: tmp/repo.built
 
 tmp/repo.built: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \
-		externals-build
+		jehon-env-minimal/usr/bin/shuttle-go
 
 	@mkdir -p repo
 	rm -f repo/jehon-*.deb
@@ -208,6 +208,10 @@ tmp/repo.built: dockers/jehon-docker-build.dockerbuild \
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 	touch "$@"
 
+jehon-env-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
+	mkdir -p "$(dir $@)"
+	cp externals/shuttle-go/shuttle-go "$@"
+
 debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/control \
 		debian/*.postinst \
@@ -215,6 +219,7 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/*.templates \
 		debian/*.triggers \
 		debian/jehon-base-minimal.links \
+		jehon-env-minimal/usr/bin/shuttle-go \
 		$(shell find . -path "./jehon-*" -type f)
 
 	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date "+%Y.%m.%d.%H.%M.%S") --distribution main)
