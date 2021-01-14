@@ -192,20 +192,21 @@ repo/Release.gpg: repo/Release
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
-repo/Packages: repo/.built
+repo/Packages: tmp/repo.built
 	@mkdir -p repo
 	cd repo && dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
 
-repo/.built: dockers/jehon-docker-build.dockerbuild \
+tmp/repo.built: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \
 		externals-build
 
 	@mkdir -p repo
 	rm -f repo/jehon-*.deb
 #echo "************ build indep ******************"
-	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/ && touch /app/repo/.built)
+	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
 #echo "************ build arch:armhf *************"
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
+	touch "$@"
 
 debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/control \
