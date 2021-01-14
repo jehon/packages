@@ -206,6 +206,7 @@ tmp/repo.built: dockers/jehon-docker-build.dockerbuild \
 	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
 #echo "************ build arch:armhf *************"
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
+	mkdir -p "$(dir $@)"
 	touch "$@"
 
 jehon-env-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
