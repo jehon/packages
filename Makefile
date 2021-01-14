@@ -278,15 +278,11 @@ shell-lint:
 deploy: deploy-local deploy-synology
 
 .PHONY: deploy-github
-deploy-github: packages-build
+deploy-github: packages-build node-setup
 	git remote -v
-	set -x && ./node_modules/.bin/gh-pages --dist repo --user "$$UE" --origin "$${GIT_ORIGIN:origin}";
 
-# U="$$( git --no-pager show -s --format="%an" )"; \
-# E="$$( git --no-pager show -s --format="%ae" )"; \
-# UE="$$U <$$E>"; \
-# echo "$$UE"; \
-
+	UE="$$( git --no-pager show -s --format="%an" ) <$$( git --no-pager show -s --format="%ae" )>"; \
+	set -x && ./node_modules/.bin/gh-pages --dist repo --user "$$UE" --remote "$${GIT_ORIGIN:origin}";
 
 .PHONY:
 deploy-github-validate:
