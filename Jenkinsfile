@@ -9,10 +9,6 @@ pipeline {
   stages {
     stage('setup') {
       steps {
-        sh 'git config user.name "$( git --no-pager show -s --format="%an" )"'
-        sh 'git config user.email "$( git --no-pager show -s --format="%ae" )"'
-        sh 'git config user.name'
-        sh 'git config user.email'
         sh 'gpg --import $PACKAGES_GPG_FILE'
         sh 'make all-setup'
       }

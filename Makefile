@@ -279,7 +279,11 @@ deploy: deploy-local deploy-synology
 
 .PHONY: deploy-github
 deploy-github: packages-build
-	./node_modules/.bin/gh-pages --dist repo
+	U="$$( git --no-pager show -s --format="%an" )"; \
+    E="$$( git --no-pager show -s --format="%ae" )"; \
+	UE="$$U <$$E>"; \
+	echo "$$UE"; \
+	./node_modules/.bin/gh-pages --dist repo --user "$$UE";
 
 .PHONY: deploy-local
 deploy-local: packages-build
