@@ -10,6 +10,7 @@ pipeline {
     stage('setup') {
       steps {
         sh 'gpg --import $PACKAGES_GPG_FILE'
+        sh 'make all-setup'
       }
     }
     stage('dump') {
