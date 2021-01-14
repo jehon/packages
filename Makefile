@@ -286,6 +286,14 @@ deploy-github: packages-build
 	echo "$$UE"; \
 	./node_modules/.bin/gh-pages --dist repo --user "$$UE";
 
+.PHONY:
+deploy-github-validate:
+	wget https://jehon.github.io/packages/Packages -O tmp/Packages-from-github
+	@echo "*** Check content ***"
+	@grep "Source: jehon-debs" tmp/Packages-from-github > /dev/null
+	@grep "Package: " tmp/Packages-from-github
+	@grep "Version: " tmp/Packages-from-github | head -n 1
+
 .PHONY: deploy-local
 deploy-local: packages-build
 	sudo ./setup-profile.sh
