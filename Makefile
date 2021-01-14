@@ -279,7 +279,7 @@ deploy: deploy-local deploy-synology
 
 .PHONY: deploy-github
 deploy-github: packages-build
-	./node_modules/.bin/gh-pages --dists repo --no-push --no-history
+	./node_modules/.bin/gh-pages --dist repo
 
 .PHONY: deploy-local
 deploy-local: packages-build
