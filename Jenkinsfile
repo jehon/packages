@@ -44,7 +44,10 @@ pipeline {
       // }
       steps {
         lock('packages_deploy') {
-          sh 'make --debug deploy-github'
+          sshagent(['jehon-nsi-wsl2-2020-PC1496']) {
+              sh 'GIT_ORIGIN=gitorigin make --debug deploy-github'
+          }
+          // withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
         }
       }
     }

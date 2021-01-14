@@ -280,11 +280,13 @@ deploy: deploy-local deploy-synology
 .PHONY: deploy-github
 deploy-github: packages-build
 	git remote -v
-	U="$$( git --no-pager show -s --format="%an" )"; \
-    E="$$( git --no-pager show -s --format="%ae" )"; \
-	UE="$$U <$$E>"; \
-	echo "$$UE"; \
-	./node_modules/.bin/gh-pages --dist repo --user "$$UE";
+	set -x && ./node_modules/.bin/gh-pages --dist repo --user "$$UE" --origin "$${GIT_ORIGIN:origin}";
+
+# U="$$( git --no-pager show -s --format="%an" )"; \
+# E="$$( git --no-pager show -s --format="%ae" )"; \
+# UE="$$U <$$E>"; \
+# echo "$$UE"; \
+
 
 .PHONY:
 deploy-github-validate:
