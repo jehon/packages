@@ -279,6 +279,7 @@ deploy: deploy-local deploy-synology
 
 .PHONY: deploy-github
 deploy-github: packages-build
+	git remote -v
 	U="$$( git --no-pager show -s --format="%an" )"; \
     E="$$( git --no-pager show -s --format="%ae" )"; \
 	UE="$$U <$$E>"; \
