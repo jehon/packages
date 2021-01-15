@@ -9,9 +9,34 @@ auto:
 
 #
 #
+# Generic configuration
+#
+#
+
+# https://ftp.gnu.org/old-gnu/Manuals/make-3.79.1/html_chapter/make_7.html
+# https://stackoverflow.com/a/26936855/1954789
+SHELL := /bin/bash
+.SECONDEXPANSION:
+
+ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+SYNOLOGY_HOST = synology
+GPG_KEY="313DD85CEFADAF7E"
+DOCKERS = $(shell find dockers/ -mindepth 1 -maxdepth 1 -type d )
+
+export PATH := $(ROOT)/jehon-base-minimal/usr/bin:$(PATH)
+
+#
+#
+# Generic functions
+#
+#
+
+#
+#
 # First install
 #
 #
+.PHONY: setup-computer
 setup-computer:
 	sudo apt install -y debhelper git-buildpackage
 	make packages-build
@@ -23,41 +48,6 @@ setup-computer:
 	@echo "You should add "
 	@echo ". $(ROOT)/setup-profile.sh "
 	@echo "in your profile"
-
-#
-#
-# Generic configuration
-#
-#
-
-# https://ftp.gnu.org/old-gnu/Manuals/make-3.79.1/html_chapter/make_7.html
-# https://stackoverflow.com/a/26936855/1954789
-SHELL := /bin/bash
-.SECONDEXPANSION:
-
-#
-#
-# System variables
-#
-#
-ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
-SYNOLOGY_HOST = synology
-GPG_KEY="313DD85CEFADAF7E"
-
-export PATH := $(ROOT)/jehon-base-minimal/usr/bin:$(PATH)
-
-#
-#
-# Product variables
-#
-#
-DOCKERS = $(shell find dockers/ -mindepth 1 -maxdepth 1 -type d )
-
-#
-#
-# Generic functions
-#
-#
 
 # See https://coderwall.com/p/cezf6g/define-your-own-function-in-a-makefile
 # 1: folder where to look
@@ -83,45 +73,45 @@ endef
 #
 #
 
-all-clean: externals-clean dockers-clean packages-clean
-all-test: shell-test
-all-build: externals-build dockers-build packages-build
-
-.PHONY: debug
-debug:
-	$(info * PWD:     $(shell pwd))
-	$(info * DOCKERS: $(DOCKERS))
-	$(info * PATH:    $(shell echo $$PATH))
-
-publish: deploy-local deploy-synology-repo
-	git push
+.PHONY: all-dump
+.PHONY: all-setup
+.PHONY: all-clean
+.PHONY: all-build
+.PHONY: all-test
+.PHONY: all-dump
+.PHONY: all-stop
 
 #
 #
-# Externals
+# Globals
 #
 #
-externals-clean:
-	rm -f externals/shuttle-go/shuttle-go
 
-externals-update:
-	# TODO: check this !
-	git subtree pull --prefix externals/shuttle-go git@github.com:abourget/shuttle-go.git master --squash
+all-dump: global-dump
 
-externals-build: externals/shuttle-go/shuttle-go
+.PHONY: global-dump
+global-dump:
+	$(info * PWD:            $(shell pwd))
+	$(info * PATH:           $(shell echo $$PATH))
+	$(info * ROOT:           $(ROOT))
+	$(info * DOCKERS:        $(DOCKERS))
+	$(info * GPG_KEY:        $(GPG_KEY))
+	$(info * SYNOLOGY_HOST:  $(SYNOLOGY_HOST))
 
-externals/shuttle-go/shuttle-go: externals/shuttle-go/*.go
-	cd externals/shuttle-go && ./build.sh
 #
 #
 # Dockers
 #
 #
-dockers: dockers-build
+all-clean: dockers-clean
+all-build: dockers-build
+all-stop: dockers-stop
 
-dockers-clean:
+.PHONY: dockers-clean
+dockers-clean: dockers-stop
 	rm -f $(ROOT)/dockers/*.dockerbuild
 
+.PHONY: dockers-build
 dockers-build: $(addsuffix .dockerexists, $(DOCKERS)) $(addsuffix .dockerbuild, $(DOCKERS))
 
 %.dockerexists:
@@ -135,21 +125,66 @@ dockers-build: $(addsuffix .dockerexists, $(DOCKERS)) $(addsuffix .dockerbuild, 
 		docker build -t "jehon/$(notdir $(basename $@))" .
 	@touch "$@"
 
+.PHONY: dockers-stop
+dockers-stop:
+	docker image prune -f
+
+#
+#
+# Externals
+#
+#
+all-clean: externals-clean
+all-build: externals-build
+
+.PHONY: externals-clean
+externals-clean:
+	rm -f externals/shuttle-go/shuttle-go
+
+.PHONY: externals-update
+externals-update:
+	# TODO: check this !
+	git subtree pull --prefix externals/shuttle-go git@github.com:abourget/shuttle-go.git master --squash
+
+.PHONY: externals-build
+externals-build: externals/shuttle-go/shuttle-go
+
+externals/shuttle-go/shuttle-go: externals/shuttle-go/*.go
+	cd externals/shuttle-go && ./build.sh
+
+
+#
+#
+# Node
+#
+#
+all-setup: node-setup
+
+.PHONY: node-build
+node-setup: node_modules/.dependencies
+
+node_modules/.dependencies: package.json package-lock.json
+	npm ci
 
 #
 #
 # Packages
 #
 #
+all-clean: packages-clean
+all-build: packages-build
+#all-test: packages-test
+
+.PHONY: packages-clean
 packages-clean:
 	make -f debian/rules clean
-	rm -f $(ROOT)/debian/*.debhelper
-	rm -f $(ROOT)/debian/*.substvars
-	rm -f $(ROOT)/repo/*
-	rm -f $(ROOT)/jehon-debs_
+	rm -f  $(ROOT)/debian/*.debhelper
+	rm -f  $(ROOT)/debian/*.substvars
+	rm -fr $(ROOT)/repo
+	rm -f  $(ROOT)/jehon-debs_
 
-packages-build: dockers-build repo/Release externals-build
-
+.PHONY: packages-build
+packages-build: repo/Release
 
 repo/Release.gpg: repo/Release
 	gpg --sign --armor --detach-sign --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
@@ -157,21 +192,32 @@ repo/Release.gpg: repo/Release
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
-repo/Packages: debian/debhelper-build-stamp
-	@mkdir -p repo
-	cd repo && \
-		dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
+repo/Packages: repo/index.html
+	cd repo && dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
 
-debian/debhelper-build-stamp: dockers/jehon-docker-build.dockerbuild \
+repo/index.html: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \
-		externals-build
+		jehon-env-minimal/usr/bin/shuttle-go
 
+	@rm -fr repo
 	@mkdir -p repo
 	rm -f repo/jehon-*.deb
 #echo "************ build indep ******************"
 	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
 #echo "************ build arch:armhf *************"
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
+	mkdir -p "$(dir $@)"
+
+# Generate the index.html for github pages
+	echo "<html>" > "$@"; \
+	for F in repo/* ; do \
+		BF=$$(basename "$$F"); echo "<a href='$$BF'>$$(date "+%m-%d-%Y %H:%M:%S" -r "$$F") $$BF</a><br>" >> "$@"; \
+	done; \
+	echo "</html>" >> "$@";
+
+jehon-env-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
+	mkdir -p "$(dir $@)"
+	cp externals/shuttle-go/shuttle-go "$@"
 
 debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/control \
@@ -180,7 +226,9 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/*.templates \
 		debian/*.triggers \
 		debian/jehon-base-minimal.links \
+		jehon-env-minimal/usr/bin/shuttle-go \
 		$(shell find . -path "./jehon-*" -type f)
+
 	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date "+%Y.%m.%d.%H.%M.%S") --distribution main)
 
 debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
@@ -226,69 +274,52 @@ shell-lint:
 	done ; \
 	exit $$RES
 
-######################
-#
-# Runtime
-#
-######################
 
-
-#
+######################################
 #
 # Deploy
 #
 #
+.PHONY: deploy
 deploy: deploy-local deploy-synology
 
-deploy-local-from-remote:
-	git push
-	date
-	sleep 1m
-	date
-	sleep 1m
-	date
-	sleep 1m
-	sudo apt update
-	sudo apt upgrade
+.PHONY: deploy-github
+deploy-github: packages-build node-setup
+	git remote -v
 
+	UE="$$( git --no-pager show -s --format="%an" ) <$$( git --no-pager show -s --format="%ae" )>"; \
+	set -x && ./node_modules/.bin/gh-pages --dist repo --user "$$UE" --remote "$${GIT_ORIGIN:origin}";
+
+	@echo "***********************************************************************"
+	@echo "***                                                                 ***"
+	@echo "***   Go check this at http://jehon.github.io/packages/index.html   ***"
+	@echo "***                                                                 ***"
+	@echo "***********************************************************************"
+
+.PHONY:
+deploy-github-validate:
+	wget https://jehon.github.io/packages/Packages -O tmp/Packages-from-github
+	@echo "*** Check content ***"
+	@grep "Source: jehon-debs" tmp/Packages-from-github > /dev/null
+	@grep "Package: " tmp/Packages-from-github
+	@grep "Version: " tmp/Packages-from-github | head -n 1
+	wget https://jehon.github.io/packages/index.html
+
+.PHONY: deploy-local
 deploy-local: packages-build
 	sudo ./setup-profile.sh
 	sudo apt update || true
 	sudo apt upgrade -y
 
 .PHONY: deploy-synology
-deploy-synology: \
-	deploy-synology-ssh \
-	deploy-synology-scripts \
-	deploy-synology-repo
-
-.PHONY: deploy-synology-ssh
-deploy-synology-ssh:
+deploy-synology:
 # Not using vf-
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
 		./synology/ssh/root/ $(SYNOLOGY_HOST):/root/.ssh \
 		--rsync-path=/bin/rsync \
 		--chmod=F644
 
-.PHONY: deploy-synology-scripts
-deploy-synology-scripts:
 # Not using vf-
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
 		"synology/scripts/" "$(SYNOLOGY_HOST):/volume3/scripts/synology" \
 		--copy-links --rsync-path=/bin/rsync
-
-.PHONY: deploy-synology-repo
-deploy-synology-repo: packages-build
-# Not using vf-
-	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
-		"repo/" "$(SYNOLOGY_HOST):/volume3/temporary/repo" \
-			--rsync-path=/bin/rsync
-
-#
-#
-# Logs
-#
-#
-udev-logs: logs-udev
-logs-udev:
-	sudo udevadm monitor -u

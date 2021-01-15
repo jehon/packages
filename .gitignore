@@ -18,3 +18,5 @@ md5sums
 jehon-debs_*
 *.build
 debian.1
+
+jehon-env-minimal/usr/bin/shuttle-go
