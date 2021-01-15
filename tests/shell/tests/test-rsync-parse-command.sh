@@ -8,9 +8,9 @@ ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )
 
 CFG="tests/data/vf.json"
 
-USER="myuser"
-TS="mytimestamp"
-KEY="mykey"
+export USER="myuser"
+export TS="mytimestamp"
+export KEY="mykey"
 
 checkShouldFail() {
     capture "$1" parseCommand "$CFG" "$2"
