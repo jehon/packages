@@ -208,10 +208,9 @@ repo/index.html: dockers/jehon-docker-build.dockerbuild \
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 	mkdir -p "$(dir $@)"
 
-	cd repo; \
 	echo "<html>" > "$@"; \
-	for F in * ; do \
-		echo "<a href='$$F'>$$(date "+%m-%d-%Y %H:%M:%S" -r "$$F") $$F</a>" >> "$@"; \
+	for F in repo/* ; do \
+		BF=$$(basename "$$F"); echo "<a href='$$BF'>$$(date "+%m-%d-%Y %H:%M:%S" -r "$$F") $$BF</a>" >> "$@"; \
 	done; \
 	echo "</html>" >> "$@";
 
@@ -289,6 +288,12 @@ deploy-github: packages-build node-setup
 
 	UE="$$( git --no-pager show -s --format="%an" ) <$$( git --no-pager show -s --format="%ae" )>"; \
 	set -x && ./node_modules/.bin/gh-pages --dist repo --user "$$UE" --remote "$${GIT_ORIGIN:origin}";
+
+	@echo "***********************************************************************"
+	@echo "***                                                                 ***"
+	@echo "***   Go check this at http://jehon.github.io/packages/index.html   ***"
+	@echo "***                                                                 ***"
+	@echo "***********************************************************************"
 
 .PHONY:
 deploy-github-validate:
