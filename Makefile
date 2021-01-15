@@ -192,28 +192,32 @@ repo/Release.gpg: repo/Release
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
-repo/Packages: repo/index.html
+repo/Packages: repo/index.html repo/jehon-base-repositories.deb
 	cd repo && dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
 
-repo/index.html: dockers/jehon-docker-build.dockerbuild \
-		debian/changelog \
-		jehon-base-minimal/usr/bin/shuttle-go
-
-	@rm -fr repo
-	@mkdir -p repo
-	rm -f repo/jehon-*.deb
-#echo "************ build indep ******************"
-	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
-#echo "************ build arch:armhf *************"
-#call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
-	mkdir -p "$(dir $@)"
-
+repo/index.html: repo/.built
 # Generate the index.html for github pages
 	echo "<html>" > "$@"; \
 	for F in repo/* ; do \
 		BF=$$(basename "$$F"); echo "<a href='$$BF'>$$(date "+%m-%d-%Y %H:%M:%S" -r "$$F") $$BF</a><br>" >> "$@"; \
 	done; \
 	echo "</html>" >> "$@";
+
+repo/jehon-base-repositories.deb: repo/.built
+# create jehon-base-repositories.deb for /start...
+	LD="$$( find repo/ -name "jehon-base-repositories_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
+
+repo/.built: dockers/jehon-docker-build.dockerbuild \
+		debian/changelog \
+		jehon-base-minimal/usr/bin/shuttle-go
+
+	@rm -fr repo
+	mkdir -p "$(dir $@)"
+#echo "************ build indep ******************"
+	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
+#echo "************ build arch:armhf *************"
+#call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
+	touch "$@"
 
 jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 	mkdir -p "$(dir $@)"
