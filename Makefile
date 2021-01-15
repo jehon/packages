@@ -208,9 +208,10 @@ repo/index.html: dockers/jehon-docker-build.dockerbuild \
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 	mkdir -p "$(dir $@)"
 
+# Generate the index.html for github pages
 	echo "<html>" > "$@"; \
 	for F in repo/* ; do \
-		BF=$$(basename "$$F"); echo "<a href='$$BF'>$$(date "+%m-%d-%Y %H:%M:%S" -r "$$F") $$BF</a>" >> "$@"; \
+		BF=$$(basename "$$F"); echo "<a href='$$BF'>$$(date "+%m-%d-%Y %H:%M:%S" -r "$$F") $$BF</a><br>" >> "$@"; \
 	done; \
 	echo "</html>" >> "$@";
 
