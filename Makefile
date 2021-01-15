@@ -197,7 +197,7 @@ repo/Packages: repo/index.html
 
 repo/index.html: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \
-		jehon-env-minimal/usr/bin/shuttle-go
+		jehon-base-minimal/usr/bin/shuttle-go
 
 	@rm -fr repo
 	@mkdir -p repo
@@ -215,7 +215,7 @@ repo/index.html: dockers/jehon-docker-build.dockerbuild \
 	done; \
 	echo "</html>" >> "$@";
 
-jehon-env-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
+jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 	mkdir -p "$(dir $@)"
 	cp externals/shuttle-go/shuttle-go "$@"
 
@@ -226,7 +226,7 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/*.templates \
 		debian/*.triggers \
 		debian/jehon-base-minimal.links \
-		jehon-env-minimal/usr/bin/shuttle-go \
+		jehon-base-minimal/usr/bin/shuttle-go \
 		$(shell find . -path "./jehon-*" -type f)
 
 	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date "+%Y.%m.%d.%H.%M.%S") --distribution main)

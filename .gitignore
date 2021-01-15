@@ -19,4 +19,4 @@ jehon-debs_*
 *.build
 debian.1
 
-jehon-env-minimal/usr/bin/shuttle-go
+jehon-base-minimal/usr/bin/shuttle-go
