@@ -39,9 +39,9 @@ pipeline {
       }
     }
     stage('Deploy') {
-      // when {
-      //   branch 'master'
-      // }
+      when {
+        branch 'master'
+      }
       environment {
         // Transform the http url into ssh url
         GIT_URL_SSH = """${sh(
