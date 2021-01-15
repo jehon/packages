@@ -210,9 +210,21 @@ debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
 # Shell
 #
 #
+all-test: shell-test
+all-lint: shell-lint
+
+.PHONY: shell-test
 shell-test:
 	run-parts --verbose --regex "test-.*" ./tests/shell/tests
 
+.PHONY: shell-lint
+shell-lint:
+	@shopt -s globstar; \
+	RES=0; \
+	for f in jehon-*/**/*.sh bin/**/*.sh; do \
+		shellcheck -x "$$f"; RES=$$? || $$RES; \
+	done ; \
+	exit $$RES
 
 ######################
 #

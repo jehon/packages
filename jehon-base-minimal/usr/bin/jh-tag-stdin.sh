@@ -7,7 +7,7 @@ addTag() {
 	if [ -z "$T" ]; then
 		return
 	fi
-	EXP="$EXP[$( printf "\e[1;%sm" "$1" )$T$( printf "\e[00m" )]"
+	EXP="$EXP\[$( printf "\e[1;%sm" "$1" )$T$( printf "\e[00m" )\]"
 }
 
 addTag "33" "$1"

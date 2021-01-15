@@ -14,7 +14,7 @@ fi
 if [[ -r ".jhn-auto-screen" ]]; then
     if [[ -z "${STY}" ]]; then
         # We are not in screen
-        if [[ $- == *i* ]] && [[ ! -z "${SSH_CLIENT}" ]]; then
+        if [[ $- == *i* ]] && [[ -n "${SSH_CLIENT}" ]]; then
             # But since we are on ssh, and interactive, we should be
             screen -RR -l
             exit $?
@@ -32,7 +32,7 @@ __parse_git_branch() {
     echo -n "$(basename "$(git rev-parse --show-toplevel)" )"
     echo -n ":"
     echo -n "$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
-    if [[ ! -z $(git status -s) ]]; then
+    if [[ -n $(git status -s) ]]; then
         echo -n "*"
     fi
     echo -n ")"
@@ -53,6 +53,7 @@ __cmd_result() {
             ;;
     esac
 
+  # shellcheck disable=2154 # (no undeclared variables)
     PS1+="${RCol}@${BBlu}\h ${Pur}\W${BYel}$ ${RCol}"
 }
 
@@ -62,11 +63,18 @@ if [[ "$( id -u )" != "0" ]]; then
     # Start with a white line
     PS1=''
     # last command result / git status / screen id
-    PS1=$PS1'\n$(__cmd_result) \033[33m$(__parse_git_branch)\[\033[00m\] ${STY:+(screen) }'
+    # !! enclose escape in \[xxx\] to avoid wrapping problems
+    PS1=$PS1'\n$(__cmd_result) \[\033\][33m$(__parse_git_branch)\[\033\][\[00m\] ${STY:+(screen) }'
 
     # user@host / folder
     PS1=$PS1'\n${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;37m\]\w\[\033[00m\] \$ '
+    export PS1
+    export debian_chroot
 
     HOST_UID="$(id -u)"
     HOST_GID="$(id -g)"
+
+    export HOST_UID
+    export HOST_GID
 fi
+

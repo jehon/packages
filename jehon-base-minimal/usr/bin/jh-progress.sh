@@ -17,33 +17,33 @@ cleanLine() {
 
 # Read and save the cursor position
 echo -en "\E[6n"
-read -sdR CURPOS
+read -rsdR CURPOS
 CURPOS=${CURPOS#*[} # Line;Column
 CURLINE=${CURPOS%;*}
 CURCOL=${CURPOS#*;}
 
 # If we are already on last line, add a new line
-if [[ $CURLINE = $TERMLINES ]] ; then
+if [[ "$CURLINE" = "$TERMLINES" ]] ; then
 	if [ "$CURCOL" != "1" ]; then
 		# Note if cursor is at the middle of a line
 		#   we should: add a new line
 		#              clear it up
 		echo ""
 		cleanLine
-		CURLINE=$[CURLINE - 1]
+		(( CURLINE-- ))
 	fi
 
 	cleanLine
 	echo ""
-	CURLINE=$[CURLINE - 1]
+	(( CURLINE-- ))
 	cleanLine
 
 	echo ""
-	CURLINE=$[CURLINE - 1]
+	(( CURLINE-- ))
 	cleanLine
-	
+
 	echo ""
-	CURLINE=$[CURLINE - 1]
+	(( CURLINE-- ))
 	cleanLine
 fi
 

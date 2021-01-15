@@ -9,14 +9,14 @@ fi
 mkdir -p "$ROOT/$1"
 
 dt=$(date +%Y-%m-%d-%H.%M.%S)
-for file in $ROOT/live/* ; do
+for file in "$ROOT"/live/* ; do
     # http://stackoverflow.com/a/965072/1954789
-    filename=`basename "$file"`
+    filename="$( basename "$file" )"
     name=${filename%.*}
     ext="${filename##*.}"
     DEST=$1/${dt}-${name}.${ext}
     echo "File: $file -> $DEST"
-    cp $file "$ROOT/$DEST"
+    cp "$file" "$ROOT/$DEST"
 done
 
 # Remove duplicates backups files

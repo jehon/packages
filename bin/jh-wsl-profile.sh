@@ -5,7 +5,7 @@ echo "** Using systemd"
 if [[ ! -x /usr/bin/daemonize ]] || [[ ! -x /usr/bin/fc-list ]] ||[[ ! -r /usr/lib/systemd/user/dbus.service ]]; then
     echo "You should install these packages: daemonize dbus-user-session fontconfig"
     # sudo apt-get install -yqq daemonize dbus-user-session fontconfig
-    read
+    read -r
     exit 1
 fi
 
@@ -25,8 +25,8 @@ while true; do
 	else
 		# Check if we have one or more systemd
 
-		PID1=$( echo $PID_SYSTEMD | cut -d ' ' -f 1)
-		PID2=$( echo $PID_SYSTEMD | cut -d ' ' -f 2)
+		PID1=$( echo "$PID_SYSTEMD" | cut -d ' ' -f 1)
+		PID2=$( echo "$PID_SYSTEMD" | cut -d ' ' -f 2)
 
 		if [ "$PID1" == "$PID2" ]; then
 			# Only one value
@@ -77,7 +77,7 @@ if [ "$PID_SYSTEMD" != 1 ]; then
 
 	if [ -n "$1" ]; then
 		# With a command
-		echo "Launching command $@"
+		echo "Launching command $*"
     	exec sudo /usr/bin/nsenter -t "$(pidof systemd)" -a runuser -u "$LOGNAME" --whitelist-environment=DISPLAY "$@"
 	else
 		# Without a command (shell)

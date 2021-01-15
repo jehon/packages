@@ -36,7 +36,7 @@ else
 		if [[ $line =~ \#[[:blank:]]+Empty:[[:blank:]]*(.*) ]] ; then
 			EMPTY=${BASH_REMATCH[1]};
 		fi
-	done < $INCLUDE
+	done < "$INCLUDE"
 fi
 
 TAG_BEGIN="### JEHON BEGIN ${TAG} ###"
@@ -53,7 +53,7 @@ if [ "$FILE" = "" ]; then
 fi
 
 if [ ! -r "$FILE" ]; then
-	if [ -z "$EMPTY"]; then
+	if [ -z "$EMPTY" ]; then
 		echo "File $FILE does not exists, bailing out..." >&2
 		exit 0
 	fi

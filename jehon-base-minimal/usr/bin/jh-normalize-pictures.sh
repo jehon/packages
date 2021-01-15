@@ -6,7 +6,7 @@ if [[ ! -x "$EXIF" ]]; then
 	exit 255
 fi
 
-if [[ ${#@} < 1 ]]; then
+if [[ ${#@} -lt 1 ]]; then
 	echo "Missing first parameter: comment"
 	exit 1
 fi
@@ -28,11 +28,11 @@ function treatOneJPG() {
 			treatOneOther "$1" "$2"
 			return
 		else
-			DATE="$(echo $COMP | cut -d ' ' -f 1 | tr ':' '-' )"
-			TIME="$(echo $COMP | cut -d ' ' -f 2 )"
-			HUR="$(echo $TIME | cut -d ':' -f 1 )"
-			MIN="$(echo $TIME | cut -d ':' -f 2 )"
-			SEC="$(echo $TIME | cut -d ':' -f 3 )"
+			DATE="$(echo "$COMP" | cut -d ' ' -f 1 | tr ':' '-' )"
+			TIME="$(echo "$COMP" | cut -d ' ' -f 2 )"
+			HUR="$(echo "$TIME" | cut -d ':' -f 1 )"
+			MIN="$(echo "$TIME" | cut -d ':' -f 2 )"
+			SEC="$(echo "$TIME" | cut -d ':' -f 3 )"
 			DATE="${DATE} ${HUR}-${MIN}-${SEC}"
 		fi
 	fi
@@ -84,12 +84,12 @@ function treatOne() {
 	echo "COMMENT: [$1]$R2 '$COMMENT'"
 
 	# endwith
-	if [ ${2%.jpg} != $2 ]; then
+	if [ "${2%.jpg}" != "$2" ]; then
 		treatOneJPG "$COMMENT" "$2"
 		return 0
 	fi
 	# endwith
-	if [ ${2%.JPG} != $2 ]; then
+	if [ "${2%.JPG}" != "$2" ]; then
 		treatOneJPG "$COMMENT" "$2"
 		return 0
 	fi
@@ -97,12 +97,7 @@ function treatOne() {
 }
 
 if  [ "$2" == "" ]; then
-	ls *.jpg *.JPG | while read FILE
-	do
-		treatOne "$1" "$FILE"
-	done
-
-	ls *.avi *.AVI *.mov *.MOV | while read FILE ; do
+	find . -type "f" \( -iname "*.jpg" -o -iname "*.avi" -o -iname "*.mov" \) | while read -r FILE ; do
 		treatOne "$1" "$FILE"
 	done
 else

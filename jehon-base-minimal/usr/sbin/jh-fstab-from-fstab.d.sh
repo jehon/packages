@@ -16,9 +16,9 @@ rm -f /etc/fstab
 	echo "#"
 ) >> /etc/fstab
 
-for F in $( ls /etc/fstab.d/*.fstab | sort ) ; do
+for F in $( find . -type f /etc/fstab.d/*.fstab | sort ) ; do
 	echo "Adding $(basename "$F" )"
-	(	
+	(
 		echo ""
 		echo "#"
 		echo "# From $F"

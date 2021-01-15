@@ -22,8 +22,11 @@ shift
 # Fix the path to avoid having the custom ssh command
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
+# Transform into an array
+read -r -a JH_SSH <<< "$JH_SSH"
+
 /usr/bin/rsync \
-	$JH_SSH \
+	"${JH_SSH[@]}" \
 	--recursive --links --times \
 	--omit-dir-times \
 	--itemize-changes \
