@@ -238,21 +238,6 @@ debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
 		&& find * -type f -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
 	cat debian/jehon-base-minimal.links.add >> "$@"
 
-# packages-release:
-# 	@echo "**"
-# 	@echo "**"
-# 	@echo "** How to release ? **"
-# 	@echo "** Set the version on the first line of the changelog **"
-# 	@echo "**"
-# 	@echo "**"
-# 	gbp dch --git-author --release
-# 	git add debian/changelog
-# 	git commit -m "Releasing version $(shell dpkg-parsechangelog -l debian/changelog --show-field Version)"
-# 	gbp tag
-# 	git push
-# 	git push --tags
-
-
 #
 #
 # Shell
