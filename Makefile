@@ -178,10 +178,10 @@ all-build: packages-build
 .PHONY: packages-clean
 packages-clean:
 	make -f debian/rules clean
-	rm -f $(ROOT)/debian/*.debhelper
-	rm -f $(ROOT)/debian/*.substvars
-	rm -f $(ROOT)/repo/*
-	rm -f $(ROOT)/jehon-debs_
+	rm -f  $(ROOT)/debian/*.debhelper
+	rm -f  $(ROOT)/debian/*.substvars
+	rm -fr $(ROOT)/repo
+	rm -f  $(ROOT)/jehon-debs_
 
 .PHONY: packages-build
 packages-build: repo/Release
@@ -192,14 +192,14 @@ repo/Release.gpg: repo/Release
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
-repo/Packages: tmp/repo.built
-	@mkdir -p repo
+repo/Packages: repo/index.html
 	cd repo && dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
 
-tmp/repo.built: dockers/jehon-docker-build.dockerbuild \
+repo/index.html: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \
 		jehon-env-minimal/usr/bin/shuttle-go
 
+	@rm -fr repo
 	@mkdir -p repo
 	rm -f repo/jehon-*.deb
 #echo "************ build indep ******************"
@@ -207,7 +207,13 @@ tmp/repo.built: dockers/jehon-docker-build.dockerbuild \
 #echo "************ build arch:armhf *************"
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 	mkdir -p "$(dir $@)"
-	touch "$@"
+
+	cd repo; \
+	echo "<html>" > "$@"; \
+	for F in * ; do \
+		echo "<a href='$$F'>$$(date "+%m-%d-%Y %H:%M:%S" -r "$$F") $$F</a>" >> "$@"; \
+	done; \
+	echo "</html>" >> "$@";
 
 jehon-env-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 	mkdir -p "$(dir $@)"
@@ -291,6 +297,7 @@ deploy-github-validate:
 	@grep "Source: jehon-debs" tmp/Packages-from-github > /dev/null
 	@grep "Package: " tmp/Packages-from-github
 	@grep "Version: " tmp/Packages-from-github | head -n 1
+	wget https://jehon.github.io/packages/index.html
 
 .PHONY: deploy-local
 deploy-local: packages-build
