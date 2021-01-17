@@ -22,7 +22,7 @@ fi
 
 if [ ! -r "$LOCAL_DEB" ]; then
     echo "*** Installing source from github"
-    wget "http://jehon.github.io/packages/jehon-base-minimal.deb}" -O "$DEB_NAME"
+    wget "http://jehon.github.io/packages/jehon-base-minimal.deb" -O "$DEB_NAME"
     LOCAL_DEB="./$DEB_NAME"
 fi
 
