@@ -56,7 +56,7 @@ Depends: ${misc:Depends},
 	shellcheck
 Description: Jehon minimal hooks
 
-Package: jehon-thirdparties
+Package: jehon-base-thirdparties
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 	dpkg (>= 1.17.14)
