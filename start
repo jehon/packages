@@ -9,25 +9,28 @@ if [[ "$(whoami)" != "root" ]]; then
     exit 255
 fi
 
-echo "*** Installing required packages"
-apt install -y apt-transport-https
+export DEBIAN_FRONTEND=noninteractive
+export DEB_NAME="jehon-base-minimal.deb"
 
-echo "*** Installing source from github"
+if [ -r repo/"$DEB_NAME" ]; then
+    LOCAL_DEB="repo/$DEB_NAME"
+fi
 
-echo "deb [trusted=yes] http://jehon.github.io/packages/ /" \
-    > "/etc/apt/sources.list.d/jehon-github.list"
+if [ -n "$LOCAL_STORE" ]; then
+    LOCAL_DEB="$LOCAL_STORE/$DEB_NAME"
+fi
 
-echo "*** Updating sources"
-apt update
+if [ ! -r "$LOCAL_DEB" ]; then
+    echo "*** Installing source from github"
+    wget "http://jehon.github.io/packages/jehon-base-minimal.deb}" -O "$DEB_NAME"
+    LOCAL_DEB="./$DEB_NAME"
+fi
 
-echo "*** Installing jehon-base-minimal"
-apt install -y jehon-base-repositories
+apt install --yes "$LOCAL_DEB"
 /usr/bin/jh-apt-configure-repositories.sh
 
-apt update
-
-echo "*** Installing jehon-base-minimal"
-apt install -y jehon-base-minimal
+apt --yes update
+apt --yes upgrade
 
 echo ""
 echo ""

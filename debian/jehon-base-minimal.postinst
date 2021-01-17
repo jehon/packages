@@ -90,6 +90,9 @@ case "$1" in
 		ufw --force enable
 		# ufw status
 		echo "*** Firewall: adapted"
+
+		/usr/bin/jh-apt-configure-repositories.sh
+
     	;;
 
 	triggered)

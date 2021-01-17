@@ -42,7 +42,7 @@ setup-computer:
 	make packages-build
 	sudo dpkg -i repo/jehon-base-minimal_*.deb || true
 	sudo apt install -f -y
-	sudo jehon-base-repositories/usr/bin/jh-apt-add-packages-key.sh
+	sudo jehon-base-minimal/usr/bin/jh-apt-add-packages-key.sh
 	sudo apt update
 	sudo snap install --classic go
 	@echo "You should add "
@@ -192,7 +192,7 @@ repo/Release.gpg: repo/Release
 repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
-repo/Packages: repo/index.html repo/jehon-base-repositories.deb
+repo/Packages: repo/index.html repo/jehon-base-minimal.deb
 	cd repo && dpkg-scanpackages -m . | sed -e "s%./%%" > Packages
 
 repo/index.html: repo/.built
@@ -203,9 +203,9 @@ repo/index.html: repo/.built
 	done; \
 	echo "</html>" >> "$@";
 
-repo/jehon-base-repositories.deb: repo/.built
-# create jehon-base-repositories.deb for /start...
-	LD="$$( find repo/ -name "jehon-base-repositories_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
+repo/jehon-base-minimal.deb: repo/.built
+# create jehon-base-minimal.deb for /start...
+	LD="$$( find repo/ -name "jehon-base-minimal_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
 
 repo/.built: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \

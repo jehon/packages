@@ -14,19 +14,12 @@ Vcs-Browser: https://bitbucket.org/jehon/packages/
 # Base
 #
 ##########################
-
-Package: jehon-base-repositories
-Architecture: all
-Pre-Depends: ${misc:Pre-Depends}
-	dpkg (>= 1.17.14)
-Depends: ${misc:Depends},
- 	apt-transport-https
-
 Package: jehon-base-minimal
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
-	dpkg (>= 1.17.14),
-	jehon-base-repositories
+	dpkg (>= 1.17.14)
+Provides: jehon-base-repositories
+Conflicts: jehon-base-repositories
 Depends: ${misc:Depends},
 	debconf, sed,
 	bash,
@@ -34,6 +27,7 @@ Depends: ${misc:Depends},
 	sshpass,
 	curl,
 	lsb-release,
+ 	apt-transport-https,
 	debfoster,
 	ntp,
 	openssh-server, openssh-client,
@@ -57,12 +51,19 @@ Depends: ${misc:Depends},
 	rsync,
 	git,
 	gettext-base,
-	nodejs,
 	xvfb,
-	docker-ce, docker-ce-cli, containerd.io,
 	shellcheck
 Description: Jehon minimal hooks
 
+Package: jehon-thirdparties
+Architecture: all
+Pre-Depends: ${misc:Pre-Depends}
+	dpkg (>= 1.17.14)
+Depends: jehon-base-minimal,
+	nodejs,
+	docker-ce, docker-ce-cli, containerd.io
+Description:
+	Install third parties from external sources
 
 ##########################
 #
@@ -83,7 +84,7 @@ Package: jehon-env-desktop
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
-	jehon-base-minimal,
+	jehon-base-thirdparties,
 	git-cola,
 	xclip,
 	gparted,
@@ -99,10 +100,6 @@ Depends: ${misc:Depends}
 	google-chrome
 Description: Jehon environnement
 
-# Provides: jehon-env-dev, jehon-base-snap
-# Replaces: jehon-env-dev, jehon-base-snap
-# Conflicts: jehon-env-dev, jehon-base-snap
-
 ##########################
 #
 # system's
@@ -114,6 +111,7 @@ Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
 	jehon-base-minimal,
+	jehon-base-thirdparties,
     jehon-env-home,
 	jehon-env-desktop,
 	rar,unrar,
