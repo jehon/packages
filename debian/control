@@ -14,12 +14,13 @@ Vcs-Browser: https://bitbucket.org/jehon/packages/
 # Base
 #
 ##########################
+
 Package: jehon-base-minimal
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 	dpkg (>= 1.17.14)
-Provides: jehon-base-repositories
-Conflicts: jehon-base-repositories
+Provides: jehon-base-repositories, jehon-env-home
+Conflicts: jehon-base-repositories, jehon-env-home
 Depends: ${misc:Depends},
 	debconf, sed,
 	bash,
@@ -71,15 +72,6 @@ Description:
 #
 ##########################
 
-
-Package: jehon-env-home
-Architecture: all
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}
-	jehon-base-minimal
-Description: Jehon environnement
-
-
 Package: jehon-env-desktop
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
@@ -111,8 +103,6 @@ Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
 	jehon-base-minimal,
-	jehon-base-thirdparties,
-    jehon-env-home,
 	jehon-env-desktop,
 	rar,unrar,
 	libnss3-dev,
@@ -125,6 +115,5 @@ Package: jehon-system-tv
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
-	jehon-env-home,
 	build-essential, rbp-userland-dev-osmc, libvncserver-dev, libconfig++-dev,
 Description: Jehon environnement

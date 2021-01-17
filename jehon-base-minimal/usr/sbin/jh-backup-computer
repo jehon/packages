@@ -23,6 +23,6 @@ if [ -r "$KEY" ]; then
 		--filter ". /etc/jehon/jh-rsync-backup-computer-filter" \
 
 else
-	echo "No $KEY found, no backup will run" >&2
-	exit 1
+	echo "No $KEY found, no backup will run"
+#	exit 1
 fi

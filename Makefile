@@ -233,7 +233,7 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		jehon-base-minimal/usr/bin/shuttle-go \
 		$(shell find . -path "./jehon-*" -type f)
 
-	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date "+%Y.%m.%d.%H.%M.%S") --distribution main)
+	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date --utc "+%Y.%m.%d.%H.%M.%S") --distribution main)
 
 debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
 		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f ) \
