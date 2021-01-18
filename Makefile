@@ -23,6 +23,24 @@ SYNOLOGY_HOST = synology
 GPG_KEY="313DD85CEFADAF7E"
 DOCKERS = $(shell find dockers/ -mindepth 1 -maxdepth 1 -type d )
 
+VERSION_LAST_GIT=$(shell git log -1 --format="%at" | xargs -I{} date --utc -d @{} "+%Y.%m.%d.%H.%M.%S" )
+#
+# git log -1 --format=%cd
+# git log -1 --format="%at" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S
+# git log -1 --format="%at" | xargs -I{} date -d @{} "+%Y.%m.%d.%H.%M.%S"
+#
+# if [ -z "$(git status --porcelain)" ]; then
+#   # Working directory clean
+# else
+#   # Uncommitted changes
+# fi
+VERSION_CURRENT_TIME_TAG=$(shell date --utc "+%Y%m%d%H%M%S")
+ifeq "$(shell git status --porcelain)" ""
+	VERSION=$(VERSION_LAST_GIT)
+else
+	VERSION=$(VERSION_LAST_GIT).$(VERSION_CURRENT_TIME_TAG)
+endif
+
 export PATH := $(ROOT)/jehon-base-minimal/usr/bin:$(PATH)
 
 #
@@ -91,6 +109,16 @@ all-dump: global-dump
 
 .PHONY: global-dump
 global-dump:
+	$(info * PWD:                      $(shell pwd))
+	$(info * PATH:                     $(shell echo $$PATH))
+	$(info * ROOT:                     $(ROOT))
+	$(info * DOCKERS:                  $(DOCKERS))
+	$(info * GPG_KEY:                  $(GPG_KEY))
+	$(info * SYNOLOGY_HOST:            $(SYNOLOGY_HOST))
+	$(info * VERSION_LAST_GIT:         $(VERSION_LAST_GIT))
+	$(info * VERSION_CURRENT_TIME_TAG: $(VERSION_CURRENT_TIME_TAG))
+	$(info * VERSION:                  $(VERSION))
+
 trigger-jenkins:
 	curl -v -X POST "http://$(JENKINS_TOKEN)@$(JENKINS_HOST)/job/packages/job/master/build?delay=0sec"
 
@@ -229,7 +257,7 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		jehon-base-minimal/usr/bin/shuttle-go \
 		$(shell find . -path "./jehon-*" -type f)
 
-	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(shell date --utc "+%Y.%m.%d.%H.%M.%S") --distribution main)
+	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main)
 
 debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
 		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f ) \
