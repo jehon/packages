@@ -259,12 +259,11 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 
 	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main)
 
-debian/jehon-base-minimal.links: debian/jehon-base-minimal.links.add \
-		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f ) \
-		Makefile
+debian/jehon-base-minimal.links: Makefile \
+		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
+
 	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
 		&& find * -type f -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
-	cat debian/jehon-base-minimal.links.add >> "$@"
 
 #
 #
