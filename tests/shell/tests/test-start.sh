@@ -24,6 +24,9 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
     # assert_success "start script"
     /app/start
 
+    assert_file_exists "/etc/apt/sources.list.d/jehon-github.list"
+    assert_file_exists "/etc/cron.daily/jh-backup-computer"
+
     exit $?
 fi
 

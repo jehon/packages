@@ -21,3 +21,5 @@ assert_equals "jhGetConfigFile from packages" \
 assert_equals "jhGetConfigFile from etc" \
     "/etc/host" \
     "$( jhGetConfigFile "/etc/host" )"
+
+assert_file_exists "/etc/hosts"

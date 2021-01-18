@@ -123,6 +123,10 @@ assert_equals() {
     log_success "$1: Expected ($2) is equal to result ($3)"
 }
 
+assert_file_exists() {
+	assert_true "File exists: $1" bash -c "[ -f '$1' ]"
+}
+
 assert_success() {
 	capture "$@"
 	assert_captured_success ""
