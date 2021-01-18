@@ -120,7 +120,8 @@ global-dump:
 	$(info * VERSION:                  $(VERSION))
 
 trigger-jenkins:
-	curl -X POST "http://$(JENKINS_TOKEN)@$(JENKINS_HOST)/job/packages/job/master/build?delay=0sec"
+	curl -X POST "http://$(JENKINS_TOKEN)@$(JENKINS_HOST)/job/packages/job/$(shell git branch --show-current)/build?delay=0sec"
+
 
 #
 #
