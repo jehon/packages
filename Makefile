@@ -91,12 +91,8 @@ all-dump: global-dump
 
 .PHONY: global-dump
 global-dump:
-	$(info * PWD:            $(shell pwd))
-	$(info * PATH:           $(shell echo $$PATH))
-	$(info * ROOT:           $(ROOT))
-	$(info * DOCKERS:        $(DOCKERS))
-	$(info * GPG_KEY:        $(GPG_KEY))
-	$(info * SYNOLOGY_HOST:  $(SYNOLOGY_HOST))
+trigger-jenkins:
+	curl -v -X POST "http://$(JENKINS_TOKEN)@$(JENKINS_HOST)/job/packages/job/master/build?delay=0sec"
 
 #
 #
