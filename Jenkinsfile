@@ -75,8 +75,6 @@ pipeline {
   }
   post {
     always {
-      sh 'ls -l repo/'
-      sh 'md5sum repo/*'
       sh 'make all-stop'
       deleteDir() /* clean up our workspace */
     }
