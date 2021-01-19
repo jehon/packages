@@ -66,6 +66,19 @@ warning() {
     fi
 }
 
+ok_ko() {
+    T1="$1"
+    T2="$2"
+    shift
+    shift
+
+    if [[ "$T1" == "$T2" ]] ; then
+        ok "$@"
+    else
+        ko "$@"
+    fi
+}
+
 ok() {
     if test -t 1 ; then
     	echo -e "\033[01;32m✓\033[0m $*"
