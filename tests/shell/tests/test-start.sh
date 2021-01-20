@@ -3,10 +3,14 @@
 set -e
 
 SWD="$( dirname "${BASH_SOURCE[0]}" )"
-. $SWD/../lib/test-helpers.sh
+
+# shellcheck source=/dev/null
+. "$SWD"/../lib/test-helpers.sh
 
 ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
-. $ROOT/synology/scripts/rsync-parse-command.sh
+
+# shellcheck source=/dev/null
+. "$ROOT"/synology/scripts/rsync-parse-command.sh
 
 CONSTANT_RUN_TEST="i_am_in_docker"
 
