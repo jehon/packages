@@ -268,7 +268,7 @@ debian/jehon-base-minimal.links: Makefile \
 		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
 
 	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
-		&& find * -type f -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
+		&& find * -type "f,l" -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
 
 #
 #
