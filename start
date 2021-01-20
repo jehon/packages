@@ -14,10 +14,12 @@ export DEB_NAME="jehon-base-minimal.deb"
 
 if [ -r repo/"$DEB_NAME" ]; then
     LOCAL_DEB="repo/$DEB_NAME"
+    echo "*** Using local deb: $LOCAL_DEB"
 fi
 
 if [ -n "$LOCAL_STORE" ]; then
     LOCAL_DEB="$LOCAL_STORE/$DEB_NAME"
+    echo "*** Using local store: $LOCAL_DEB"
 fi
 
 if [ ! -r "$LOCAL_DEB" ]; then
@@ -26,11 +28,13 @@ if [ ! -r "$LOCAL_DEB" ]; then
     LOCAL_DEB="./$DEB_NAME"
 fi
 
-apt install --yes "$LOCAL_DEB"
+echo "*** Using deb: $LOCAL_DEB"
+
+apt-get install --yes "$LOCAL_DEB"
 /usr/bin/jh-apt-configure-repositories.sh
 
-apt --yes update
-apt --yes upgrade
+apt-get --yes update
+apt-get --yes upgrade
 
 echo ""
 echo ""
