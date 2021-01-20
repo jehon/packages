@@ -21,7 +21,7 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
 
     log_message "Level-up docker image - start"
     assert_success "Level-up docker image - apt-get update" apt update -y
-    assert_success "Level-up docker image - apt-get install" apt install -y lsb-release gpg ca-certificates
+    assert_success "Level-up docker image - apt-get install" apt install -y lsb-release gpg ca-certificates wget
     log_message "Level-up docker image - done"
 
     export LOCAL_STORE="/app/repo/"
@@ -33,6 +33,8 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
 
     exit $?
 fi
+
+assert_file_exists "$ROOT/repo/jehon-base-minimal.deb"
 
 echo "Launching docker"
 # SCRIPT_NAME=""
