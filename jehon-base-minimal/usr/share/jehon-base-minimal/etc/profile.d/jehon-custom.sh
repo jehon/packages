@@ -71,10 +71,14 @@ if [[ "$( id -u )" != "0" ]]; then
     export PS1
     export debian_chroot
 
-    HOST_UID="$(id -u)"
-    HOST_GID="$(id -g)"
+    # Already calculated:
+    if [ -z "$UID" ]; then
+        UID=$(id -u)
+    fi
+    if [ -z "$GID" ]; then
+        GID=$(id -g)
+    fi
 
-    export HOST_UID
-    export HOST_GID
+    export UID
+    export GID
 fi
-
