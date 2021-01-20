@@ -124,7 +124,11 @@ assert_equals() {
 }
 
 assert_file_exists() {
-	assert_true "File exists: $1" bash -c "[ -f '$1' ]"
+	if [ -e "$1" ]; then
+		log_success "File exists: $1"
+	else
+		log_failure "File exists: $1" "not found ( $( cd "$(dirname "$1")" && find . -maxdepth 1 -type f -exec basename "{}" ";" | tr '\n' ' ' ))"
+	fi
 }
 
 assert_success() {

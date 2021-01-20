@@ -20,4 +20,7 @@ assert_captured_success
 capture "exit 1" exit 1
 assert_captured_failure
 
+assert_file_exists "/etc/hosts"
+# assert_file_exists "/etc/cron.daily/xxx"
+
 echo "Test done"
