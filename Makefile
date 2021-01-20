@@ -150,6 +150,14 @@ dockers-build: $(addsuffix .dockerexists, $(DOCKERS)) $(addsuffix .dockerbuild, 
 dockers-stop:
 	docker image prune -f
 
+dockers-kill:
+	@for D in $(DOCKERS); do \
+		BN="$$(basename "$$D" )"; \
+		echo "* Killing $$BN"; \
+		docker kill "jehon/$$BN" || true; \
+	done; \
+	echo "* Killing done";
+
 #
 #
 # Externals
