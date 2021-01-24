@@ -6,7 +6,7 @@ set -e
 . jh-lib.sh
 
 # shellcheck source=/dev/null
-. jh-git-status.sh
+. jh-git-status.sh || true
 
 JENKINS_URL_PROJECT="http://$JENKINS_TOKEN@$JENKINS_HOST/job/${GIT_PROJECT}"
 JENKINS_URL_JOB="$JENKINS_URL_PROJECT/job/${GIT_BRANCH//\//%2F}"

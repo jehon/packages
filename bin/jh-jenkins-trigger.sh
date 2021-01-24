@@ -10,7 +10,6 @@ if [ -n "$1" ]; then
     	curl --fail -X POST "$JENKINS_URL_PROJECT/build?delay=0sec"
         exit $?
     fi
-    GIT_BRANCH="$1"
 fi
 
 echo "BRANCH: $BRANCH"

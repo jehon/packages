@@ -20,6 +20,12 @@ echo "- GIT_PROJECT: $GIT_PROJECT"
 echo "- GIT_BRANCH:  $GIT_BRANCH"
 echo ""
 
+export GIT_SLUG
+export GIT_OWNER
+export GIT_PROJECT
+export GIT_BRANCH
+export GIT_STASH_CNT
+
 # LOCAL COMMIT NOT PUSHED
 AHEAD=$(git status -sb | grep -E '\[(ahead|behind)' | sed -r 's/^.*\[//g' | sed -r 's/\].*$//g' )
 if [ -z "$AHEAD" ]; then
@@ -35,9 +41,3 @@ if [[ $GIT_STASH_CNT -eq 0 ]] ; then
 else
     ko "$GIT_STASH_CNT stash'es found locally"
 fi
-
-export GIT_SLUG
-export GIT_OWNER
-export GIT_PROJECT
-export GIT_BRANCH
-export GIT_STASH_CNT
