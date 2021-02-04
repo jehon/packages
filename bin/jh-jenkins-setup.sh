@@ -9,6 +9,12 @@ usermod -a -G docker jenkins
 
 ufw allow 8080
 
+#
+# Change home to be in /home/jenkins
+#   for snaps
+#   thanks to https://dzone.com/articles/jenkins-02-changing-home-directory
+#
+
 cp /etc/default/jenkins /etc/default/jenkins.bak
 sed -i "s/JENKINS_HOME=.*/JENKINS_HOME=\/home\/jenkins/" /etc/default/jenkins
 if [ -d /var/lib/jenkins ] ; then
