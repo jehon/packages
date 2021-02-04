@@ -53,7 +53,8 @@ Depends: ${misc:Depends},
 	git,
 	gettext-base,
 	xvfb,
-	shellcheck
+	shellcheck,
+	thefuck
 Description: Jehon minimal hooks
 
 Package: jehon-base-thirdparties

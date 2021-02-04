@@ -82,3 +82,8 @@ if [[ "$( id -u )" != "0" ]]; then
     export UID
     export GID
 fi
+
+if [ -x thefuck ]; then
+    eval "$(thefuck --alias)"
+    alias z="fuck"
+fi
