@@ -54,6 +54,10 @@ Depends: ${misc:Depends},
 	gettext-base,
 	xvfb,
 	shellcheck,
+	rar,unrar,
+	libnss3-dev,
+	libatk1.0-dev,
+	encfs,
 	thefuck
 Description: Jehon minimal hooks
 
@@ -76,6 +80,8 @@ Description:
 Package: jehon-env-desktop
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
+Provides: jehon-system-private
+Conflicts: jehon-system-private
 Depends: ${misc:Depends}
 	jehon-base-thirdparties,
 	git-cola,
@@ -99,22 +105,10 @@ Description: Jehon environnement
 #
 ##########################
 
-Package: jehon-system-private
-Architecture: all
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}
-	jehon-base-minimal,
-	jehon-env-desktop,
-	rar,unrar,
-	libnss3-dev,
-	libatk1.0-dev,
-	encfs
-Description: Jehon environnement
-
-
 Package: jehon-system-tv
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}
+	jehon-base-minimal,
 	build-essential, rbp-userland-dev-osmc, libvncserver-dev, libconfig++-dev,
 Description: Jehon environnement
