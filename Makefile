@@ -238,7 +238,8 @@ repo/jehon-base-minimal.deb: repo/.built
 
 repo/.built: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \
-		jehon-base-minimal/usr/bin/shuttle-go
+		jehon-base-minimal/usr/bin/shuttle-go \
+		shell-build
 
 	@rm -fr repo
 	mkdir -p "$(dir $@)"
@@ -275,11 +276,17 @@ debian/jehon-base-minimal.links: Makefile \
 # Shell
 #
 #
+all-build: shell-build
 all-test: shell-test
 all-lint: shell-lint
 
+shell-build:
+	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find bin -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
+
 .PHONY: shell-test
-shell-test:
+shell-test: shell-build
 	run-parts --verbose --regex "test-.*" ./tests/shell/tests
 
 .PHONY: shell-lint
