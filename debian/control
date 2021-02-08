@@ -57,7 +57,8 @@ Depends: ${misc:Depends},
 	libnss3-dev,
 	libatk1.0-dev,
 	encfs,
-	thefuck
+	thefuck,
+	ufw
 Description: Jehon minimal hooks
 
 Package: jehon-base-thirdparties
