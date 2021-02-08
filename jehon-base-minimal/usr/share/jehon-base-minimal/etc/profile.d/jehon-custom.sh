@@ -83,7 +83,7 @@ if [[ "$( id -u )" != "0" ]]; then
     export GID
 fi
 
-if [ -x thefuck ]; then
+if type thefuck &> /dev/null; then
     eval "$(thefuck --alias)"
     alias z="fuck"
 fi
