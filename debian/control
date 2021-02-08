@@ -54,7 +54,7 @@ Depends: ${misc:Depends},
 	gettext-base,
 	xvfb,
 	shellcheck,
-	rar,unrar,
+	unrar,
 	libnss3-dev,
 	libatk1.0-dev,
 	encfs,
@@ -67,7 +67,8 @@ Pre-Depends: ${misc:Pre-Depends}
 	dpkg (>= 1.17.14)
 Depends: jehon-base-minimal,
 	nodejs,
-	docker-ce, docker-ce-cli, containerd.io
+	docker-ce, docker-ce-cli, containerd.io,
+	rar
 Description:
 	Install third parties from external sources
 
