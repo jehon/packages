@@ -18,6 +18,10 @@ auto:
 SHELL := /bin/bash
 .SECONDEXPANSION:
 
+define itself
+	$(MAKE) $(FLAGS) $(MAKEOVERRIDES) "$1"
+endef
+
 ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 SYNOLOGY_HOST = synology
 GPG_KEY="313DD85CEFADAF7E"
@@ -238,9 +242,9 @@ repo/jehon-base-minimal.deb: repo/.built
 
 repo/.built: dockers/jehon-docker-build.dockerbuild \
 		debian/changelog \
-		jehon-base-minimal/usr/bin/shuttle-go \
-		shell-build
+		jehon-base-minimal/usr/bin/shuttle-go
 
+	$(call itself,shell-build)
 	@rm -fr repo
 	mkdir -p "$(dir $@)"
 #echo "************ build indep ******************"
@@ -308,7 +312,7 @@ shell-lint:
 deploy: deploy-local deploy-synology
 
 .PHONY: deploy-github
-deploy-github: packages-build node-setup
+deploy-github: repo/Release.gpg node-setup
 	git remote -v
 
 	UE="$$( git --no-pager show -s --format="%an" ) <$$( git --no-pager show -s --format="%ae" )>"; \
