@@ -67,8 +67,7 @@ Pre-Depends: ${misc:Pre-Depends}
 	dpkg (>= 1.17.14)
 Depends: jehon-base-minimal,
 	nodejs,
-	docker-ce, docker-ce-cli, containerd.io,
-	rar
+	docker-ce, docker-ce-cli, containerd.io
 Description:
 	Install third parties from external sources
 
