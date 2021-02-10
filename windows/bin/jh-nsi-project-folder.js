@@ -33,7 +33,7 @@ const projects = [
 	{ "id": 22202, "wo": "SPW    ", "status": "en cours", "title": "Etude Application GESPER" },
 	{ "id": 23722, "wo": "CGER002", "status": "en cours", "title": "COMMUNAUTE  GERM-Maintenance GESPER-GER" },
 	{ "id": 24643, "wo": "SPW    ", "status": "en cours", "title": "O4-16M23-Mnt GESPER 01 08 20-31 07 21" },
-	{ "id": 24703, "wo": "-      ", "status": "offre   ", "title": "O3-20M23-Coditax-signature électronique" },
+	{ "id": 24703, "wo": "SPW-431", "status": "en cours", "title": "O3-20M23-Coditax-signature électronique" },
 	{ "id": -1000, "wo": "-      ", "status": "en cours", "title": "" },
 ].filter(e => e.title > '');
 
