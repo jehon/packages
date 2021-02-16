@@ -12,6 +12,7 @@ term.cyan('The hall is spacious. Someone lighted few chandeliers.\n');
 term.cyan('There are doorways south and west.\n');
 
 const projects = [
+	{ "id": 24245, "wo": "CGER003", "status": "en cours", "title": "COMMUNAUTE  GERM-Maintenance GESPER-GER" },
 	{ "id": 10683, "wo": "NAMU001", "status": "en cours", "title": "E1952 Gestion Domaine Public" },
 	{ "id": 21143, "wo": "NAMU003", "status": "en cours", "title": "E2309 Plateforme WEB-Réservation emplacements" },
 	{ "id": 22722, "wo": "NAMU004", "status": "en cours", "title": "Evolution de l'outil de gestion ODP" },
@@ -31,7 +32,6 @@ const projects = [
 	{ "id": 19604, "wo": "SPW-355", "status": "en cours", "title": "O4-16M23-GesPer-BIEN" },
 	{ "id": 19942, "wo": "SPW-391", "status": "en cours", "title": "O4-16M23-Mnt GESPER POW" },
 	{ "id": 22202, "wo": "SPW    ", "status": "en cours", "title": "Etude Application GESPER" },
-	{ "id": 23722, "wo": "CGER002", "status": "en cours", "title": "COMMUNAUTE  GERM-Maintenance GESPER-GER" },
 	{ "id": 24643, "wo": "SPW    ", "status": "en cours", "title": "O4-16M23-Mnt GESPER 01 08 20-31 07 21" },
 	{ "id": 24703, "wo": "SPW-431", "status": "en cours", "title": "O3-20M23-Coditax-signature électronique" },
 	{ "id": -1000, "wo": "-      ", "status": "en cours", "title": "" },
@@ -51,12 +51,16 @@ term.singleColumnMenu(items, function (error, response) {
 	const child = childProcess.spawn('explorer', [p], { detached: true, stdio: 'ignore' });
 	child.unref();
 
-	// glob(p + '*', function (err, files) {
+	// glob(p + '\\*', function (err, files) {
 	// 	if (err) {
 	// 		console.error(err);
+	// 		return;
 	// 	}
 	// 	console.log(files);
+	// 	console.log("done");
 	// });
 
+	// term.inputField((error, input) => {
 	process.exit();
+	// });
 });
