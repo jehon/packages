@@ -35,6 +35,7 @@ echo "*** Key $KEY_LABEL ($KEY_ID): adding"
     if [ -f "$3" ]; then
         apt-key add "$KEY_FILE"
     else
+        # curl -sL "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x$KEY_ID" | sudo apt-key add
         apt-key adv --recv-keys --keyserver keyserver.ubuntu.com "$KEY_ID"
     fi
 ) > /dev/null
