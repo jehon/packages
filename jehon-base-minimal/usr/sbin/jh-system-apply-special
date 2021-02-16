@@ -10,19 +10,6 @@ mkdir -p "$CACHE"
 
 ################################
 #
-# Config files
-#
-
-CONF="$ROOT/conf"
-mkdir -p "$CONF"
-
-if [ -n  "$(ls -A $CONF/)" ]; then
-	cp --no-dereference -r "$CONF"/* /
-fi
-
-
-################################
-#
 # Patch
 #
 
