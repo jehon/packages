@@ -87,6 +87,7 @@ case "$1" in
 
 		echo "*** Firewall: adapting"
 		ufw allow ssh
+		ufw allow OpenSSH
 		ufw --force enable
 		# ufw status
 		echo "*** Firewall: adapted"
