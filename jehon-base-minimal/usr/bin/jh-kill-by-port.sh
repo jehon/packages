@@ -2,6 +2,9 @@
 
 PID=$(lsof -t "-i:$1")
 
+# netstat -oan | grep "$1"
+# nestat -lnp | grep ":$1 " | ...
+
 if [ "$PID" != "" ]; then
   echo "Kill $PID"
   kill -9 "$PID"
