@@ -74,7 +74,6 @@ ensure_snap_installed "intellij-idea-community" classic
 ensure_snap_installed "chromium"
 # ensure_snap_installed "node" classic "15/stable"
 ensure_snap_installed "code" classic
-# ensure_snap_installed "code-insiders" classic
 # ensure_snap_installed "shellcheck"
 ensure_snap_installed "mkvtoolnix-jz"
 ensure_snap_installed "go" classic
