@@ -79,7 +79,7 @@ define recursive-dependencies
 		if [ -r "$(2)" ]; then \
 			find "$(1)" -name tests_data -prune -o -name tmp -prune -o -newer "$(2)"; \
 		else \
-			echo "$(1)";\
+			echo "$(1)/**";\
 		fi \
 	)
 endef
@@ -132,23 +132,27 @@ all-clean: dockers-clean
 all-build: dockers-build
 all-stop: dockers-stop
 
+# Easier: docker/jh-docker-build => build the docker
+# $(DOCKERS): $$@/$$(notdir $$@).dockerexists $$@/$$(notdir $$@).dockerbuild
+
 .PHONY: dockers-clean
 dockers-clean: dockers-stop
-	rm -f $(ROOT)/dockers/*.dockerbuild
 
 .PHONY: dockers-build
-dockers-build: $(addsuffix .dockerexists, $(DOCKERS)) $(addsuffix .dockerbuild, $(DOCKERS))
+dockers-build: $(DOCKERS)
 
-%.dockerexists:
-	@if [[ -r "$@" ]] && [[ "$$(docker images -q "jehon/$@" 2>/dev/null)" == "" ]]; then \
-		rm "$@.dockerbuild"; \
-	fi ;
+$(DOCKERS): $$(call recursive-dependencies,dockers/$$*,$$@)
+	FNAME=$(notdir $@); INAME="jehon/$$FNAME"; \
+	echo "Building $$INAME"; \
+	cd "$@" && docker build -t "$$INAME" . ;
 
-%.dockerbuild: $$(call recursive-dependencies,dockers/$$*,$$@)
-	@echo "Building $@ from $(notdir $(basename $@))"
-	cd $(basename $@) && \
-		docker build -t "jehon/$(notdir $(basename $@))" .
-	@touch "$@"
+# FNAME=$(notdir $@); INAME="jehon/$$FNAME"; \
+# if [[ "$$(docker images -q "$$INAME" 2>/dev/null)" == "" ]]; then \
+# 	echo "Building $$INAME"; \
+# 	cd "$@" && docker build -t "$$INAME" . ; \
+# else \
+# 	echo "Image $$INAME already exists"; \
+# fi ;
 
 .PHONY: dockers-stop
 dockers-stop:
@@ -222,7 +226,7 @@ packages-build: repo/Release
 repo/Release.gpg: repo/Release
 	gpg --sign --armor --detach-sign --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
 
-repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
+repo/Release: repo/Packages dockers/jehon-docker-build
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
 repo/Packages: repo/index.html repo/jehon-base-minimal.deb
@@ -240,7 +244,7 @@ repo/jehon-base-minimal.deb: repo/.built
 # create jehon-base-minimal.deb for /start...
 	LD="$$( find repo/ -name "jehon-base-minimal_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
 
-repo/.built: dockers/jehon-docker-build.dockerbuild \
+repo/.built: dockers/jehon-docker-build \
 		debian/changelog \
 		jehon-base-minimal/usr/bin/shuttle-go
 
@@ -257,7 +261,7 @@ jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 	mkdir -p "$(dir $@)"
 	cp externals/shuttle-go/shuttle-go "$@"
 
-debian/changelog: dockers/jehon-docker-build.dockerbuild \
+debian/changelog: dockers/jehon-docker-build \
 		debian/control \
 		debian/*.postinst \
 		debian/*.install \
