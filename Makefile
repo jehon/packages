@@ -394,7 +394,7 @@ deploy-synology:
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
 		./synology/ssh/root/ $(SYNOLOGY_HOST):/root/.ssh \
 		--rsync-path=/bin/rsync \
-		--chmod=F644
+		--chmod=F644 --chmod=D755
 
 # Not using vf-
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
