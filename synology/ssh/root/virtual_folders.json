@@ -4,11 +4,6 @@
   },
   "vfs": [
     {
-      "key": "/repo",
-      "path": "/volume3/temporary/repo",
-      "readonly": true
-    },
-    {
       "key": "/synology/backup",
       "path": "/volume3/Backups/cron/{key}",
       "backup": "/volume3/Backups/snapshots/{timestamp}-{key}"
