@@ -28,3 +28,10 @@ mkdir -p /home/jenkins
 chown jenkins /home/jenkins
 
 # End
+
+
+
+# upload ssh key: https://gist.github.com/hayderimran7/d6ab8a6a770cb970349e
+# https://nickcharlton.net/posts/setting-jenkins-credentials-with-groovy.html
+# https://www.devopsschool.com/blog/complete-guide-to-use-jenkins-cli-command-line/
+# https://stackoverflow.com/questions/59396223/create-jenkins-ssh-username-with-private-key-credential-via-rest-xml-api

@@ -11,9 +11,28 @@ set -e
 #   --volume jenkins-data:/var/jenkins_home ^
 #   docker:dind
 
-docker stop jenkins || true
-docker rm -f jenkins
+docker stop jenkins || true > /dev/null
+docker rm -f jenkins > /dev/null
 
 make dockers/jenkins
 
-docker run --name jenkins -p 18080:8080 jehon/jenkins "$@"
+ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "[localhost]:2022"
+
+cat <<EOT
+
+*****************************************
+*
+* Ports:
+*      web interface: 18080
+*      sshd server:    2022
+*
+* Run jenkins console:
+*      ssh admin@localhost -p 2022 help
+*
+* Log into container:
+*      docker exec -it jenkins bash
+*****************************************
+
+EOT
+
+docker run --name jenkins -p 18080:8080 -p 2022:22 jehon/jenkins "$@"

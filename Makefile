@@ -154,6 +154,10 @@ $(DOCKERS): $$(call recursive-dependencies,dockers/$$*,$$@)
 # 	echo "Image $$INAME already exists"; \
 # fi ;
 
+dockers/jenkins: \
+	dockers/jenkins/shared/authorized_keys \
+	dockers/jenkins/shared/timezone
+
 .PHONY: dockers-stop
 dockers-stop:
 	docker image prune -f
@@ -200,20 +204,33 @@ all-clean: files-clean
 all-build: files-build
 
 files-clean:
+	rm -f dockers/jenkins/shared/authorized_keys
+	rm -f dockers/jenkins/shared/timezone
 	rm -f jehon-base-minimal/usr/bin/shuttle-go
 	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 	rm -f synology/ssh/root/authorized_keys
 
 files-build: \
+	dockers/jenkins/shared/authorized_keys \
+	dockers/jenkins/shared/timezone \
 	jehon-base-minimal/usr/bin/shuttle-go \
 	jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
 	synology/ssh/root/authorized_keys \
 
+dockers/jenkins/shared/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/timezone: jehon-base-minimal/usr/share/jehon-base-minimal/etc/timezone
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
 jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
-	mkdir -p "$(dir $@)"
+	@mkdir -p "$(dir $@)"
 	cp externals/shuttle-go/shuttle-go "$@"
 
 jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $$(call recursive-dependencies,conf/keys,$$@)
+	@mkdir -p "$(dir $@)"
 	( \
 		echo -e "\n\n#\n#\n# Access \n#\n#   Generated on $$(date)\n#\n";\
 		for F in conf/keys/* ; do \
@@ -299,7 +316,7 @@ repo/.built: dockers/jehon-docker-build \
 
 	$(call itself,shell-build)
 	@rm -fr repo
-	mkdir -p "$(dir $@)"
+	@mkdir -p "$(dir $@)"
 #echo "************ build indep ******************"
 	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
 #echo "************ build arch:armhf *************"

@@ -10,6 +10,7 @@ ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
 # Thanks to https://github.com/jenkinsci/docker/issues/310#issuecomment-692037293
 COPY customize.groovy /usr/share/jenkins/ref/init.groovy.d/customize.groovy
+COPY shared/ /conf/
 
 RUN jenkins-plugin-cli --plugins \
     ansicolor \
