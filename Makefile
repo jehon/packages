@@ -192,6 +192,55 @@ externals/shuttle-go/shuttle-go: externals/shuttle-go/*.go
 
 #
 #
+# Files
+#
+#
+
+all-clean: files-clean
+all-build: files-build
+
+files-clean:
+	rm -f jehon-base-minimal/usr/bin/shuttle-go
+	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+	rm -f synology/ssh/root/authorized_keys
+
+files-build: \
+	jehon-base-minimal/usr/bin/shuttle-go \
+	jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
+	synology/ssh/root/authorized_keys \
+
+jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
+	mkdir -p "$(dir $@)"
+	cp externals/shuttle-go/shuttle-go "$@"
+
+jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $$(call recursive-dependencies,conf/keys,$$@)
+	( \
+		echo -e "\n\n#\n#\n# Access \n#\n#   Generated on $$(date)\n#\n";\
+		for F in conf/keys/* ; do \
+			echo -e "\\n# $$F"; \
+			cat "$$F"; \
+			echo ""; \
+		done \
+	) > "$@"; \
+
+synology/ssh/root/authorized_keys: \
+		$$(call recursive-dependencies,conf/synology-backup,$$@) \
+		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+
+	(\
+		cat jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon; \
+		echo -e "\n\n#\n#\n# Backups \n#\n#   Generated on $$(date)\n#\n";\
+		for F in conf/synology-backup/* ; do \
+			echo -e "\\n# $$F"; \
+			echo -ne "command=\"KEY=$$(basename "$$F") /volume3/scripts/synology/rsync-vf.sh\" ";\
+			cat "$$F" | tr --delete "\n\r"; \
+			echo ""; \
+		done \
+	) > "$@"; \
+
+
+#
+#
 # Node
 #
 #
@@ -246,7 +295,7 @@ repo/jehon-base-minimal.deb: repo/.built
 
 repo/.built: dockers/jehon-docker-build \
 		debian/changelog \
-		jehon-base-minimal/usr/bin/shuttle-go
+		files-build
 
 	$(call itself,shell-build)
 	@rm -fr repo
@@ -256,10 +305,6 @@ repo/.built: dockers/jehon-docker-build \
 #echo "************ build arch:armhf *************"
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 	touch "$@"
-
-jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
-	mkdir -p "$(dir $@)"
-	cp externals/shuttle-go/shuttle-go "$@"
 
 debian/changelog: dockers/jehon-docker-build \
 		debian/control \
@@ -273,7 +318,7 @@ debian/changelog: dockers/jehon-docker-build \
 
 	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main)
 
-debian/jehon-base-minimal.links: Makefile \
+debian/jehon-base-minimal.links: \
 		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
 
 	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
