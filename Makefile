@@ -339,7 +339,7 @@ shell-build:
 	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
 
 .PHONY: shell-test
-shell-test: shell-build
+shell-test: shell-build packages-build
 	run-parts --verbose --regex "test-.*" ./tests/shell/tests
 
 .PHONY: shell-lint
