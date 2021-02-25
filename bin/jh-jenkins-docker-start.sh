@@ -11,8 +11,10 @@ set -e
 #   --volume jenkins-data:/var/jenkins_home ^
 #   docker:dind
 
-docker stop jenkins || true > /dev/null
-docker rm -f jenkins > /dev/null
+if [ "$1" = "-f" ]; then
+    docker stop jenkins || true > /dev/null
+    docker rm -f jenkins || true > /dev/null
+fi
 
 make dockers/jenkins
 
