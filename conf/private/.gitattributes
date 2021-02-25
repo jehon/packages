@@ -1,2 +1,5 @@
+# Crypt everything (git-crypt)
 * filter=git-crypt diff=git-crypt
+
+# Do not crypt gitattributes:
 .gitattributes !filter !diff
