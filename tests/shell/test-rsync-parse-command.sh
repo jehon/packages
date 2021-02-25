@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-SWD="$( dirname "${BASH_SOURCE[0]}" )"
-. $SWD/../lib/test-helpers.sh
+# Script Working Directory
+SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
-ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
+# shellcheck source=../lib/test-helpers.sh
+. "$SWD/../lib/test-helpers.sh"
+
+ROOT="$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
+
 . $ROOT/synology/scripts/rsync-parse-command.sh
 
 CFG="tests/data/vf.json"

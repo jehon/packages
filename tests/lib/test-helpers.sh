@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
-# TODO: use jh-lib.sh
+set -e
 
 # The root of the repository
-ROOT="$(dirname "$(dirname "$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" )" )" )"
+ROOT="$(dirname "$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" )" )"
 export ROOT
+
+# shellcheck source=../../jehon-base-minimal/usr/bin/jh-lib.sh
+. "$ROOT/jehon-base-minimal/usr/bin/jh-lib.sh"
+
+# TODO: use jh-lib.sh and factorized facilities
 
 TMP="$ROOT/tmp"
 mkdir -p "$TMP"

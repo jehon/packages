@@ -3,6 +3,7 @@
 # Script Working Directory
 SWD="$( dirname "${BASH_SOURCE[0]}" )"
 
+# shellcheck source=../lib/test-helpers.sh
 . "$SWD/../lib/test-helpers.sh"
 
 TARGET="/tmp/jh-patch-file-original.txt"

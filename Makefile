@@ -276,7 +276,7 @@ node_modules/.dependencies: package.json package-lock.json
 #
 all-clean: packages-clean
 all-build: packages-build
-#all-test: packages-test
+all-test: packages-test
 
 .PHONY: packages-clean
 packages-clean:
@@ -288,6 +288,9 @@ packages-clean:
 
 .PHONY: packages-build
 packages-build: repo/Release
+
+packages-test: packages-build
+	run-parts --verbose --regex "test-.*" ./tests/packages
 
 repo/Release.gpg: repo/Release
 	gpg --sign --armor --detach-sign --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
@@ -356,8 +359,8 @@ shell-build:
 	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
 
 .PHONY: shell-test
-shell-test: shell-build packages-build
-	run-parts --verbose --regex "test-.*" ./tests/shell/tests
+shell-test: shell-build
+	run-parts --verbose --regex "test-.*" ./tests/shell
 
 .PHONY: shell-lint
 shell-lint:

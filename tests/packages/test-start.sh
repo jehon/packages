@@ -2,14 +2,15 @@
 
 set -e
 
-SWD="$( dirname "${BASH_SOURCE[0]}" )"
+# Script Working Directory
+SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
-# shellcheck source=/dev/null
-. "$SWD"/../lib/test-helpers.sh
+# shellcheck source=../lib/test-helpers.sh
+. "$SWD/../lib/test-helpers.sh"
 
 ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
 
-# shellcheck source=/dev/null
+# shellcheck source=../../synology/scripts/rsync-parse-command.sh
 . "$ROOT"/synology/scripts/rsync-parse-command.sh
 
 CONSTANT_RUN_TEST="i_am_in_docker"

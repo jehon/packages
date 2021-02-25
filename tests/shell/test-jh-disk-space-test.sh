@@ -3,9 +3,10 @@
 set -e
 
 # Script Working Directory
-TWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
+SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
-. "$TWD/../lib/test-helpers.sh"
+# shellcheck source=../lib/test-helpers.sh
+. "$SWD/../lib/test-helpers.sh"
 
 SCRIPT="$ROOT/jehon-base-minimal/usr/bin/jh-disk-space-test.sh"
 
