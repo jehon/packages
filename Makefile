@@ -155,8 +155,12 @@ $(DOCKERS): $$(call recursive-dependencies,dockers/$$*,$$@)
 # fi ;
 
 dockers/jenkins: \
-	dockers/jenkins/shared/authorized_keys \
-	dockers/jenkins/shared/timezone
+	dockers/jenkins/shared/generated/authorized_keys \
+	dockers/jenkins/shared/generated/jenkins.yml \
+	dockers/jenkins/shared/generated/jenkins-github-ssh \
+	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
+	dockers/jenkins/shared/generated/packages-gpg \
+	dockers/jenkins/shared/generated/timezone
 
 .PHONY: dockers-stop
 dockers-stop:
@@ -204,24 +208,47 @@ all-clean: files-clean
 all-build: files-build
 
 files-clean:
-	rm -f dockers/jenkins/shared/authorized_keys
-	rm -f dockers/jenkins/shared/timezone
+	rm -fr dockers/jenkins/shared/generated/
 	rm -f jehon-base-minimal/usr/bin/shuttle-go
 	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 	rm -f synology/ssh/root/authorized_keys
 
 files-build: \
-	dockers/jenkins/shared/authorized_keys \
-	dockers/jenkins/shared/timezone \
+	dockers/jenkins/shared/generated/authorized_keys \
+	dockers/jenkins/shared/generated/jenkins.yml \
+	dockers/jenkins/shared/generated/jenkins-github-ssh \
+	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
+	dockers/jenkins/shared/generated/packages-gpg \
+	dockers/jenkins/shared/generated/timezone \
 	jehon-base-minimal/usr/bin/shuttle-go \
 	jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
 	synology/ssh/root/authorized_keys \
 
-dockers/jenkins/shared/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+dockers/jenkins/shared/generated/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/timezone: jehon-base-minimal/usr/share/jehon-base-minimal/etc/timezone
+dockers/jenkins/shared/generated/jenkins.yml: conf/private/jenkins.yml
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/jenkins-github-ssh: conf/private/jenkins-github-ssh
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: conf/private/jenkins-master-to-slave-ssh
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/packages-gpg: conf/private/packages-gpg
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/secrets.yml: conf/private/jenkins-secrets.yml
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/timezone: jehon-base-minimal/usr/share/jehon-base-minimal/etc/timezone
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 

@@ -23,8 +23,6 @@ debian.1
 # Generated files
 #
 
-dockers/jenkins/shared/authorized_keys
-dockers/jenkins/shared/timezone
 jehon-base-minimal/usr/bin/shuttle-go
 jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 synology/ssh/root/authorized_keys
