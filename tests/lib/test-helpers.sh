@@ -79,7 +79,7 @@ log_success() {
 #
 log_failure() {
     (
-		if [ ! -z "$CAPTURED_OUTPUT" ]; then
+		if [ -n "$CAPTURED_OUTPUT" ]; then
         	echo "*** Captured output begin ***"
         	echo -e "$CAPTURED_OUTPUT"
         	echo "*** Captured output end ***"
@@ -182,7 +182,7 @@ assert_captured_output_contains() {
 
 	local FOUND=0
 	local BACKUP_IFS="$IFS"
-	IFS='\n'
+	IFS=$'\n'
 
 	while read -r R; do
         if [[ "$R" =~  $TEST ]]; then
@@ -206,7 +206,7 @@ assert_captured_output_contains() {
 assert_captured_success() {
     if [[ $CAPTURED_EXITCODE -gt 0 ]]; then
         log_failure "$CAPTURED_HEADER: $1" "command return $CAPTURED_EXITCODE"
-		return $RES
+		return "$RES"
     fi
     log_success "$CAPTURED_HEADER: $1"
 }
@@ -214,7 +214,7 @@ assert_captured_success() {
 assert_captured_failure() {
     if [[ $CAPTURED_EXITCODE -eq 0 ]]; then
         log_failure "$CAPTURED_HEADER: $1" "command return $CAPTURED_EXITCODE (success)"
-		return $RES
+		return "$RES"
     fi
     log_success "$CAPTURED_HEADER: $1"
 }
