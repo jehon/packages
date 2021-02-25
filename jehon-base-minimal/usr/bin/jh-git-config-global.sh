@@ -8,6 +8,8 @@ git config --global user.name "Jean Honlet"
 git config --global push.default "simple"
 git config --global push.default current
 git config --global push.followtags true
+git config --global pull.rebase true
+git config --global rebase.autoStash true
 git config --global fetch.prune true
 git config --global fetch.writeCommitGraph true
 
