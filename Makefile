@@ -229,11 +229,11 @@ jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 	@mkdir -p "$(dir $@)"
 	cp externals/shuttle-go/shuttle-go "$@"
 
-jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $$(call recursive-dependencies,conf/keys,$$@)
+jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $$(call recursive-dependencies,conf/keys/admin,$$@)
 	@mkdir -p "$(dir $@)"
 	( \
 		echo -e "\n\n#\n#\n# Access \n#\n#   Generated on $$(date)\n#\n";\
-		for F in conf/keys/* ; do \
+		for F in conf/keys/admin/* ; do \
 			echo -e "\\n# $$F"; \
 			cat "$$F"; \
 			echo ""; \
