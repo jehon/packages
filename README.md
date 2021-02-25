@@ -13,3 +13,11 @@ dconf write /org/gnome/shell/app-switcher/current-workspace-only 'true'
 
 ### shuttle pro
 -> removable element?
+
+# VSCode config
+
+Shellcheck:
+    "shellcheck.customArgs": [
+        "-x"
+    ],
+    "shellcheck.useWorkspaceRootAsCwd": false // default
