@@ -37,4 +37,4 @@ cat <<EOT
 
 EOT
 
-docker run --name jenkins -p 18080:8080 -p 2022:22 jehon/jenkins "$@"
+docker run --name jenkins -p 18080:8080 -p 2022:22 jehon/jenkins
