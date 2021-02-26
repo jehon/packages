@@ -384,6 +384,7 @@ shell-build:
 	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
 	find bin -name "*.sh" -exec "chmod" "+x" "{}" ";"
 	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal/usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
 
 .PHONY: shell-test
 shell-test: shell-build

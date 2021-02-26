@@ -21,76 +21,31 @@ apply_special() {
 	fi
 }
 
-configureUserJehon() {
-	# Do we have a password?
-	db_get jehon/jehon_password
-	if [ "$RES" = "" ]; then
-
-		db_input critical jehon/jehon_password || true
-		db_go
-
-		db_get jehon/jehon_password
-		PASSWD="$RET"
-		if [ "$PWD" != "" ]; then
-			echo "Setting the password of account jehon"
-			echo "jehon:$PASSWD" | chpasswd
-			echo "Setting the samba passord of account jehon"
-			printf "$PASSWD\n$PASSWD\n" | smbpasswd -s -a jehon > /dev/null
-		else
-			echo "Bypassing setting the password of account jehon"
-		fi
-	fi
-
-	if getent group "sudo" > /dev/null; then
-		usermod -a -G "sudo" "jehon" || true
-	fi
-
-    # Fix ssh rights
-	if [ -r /home/jehon/.ssh ]; then
-    	chown jehon.jehon -R /home/jehon/.ssh
-		chmod go-w -R /home/jehon/.ssh
-		if [ -r /home/jehon/.ssh/id_rsa ]; then
-			chmod 400 /home/jehon/.ssh/id_rsa
-		fi
-		if [ -r /home/jehon/.ssh/id_rsa.pub ]; then
-			chmod 400 /home/jehon/.ssh/id_rsa.pub
-		fi
-	fi
-}
-
-dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_custom.sh -- "$@"
-
 case "$1" in
 	configure)
-		# Create user jehon if it does not exists
-		if ! id -u jehon >/dev/null 2>&1; then
-			U1000GRPS=$(id -Gn 1000 | sed -e 's/ /,/g' )
 
-			useradd --groups "$U1000GRPS" jehon || true
+		# Do we have a password?
+		db_get jehon/jehon_password
+		if [ "$RES" = "" ]; then
 
-		 	if [ -x /bin/bash ]; then
-				usermod -s /bin/bash jehon
+			db_input critical jehon/jehon_password || true
+			db_go
+
+			db_get jehon/jehon_password
+			PASSWD="$RET"
+			if [ "$PWD" != "" ]; then
+				echo "Setting the password of account jehon"
+				echo "jehon:$PASSWD" | chpasswd
+				echo "Setting the samba passord of account jehon"
+				printf "$PASSWD\n$PASSWD\n" | smbpasswd -s -a jehon > /dev/null
+			else
+				echo "Bypassing setting the password of account jehon"
 			fi
 		fi
 
 		groupadd -f docker || true
-    	usermod -a -G "docker" "jehon" || true
-
-		timedatectl set-timezone Europe/Brussels
-
-		configureUserJehon
 
 		apply_special
-
-		mkdir -p /etc/jehon/restricted/
-		chmod 500 /etc/jehon/restricted
-
-		echo "*** Firewall: adapting"
-		ufw allow ssh
-		ufw allow OpenSSH
-		ufw --force enable
-		# ufw status
-		echo "*** Firewall: adapted"
 
 		/usr/bin/jh-apt-configure-repositories.sh
 
