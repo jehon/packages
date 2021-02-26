@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if jh-in-docker ; then
-    echo "Skipping ufw in docker"
+    echo "Skipping $0 in docker"
     exit 0
 fi
 

@@ -48,5 +48,5 @@ rm -f "$PATCHING"
 
 for S in "$ROOT"/postUpdate/* ; do
 	chmod +x "$S"
-	$S
+	"$S" || echo "** Failed in $S **"
 done

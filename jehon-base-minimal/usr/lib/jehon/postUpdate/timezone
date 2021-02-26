@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
+if jh-in-docker ; then
+    echo "Skipping $0 in docker"
+    exit 0
+fi
+
 timedatectl set-timezone Europe/Brussels
