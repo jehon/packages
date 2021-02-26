@@ -5,4 +5,9 @@ if jh-in-docker ; then
     exit 0
 fi
 
+if jh-in-wsl ; then
+    echo "Skipping $0 in wsl"
+    exit 0
+fi
+
 timedatectl set-timezone Europe/Brussels
