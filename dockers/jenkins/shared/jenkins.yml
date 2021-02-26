@@ -7,7 +7,7 @@ configuration-as-code:
   unknown: reject
 
 jenkins:
-  numExecutors: 1
+  numExecutors: 0
   mode: NORMAL
 
   authorizationStrategy:
@@ -28,6 +28,25 @@ jenkins:
 
   remotingSecurity:
     enabled: false
+  nodes:
+    # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/build_agents
+    - permanent:
+        labelString: "${JENKINS_SLAVE_HOST}"
+        mode: NORMAL
+        name: "${JENKINS_SLAVE_HOST}"
+        numExecutors: 2
+        remoteFS: "/home/${JENKINS_SLAVE_USER}/jenkins-slave"
+        launcher:
+          ssh:
+            host: "${JENKINS_SLAVE_HOST}"
+            port: 22
+            credentialsId: jenkins-master-to-slave-ssh
+            # launchTimeoutSeconds: 60
+            # maxNumRetries: 3
+            # retryWaitTime: 30
+            sshHostKeyVerificationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInitialManualTrust: false
 
 security:
   sSHD:
