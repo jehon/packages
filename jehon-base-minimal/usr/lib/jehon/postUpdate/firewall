@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if jh-in-docker ; then
+    echo "Skipping ufw in docker"
+    exit 0
+fi
+
 echo "*** Firewall: adapting"
 ufw allow ssh
 ufw allow OpenSSH
