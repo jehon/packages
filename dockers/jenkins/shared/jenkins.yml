@@ -9,6 +9,7 @@ configuration-as-code:
 jenkins:
   numExecutors: 0
   mode: NORMAL
+  slaveAgentPort: 0
 
   authorizationStrategy:
     loggedInUsersCanDoAnything:
@@ -27,7 +28,9 @@ jenkins:
                 authorizedKeys: ${readFile:/conf/generated/authorized_keys}
 
   remotingSecurity:
-    enabled: false
+    enabled: true
+  # agentProtocols ??
+
   nodes:
     # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/build_agents
     - permanent:
