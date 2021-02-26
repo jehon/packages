@@ -11,10 +11,12 @@ ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 COPY --chown=jenkins:jenkins shared/ /conf/
 
 RUN jenkins-plugin-cli --plugins \
+    configuration-as-code \
+    job-dsl \
+    \
     ansicolor \
     blueocean \
     lockable-resources \
     pipeline-github \
     ssh-agent \
-    ws-cleanup \
-    configuration-as-code
+    ws-cleanup
