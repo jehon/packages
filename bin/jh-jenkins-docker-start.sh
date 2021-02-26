@@ -4,6 +4,8 @@ set -e
 
 # See https://www.jenkins.io/doc/book/installing/docker/
 
+WEB=8080
+
 # docker run --name jenkins-docker --rm --detach ^
 #   --privileged ^
 #   --env DOCKER_TLS_CERTDIR=/certs ^
@@ -25,7 +27,7 @@ cat <<EOT
 *****************************************
 *
 * Ports:
-*      web interface: 18080
+*      web interface:  $WEB
 *      sshd server:    2022
 *
 * Run jenkins console:
@@ -37,4 +39,4 @@ cat <<EOT
 
 EOT
 
-docker run --name jenkins -p 18080:8080 -p 2022:22 jehon/jenkins
+docker run --name jenkins -p $WEB:8080 -p 2022:22 jehon/jenkins
