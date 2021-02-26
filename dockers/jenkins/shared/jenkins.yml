@@ -1,0 +1,135 @@
+#
+# See http://192.168.100.2:18080/configuration-as-code/reference
+#    from local install of jenkins
+
+configuration-as-code:
+  deprecated: warn
+  unknown: reject
+
+jenkins:
+  numExecutors: 1
+  mode: NORMAL
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: admin
+          name: ${ADMIN_USER}
+          password: ${ADMIN_PASSWORD}
+          properties:
+            - timezone:
+                timeZoneName: ${readFile:/conf/generated/timezone}
+            - sshPublicKey:
+                authorizedKeys: ${readFile:/conf/generated/authorized_keys}
+
+  remotingSecurity:
+    enabled: false
+
+security:
+  sSHD:
+    port: 22
+
+credentials:
+  # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/credentials
+  # https://github.com/jenkinsci/configuration-as-code-plugin/blob/master/docs/features/secrets.adoc#secret-sources
+
+  system:
+    domainCredentials:
+      - credentials:
+        - basicSSHUserPrivateKey:
+            scope: SYSTEM
+            id: jenkins-master-to-slave-ssh
+            username: ${JENKINS_SLAVE_USER}
+            passphrase:
+            description: Connect to slaves
+            privateKeySource:
+              directEntry:
+                privateKey: ${readFile:/conf/generated/jenkins-master-to-slave-ssh}
+
+        - basicSSHUserPrivateKey:
+            scope: GLOBAL
+            id: jenkins-github-ssh
+            username: ${GITHUB_USER}
+            passphrase:
+            description: Commit to GitHub
+            privateKeySource:
+              directEntry:
+                privateKey: ${readFile:/conf/generated/jenkins-github-ssh}
+
+        - usernamePassword:
+            # View it https://github.com/settings/tokens
+            # repo > *, user > read,email, admin:repo_hook > write:repo_hook
+            scope: GLOBAL
+            id: github-app
+            username: ${GITHUB_USER}
+            password: ${GITHUB_APP_TOKEN}
+            description: GitHub connector through app
+
+        - usernamePassword:
+            scope: GLOBAL
+            id: cryptomedic-upload
+            username: ${CRYPTOMEDIC_UPLOAD_USER}
+            password: ${CRYPTOMEDIC_UPLOAD_PASSWORD}
+
+        - string:
+            scope: GLOBAL
+            id: cryptomedic-deploy
+            secret: ${CRYPTOMEDIC_DEPLOY}
+
+        - file:
+            scope: GLOBAL
+            id: secret-file
+            fileName: packages-gpg
+            secretBytes: ${base64:${readFile:/conf/generated/packages-gpg}}
+
+unclassified:
+  location:
+    url: ${JENKINS_URL}
+
+  githubpluginconfig:
+    configs:
+      - name: GitHub
+        # apiUrl: https://github.domain.local/api/v3
+        credentialsId: github
+        manageHooks: false
+
+# https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/jobs
+jobs:
+  - script: |
+      organizationFolder('GitHub Organization Folder') {
+        description("GitHub orga folder configured with JCasC")
+        displayName('My gitHub')
+        organizations {
+          github {
+            repoOwner("${GITHUB_USER}")
+            credentialsId("github-app")
+            // https://www.reddit.com/r/jenkinsci/comments/ewe6mt/job_dsl_and_organizationfolder_with_github/
+            // https://github.com/jenkinsci/github-branch-source-plugin/tree/master/src/main/java/org/jenkinsci/plugins/github_branch_source
+            traits {
+              gitHubBranchDiscovery {
+                //  1 : Exclude branches that are also filed as PRs
+                //  2 : Only branches that are also filed as PRs
+                //  3 : All branches
+                strategyId(1)
+              }
+              gitHubPullRequestDiscovery {
+                //  1 : Merging the pull request with the current target branch revision
+                //  2 : The current pull request revision
+                //  3 : Both the current pull request revision and the pull request merged with the current target branch revision
+                strategyId(1)
+              }
+              gitHubExcludeArchivedRepositories {}
+            }
+          }
+        }
+
+        triggers {
+          periodicFolderTrigger {
+            interval("1d")
+          }
+        }
+      }

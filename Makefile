@@ -156,10 +156,10 @@ $(DOCKERS): $$(call recursive-dependencies,dockers/$$*,$$@)
 
 dockers/jenkins: \
 	dockers/jenkins/shared/generated/authorized_keys \
-	dockers/jenkins/shared/generated/jenkins.yml \
 	dockers/jenkins/shared/generated/jenkins-github-ssh \
 	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
 	dockers/jenkins/shared/generated/packages-gpg \
+	dockers/jenkins/shared/generated/secrets.properties \
 	dockers/jenkins/shared/generated/timezone
 
 .PHONY: dockers-stop
@@ -215,10 +215,10 @@ files-clean:
 
 files-build: \
 	dockers/jenkins/shared/generated/authorized_keys \
-	dockers/jenkins/shared/generated/jenkins.yml \
 	dockers/jenkins/shared/generated/jenkins-github-ssh \
 	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
 	dockers/jenkins/shared/generated/packages-gpg \
+	dockers/jenkins/shared/generated/secrets.properties \
 	dockers/jenkins/shared/generated/timezone \
 	jehon-base-minimal/usr/bin/shuttle-go \
 	jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
@@ -226,9 +226,9 @@ files-build: \
 
 dockers/jenkins/shared/generated/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 	@mkdir -p "$(dir $@)"
-	cp "$<" "$@"
+	cat "$<" | grep -v -e "^#" | grep -v -e "^\$$"> "$@"
 
-dockers/jenkins/shared/generated/jenkins.yml: conf/private/jenkins.yml
+dockers/jenkins/shared/generated/secrets.properties: conf/private/jenkins-secrets.properties
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
@@ -250,7 +250,7 @@ dockers/jenkins/shared/generated/secrets.yml: conf/private/jenkins-secrets.yml
 
 dockers/jenkins/shared/generated/timezone: jehon-base-minimal/usr/share/jehon-base-minimal/etc/timezone
 	@mkdir -p "$(dir $@)"
-	cp "$<" "$@"
+	cat "$<" | tr -d '\n' > "$@"
 
 jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 	@mkdir -p "$(dir $@)"
