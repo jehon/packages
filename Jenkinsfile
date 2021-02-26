@@ -5,7 +5,7 @@ pipeline {
     skipStagesAfterUnstable()
   }
   environment {
-    PACKAGES_GPG_FILE = credentials('packages-gpg-key')
+    PACKAGES_GPG_FILE = credentials('packages-gpg')
   }
   stages {
     stage('setup') {
