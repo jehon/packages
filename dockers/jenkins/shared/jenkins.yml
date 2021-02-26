@@ -122,9 +122,9 @@ unclassified:
 # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/jobs
 jobs:
   - script: |
-      organizationFolder('GitHub Organization Folder') {
-        description("GitHub orga folder configured with JCasC")
-        displayName('My gitHub')
+      organizationFolder('github') {
+        description("GitHub organizationnal folder")
+        displayName('github')
         organizations {
           github {
             repoOwner("${GITHUB_USER}")
