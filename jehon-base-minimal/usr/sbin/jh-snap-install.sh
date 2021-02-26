@@ -27,7 +27,7 @@ ensure_snap_installed() {
 
 	CONFIN_ARG="--$CONFIN"
 
-	if /usr/bin/jh-wsl-detect.sh ; then
+	if /usr/bin/jh-in-wsl ; then
 		# In some cases, we can not specify the confinment type
 		CONFIN_ARG=""
 	fi
