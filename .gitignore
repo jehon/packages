@@ -13,6 +13,7 @@ softs
 
 md5sums
 
+*~
 *.dockerbuild
 *.deb
 jehon-debs_*
