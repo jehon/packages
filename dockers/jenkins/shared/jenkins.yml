@@ -142,7 +142,7 @@ jobs:
                 //  1 : Merging the pull request with the current target branch revision
                 //  2 : The current pull request revision
                 //  3 : Both the current pull request revision and the pull request merged with the current target branch revision
-                strategyId(1)
+                strategyId(2)
               }
               gitHubExcludeArchivedRepositories {}
             }
