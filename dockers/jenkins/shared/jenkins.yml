@@ -104,7 +104,7 @@ credentials:
 
         - file:
             scope: GLOBAL
-            id: secret-file
+            id: packages-gpg
             fileName: packages-gpg
             secretBytes: ${base64:${readFile:/conf/generated/packages-gpg}}
 
