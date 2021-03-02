@@ -20,6 +20,11 @@ pipeline {
         sh 'make all-dump'
       }
     }
+    stage('dockers/jehon-docker-build') {
+      steps {
+        sh 'make dockers/jehon-docker-build'
+      }
+    }
     stage('build') {
       steps {
         sh 'make all-build'

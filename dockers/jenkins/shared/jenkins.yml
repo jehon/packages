@@ -125,6 +125,7 @@ unclassified:
         manageHooks: false
 
 # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/jobs
+# https://jenkinsci.github.io/job-dsl-plugin/
 jobs:
   - script: |
       organizationFolder('github') {
