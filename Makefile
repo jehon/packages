@@ -25,7 +25,7 @@ endef
 ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 SYNOLOGY_HOST = synology
 GPG_KEY = 313DD85CEFADAF7E
-GPG_KEYRING = conf/private/keyring.gpg
+GPG_KEYRING = conf/generated/keyring.gpg
 DOCKERS = $(shell find dockers/ -mindepth 1 -maxdepth 1 -type d )
 
 VERSION_LAST_GIT=$(shell git log -1 --format="%at" | xargs -I{} date --utc -d @{} "+%Y.%m.%d.%H.%M.%S" )
@@ -210,6 +210,7 @@ all-clean: files-clean
 all-build: files-build
 
 files-clean:
+	rm -fr conf/generated
 	rm -fr dockers/jenkins/shared/generated/
 	rm -f jehon-base-minimal/usr/bin/shuttle-go
 	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
@@ -225,6 +226,11 @@ files-build: \
 	jehon-base-minimal/usr/bin/shuttle-go \
 	jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
 	synology/ssh/root/authorized_keys \
+
+$(GPG_KEYRING): conf/private/packages-gpg
+	@mkdir -p "$(dir $@)"
+	@rm -f $(GPG_KEYRING)
+	gpg --no-default-keyring --keyring="$@" --import "$<"
 
 dockers/jenkins/shared/generated/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 	@mkdir -p "$(dir $@)"
@@ -321,7 +327,7 @@ packages-build: repo/Release
 packages-test: packages-build
 	run-parts --verbose --regex "test-.*" ./tests/packages
 
-repo/Release.gpg: repo/Release
+repo/Release.gpg: repo/Release $(GPG_KEYRING)
 	gpg --sign --armor --detach-sign --no-default-keyring --keyring=$(GPG_KEYRING) --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
 
 repo/Release: repo/Packages dockers/jehon-docker-build

@@ -24,6 +24,7 @@ debian.1
 # Generated files
 #
 
+conf/generated/
 jehon-base-minimal/usr/bin/shuttle-go
 jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 synology/ssh/root/authorized_keys
