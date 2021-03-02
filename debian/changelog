@@ -1,8 +1,1 @@
-jehon-debs (2021.01.07.14.59.22) main; urgency=medium
-
-  * feat: jehon-base-repositories
-  * feat: use docker from docker.io
-
- -- Jean Honlet <jehon@users.noreply.github.com>  Sat, 14 Mar 2020 08:43:43 +0100
-
-jehon-debs (1.2.3) main; urgency=medium
+jehon-debs (0) main; urgency=medium
