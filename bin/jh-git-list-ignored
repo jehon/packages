@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "-v" ]; then
+    git check-ignore -v **/*
+else
+    git check-ignore **/*
+fi
