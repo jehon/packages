@@ -318,6 +318,7 @@ all-test: packages-test
 .PHONY: packages-clean
 packages-clean:
 	make -f debian/rules clean
+	rm -f  $(ROOT)/debian/jehon-base-minimal.links
 	rm -f  $(ROOT)/debian/*.debhelper
 	rm -f  $(ROOT)/debian/*.substvars
 	rm -fr $(ROOT)/repo
@@ -392,7 +393,7 @@ all-lint: shell-lint
 
 shell-build:
 	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
-	find bin -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find bin -exec "chmod" "+x" "{}" ";"
 	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
 	find jehon-base-minimal/usr/bin -exec "chmod" "+x" "{}" ";"
 	find jehon-base-minimal/usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
