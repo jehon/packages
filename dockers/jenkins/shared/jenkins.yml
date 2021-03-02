@@ -37,7 +37,7 @@ jenkins:
         labelString: "${JENKINS_SLAVE_HOST}"
         mode: NORMAL
         name: "${JENKINS_SLAVE_HOST}"
-        numExecutors: 2
+        numExecutors: 1
         remoteFS: "/home/${JENKINS_SLAVE_USER}/jenkins-slave"
         launcher:
           ssh:
