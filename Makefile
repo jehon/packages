@@ -238,6 +238,7 @@ files-clean:
 	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 	rm -f synology/ssh/root/authorized_keys
 
+.PHONY: files-build
 files-build: \
 	dockers/jenkins/shared/generated/authorized_keys \
 	dockers/jenkins/shared/generated/git-crypt-key \
@@ -247,7 +248,7 @@ files-build: \
 	dockers/jenkins/shared/generated/timezone \
 	jehon-base-minimal/usr/bin/shuttle-go \
 	jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
-	synology/ssh/root/authorized_keys \
+	synology/ssh/root/authorized_keys
 
 $(GPG_KEYRING): conf/private/packages-gpg
 	@mkdir -p "$(dir $@)"
@@ -375,7 +376,8 @@ repo/jehon-base-minimal.deb: repo/.built
 
 repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		debian/changelog \
-		files-build
+		jehon-base-minimal/usr/bin/shuttle-go \
+		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 
 	$(call itself,shell-build)
 	@rm -fr repo
