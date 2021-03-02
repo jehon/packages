@@ -64,7 +64,7 @@ pipeline {
 
           // See username on top right -> credentials
           // Thanks to https://stackoverflow.com/a/44369176/1954789
-          sshagent(credentials: ['github-ssh']) {
+          sshagent(credentials: ['jenkins-github-ssh']) {
             // GIT_URL, GIT_USERNAME, GIT_PASSWORD => withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
             // sh 'echo "****** GIT_URL_SSH: $GIT_URL_SSH ******"'
             // sh 'git remote -v'
