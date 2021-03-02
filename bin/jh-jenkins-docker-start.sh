@@ -2,6 +2,9 @@
 
 set -e
 
+# shellcheck source=../jehon-base-minimal/usr/bin/jh-lib.sh
+. jh-lib.sh
+
 # See https://www.jenkins.io/doc/book/installing/docker/
 
 WEB=8080
@@ -14,6 +17,10 @@ WEB=8080
 #   docker:dind
 
 if [ "$1" = "-f" ]; then
+    echo "PKG_FOLDER: $PKG_FOLDER"
+    pushd "$PKG_FOLDER" > /dev/null
+
+    rm -fr dockers/jenkins/shared/generated
     docker stop jenkins || true > /dev/null
     docker rm -f jenkins || true > /dev/null
 fi
