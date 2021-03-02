@@ -5,13 +5,13 @@ pipeline {
     skipStagesAfterUnstable()
   }
   environment {
-    PACKAGES_GPG_FILE = credentials('packages-gpg')
+    GIT_CRYPT_KEY = credentials('git-crypt-key')
   }
   stages {
     stage('setup') {
       steps {
-        sh 'md5sum $PACKAGES_GPG_FILE'
-        sh 'gpg --import $PACKAGES_GPG_FILE'
+        sh 'md5sum $GIT_CRYPT_KEY'
+        sh 'git-crypt unlock $GIT_CRYPT_KEY'
         sh 'make all-setup'
       }
     }

@@ -158,9 +158,9 @@ $(DOCKERS): $$(call recursive-dependencies,dockers/$$*,$$@)
 
 dockers/jenkins: \
 	dockers/jenkins/shared/generated/authorized_keys \
+	dockers/jenkins/shared/generated/git-crypt-key \
 	dockers/jenkins/shared/generated/jenkins-github-ssh \
 	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
-	dockers/jenkins/shared/generated/packages-gpg \
 	dockers/jenkins/shared/generated/secrets.properties \
 	dockers/jenkins/shared/generated/timezone
 
@@ -218,9 +218,9 @@ files-clean:
 
 files-build: \
 	dockers/jenkins/shared/generated/authorized_keys \
+	dockers/jenkins/shared/generated/git-crypt-key \
 	dockers/jenkins/shared/generated/jenkins-github-ssh \
 	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
-	dockers/jenkins/shared/generated/packages-gpg \
 	dockers/jenkins/shared/generated/secrets.properties \
 	dockers/jenkins/shared/generated/timezone \
 	jehon-base-minimal/usr/bin/shuttle-go \
@@ -240,15 +240,15 @@ dockers/jenkins/shared/generated/secrets.properties: conf/private/jenkins-secret
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
+dockers/jenkins/shared/generated/git-crypt-key: conf/private/git-crypt-key
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
 dockers/jenkins/shared/generated/jenkins-github-ssh: conf/private/jenkins-github-ssh
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
 dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: conf/private/jenkins-master-to-slave-ssh
-	@mkdir -p "$(dir $@)"
-	cp "$<" "$@"
-
-dockers/jenkins/shared/generated/packages-gpg: conf/private/packages-gpg
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 

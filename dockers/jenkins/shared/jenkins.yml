@@ -106,10 +106,12 @@ credentials:
             secret: ${CRYPTOMEDIC_DEPLOY}
 
         - file:
+            # This work only if the original file is binary ???
             scope: GLOBAL
-            id: packages-gpg
-            fileName: packages-gpg
-            secretBytes: ${base64:${readFile:/conf/generated/packages-gpg}}
+            id: git-crypt-key
+            description: to unlock git crypted part
+            fileName: git-crypt-key2
+            secretBytes: ${readFileBase64:/conf/generated/git-crypt-key}
 
 unclassified:
   location:
