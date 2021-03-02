@@ -24,7 +24,8 @@ endef
 
 ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 SYNOLOGY_HOST = synology
-GPG_KEY="313DD85CEFADAF7E"
+GPG_KEY = 313DD85CEFADAF7E
+GPG_KEYRING = conf/private/keyring.gpg
 DOCKERS = $(shell find dockers/ -mindepth 1 -maxdepth 1 -type d )
 
 VERSION_LAST_GIT=$(shell git log -1 --format="%at" | xargs -I{} date --utc -d @{} "+%Y.%m.%d.%H.%M.%S" )
@@ -117,6 +118,7 @@ global-dump:
 	$(info * PATH:                     $(shell echo $$PATH))
 	$(info * ROOT:                     $(ROOT))
 	$(info * DOCKERS:                  $(DOCKERS))
+	$(info * GPG_KEYRING:              $(GPG_KEYRING))
 	$(info * GPG_KEY:                  $(GPG_KEY))
 	$(info * SYNOLOGY_HOST:            $(SYNOLOGY_HOST))
 	$(info * VERSION_LAST_GIT:         $(VERSION_LAST_GIT))
@@ -320,7 +322,7 @@ packages-test: packages-build
 	run-parts --verbose --regex "test-.*" ./tests/packages
 
 repo/Release.gpg: repo/Release
-	gpg --sign --armor --detach-sign --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
+	gpg --sign --armor --detach-sign --no-default-keyring --keyring=$(GPG_KEYRING) --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
 
 repo/Release: repo/Packages dockers/jehon-docker-build
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
