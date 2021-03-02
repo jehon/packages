@@ -65,9 +65,9 @@ credentials:
         - basicSSHUserPrivateKey:
             scope: SYSTEM
             id: jenkins-master-to-slave-ssh
+            description: Connect to slaves
             username: ${JENKINS_SLAVE_USER}
             passphrase:
-            description: Connect to slaves
             privateKeySource:
               directEntry:
                 privateKey: ${readFile:/conf/generated/jenkins-master-to-slave-ssh}
@@ -75,9 +75,9 @@ credentials:
         - basicSSHUserPrivateKey:
             scope: GLOBAL
             id: jenkins-github-ssh
+            description: Commit to GitHub
             username: ${GITHUB_USER}
             passphrase:
-            description: Commit to GitHub
             privateKeySource:
               directEntry:
                 privateKey: ${readFile:/conf/generated/jenkins-github-ssh}
@@ -87,6 +87,7 @@ credentials:
             # repo > *, user > read,email, admin:repo_hook > write:repo_hook
             scope: GLOBAL
             id: github-app
+            description: View it https://github.com/settings/tokens
             username: ${GITHUB_USER}
             password: ${GITHUB_APP_TOKEN}
             description: GitHub connector through app
@@ -94,11 +95,13 @@ credentials:
         - usernamePassword:
             scope: GLOBAL
             id: cryptomedic-upload
+            description: cryptomedic-upload
             username: ${CRYPTOMEDIC_UPLOAD_USER}
             password: ${CRYPTOMEDIC_UPLOAD_PASSWORD}
 
         - string:
             scope: GLOBAL
+            description: cryptomedic-deploy
             id: cryptomedic-deploy
             secret: ${CRYPTOMEDIC_DEPLOY}
 
