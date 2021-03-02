@@ -27,17 +27,17 @@ pipeline {
     }
     stage('sign') {
       steps {
-        sh 'make repo/Release.gpg'
+        sh 'make --debug repo/Release.gpg'
       }
     }
     stage('test') {
       steps {
-        sh 'make all-test'
+        sh 'make --debug all-test'
       }
     }
     stage('lint') {
       steps {
-        sh 'make all-lint'
+        sh 'make --debug all-lint'
       }
     }
     stage('Deploy') {
@@ -69,7 +69,7 @@ pipeline {
             // sh 'echo "****** GIT_URL_SSH: $GIT_URL_SSH ******"'
             // sh 'git remote -v'
 
-            sh 'GIT_ORIGIN=sshorigin make deploy-github'
+            sh 'GIT_ORIGIN=sshorigin make --debug deploy-github'
           }
         }
       }
