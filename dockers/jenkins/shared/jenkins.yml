@@ -137,6 +137,10 @@ jobs:
             // https://www.reddit.com/r/jenkinsci/comments/ewe6mt/job_dsl_and_organizationfolder_with_github/
             // https://github.com/jenkinsci/github-branch-source-plugin/tree/master/src/main/java/org/jenkinsci/plugins/github_branch_source
             traits {
+              webhookRegistrationTrait {
+                mode('DISABLE')
+              }
+
               gitHubBranchDiscovery {
                 //  1 : Exclude branches that are also filed as PRs
                 //  2 : Only branches that are also filed as PRs
