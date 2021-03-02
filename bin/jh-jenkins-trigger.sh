@@ -4,16 +4,9 @@ set -e
 # shellcheck source=/dev/null
 . jh-jenkins-status.sh
 
-if [ -n "$1" ]; then
-    if [ "$1" == "all" ]; then
-        echo "Building all"
-    	curl --fail -X POST "$JENKINS_URL_PROJECT/build?delay=0sec"
-        exit $?
-    fi
-fi
-
-echo "BRANCH: $BRANCH"
+echo "BRANCH: $GIT_BRANCH"
 
 echo "Launching build..."
-curl --fail -X POST "$JENKINS_URL_JOB/build?delay=0sec"
+ssh "${JENKINS_HOST}" -p "${JENKINS_SSH}" build "github/${GIT_PROJECT}/${GIT_BRANCH}"
+# curl --fail -X POST "$JENKINS_URL_JOB/build?delay=0sec"
 echo "Launching build... done"
