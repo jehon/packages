@@ -310,6 +310,8 @@ node_modules/.dependencies: package.json package-lock.json
 #
 #
 all-clean: packages-clean
+	rm -fr tmp
+
 all-build: packages-build
 all-test: packages-test
 
