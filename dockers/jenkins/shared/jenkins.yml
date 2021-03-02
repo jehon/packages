@@ -143,12 +143,14 @@ jobs:
                 //  3 : All branches
                 strategyId(1)
               }
+
               gitHubPullRequestDiscovery {
                 //  1 : Merging the pull request with the current target branch revision
                 //  2 : The current pull request revision
                 //  3 : Both the current pull request revision and the pull request merged with the current target branch revision
                 strategyId(2)
               }
+
               gitHubExcludeArchivedRepositories {}
             }
           }
