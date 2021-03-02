@@ -72,9 +72,13 @@ setup-computer:
 	@echo ". $(ROOT)/setup-profile.sh "
 	@echo "in your profile"
 
-# See https://coderwall.com/p/cezf6g/define-your-own-function-in-a-makefile
+#
+# find recursive dependencies in folder $1 (newer than $2)
+#
 # 1: folder where to look
 # 2: base file to have files newer than, to limit the length of the output
+#
+# See https://coderwall.com/p/cezf6g/define-your-own-function-in-a-makefile
 define recursive-dependencies
 	$(shell \
 		if [ -r "$(2)" ]; then \
@@ -85,7 +89,11 @@ define recursive-dependencies
 	)
 endef
 
+#
+# Run the command in a docker container
+#
 # 1: command to be run
+#
 define in_docker
 	docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app,type=bind" jehon/jehon-docker-build "$1"
 endef
@@ -131,22 +139,35 @@ global-dump:
 #
 #
 all-clean: dockers-clean
-# all-build: dockers-build
+all-dump: dockers-dump
 all-stop: dockers-stop
 
-# Easier: docker/jh-docker-build => build the docker
-# $(DOCKERS): $$@/$$(notdir $$@).dockerexists $$@/$$(notdir $$@).dockerbuild
+#
+# Check if dockers does exists or not
+#
+#  for docker, the file dockers/*/.dockerexists track the fact that the docker
+#  image exists. So, we need to check here if it is really the case.
+#
+DOCKERS_PRE_EXISTING = $(shell for L in dockers/* ; do I="jehon/$$(basename $$L)"; if docker image ls | grep "$$I" > /dev/null; then echo "$$I"; else rm -f $$L/.dockerbuild ; fi; done )
+
+dockers-dump:
+	$(info * DOCKERS_PRE_EXISTING:     $(DOCKERS_PRE_EXISTING))
 
 .PHONY: dockers-clean
 dockers-clean: dockers-stop
+	rm dockers/*/.dockerbuild
 
 .PHONY: dockers-build
-dockers-build: $(DOCKERS)
+dockers-build: $(addsuffix /.dockerbuild,$(DOCKERS))
 
-$(DOCKERS): $$(call recursive-dependencies,dockers/$$*,$$@)
-	FNAME=$(notdir $@); INAME="jehon/$$FNAME"; \
+.PHONY: dockers/*
+dockers/*: dockers/*/.dockerbuild
+
+$(addsuffix /.dockerbuild,$(DOCKERS)): $$(call recursive-dependencies,dockers/$$*,$$@)
+	@DNAME=$$(dirname "$@"); FNAME=$$(basename $$DNAME); INAME="jehon/$$FNAME"; \
 	echo "Building $$INAME"; \
-	cd "$@" && docker build -t "$$INAME" . ;
+	cd "$$DNAME" && docker build -t "$$INAME" . ;
+	touch "$@"
 
 # FNAME=$(notdir $@); INAME="jehon/$$FNAME"; \
 # if [[ "$$(docker images -q "$$INAME" 2>/dev/null)" == "" ]]; then \
@@ -156,7 +177,8 @@ $(DOCKERS): $$(call recursive-dependencies,dockers/$$*,$$@)
 # 	echo "Image $$INAME already exists"; \
 # fi ;
 
-dockers/jenkins: \
+# Enrich dependencies
+dockers/jenkins/.dockerbuild: \
 	dockers/jenkins/shared/generated/authorized_keys \
 	dockers/jenkins/shared/generated/git-crypt-key \
 	dockers/jenkins/shared/generated/jenkins-github-ssh \
@@ -333,7 +355,7 @@ packages-test: packages-build
 repo/Release.gpg: repo/Release $(GPG_KEYRING)
 	gpg --sign --armor --detach-sign --no-default-keyring --keyring=$(GPG_KEYRING) --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
 
-repo/Release: repo/Packages dockers/jehon-docker-build
+repo/Release: repo/Packages dockers/jehon-docker-build/.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
 repo/Packages: repo/index.html repo/jehon-base-minimal.deb
@@ -351,7 +373,7 @@ repo/jehon-base-minimal.deb: repo/.built
 # create jehon-base-minimal.deb for /start...
 	LD="$$( find repo/ -name "jehon-base-minimal_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
 
-repo/.built: dockers/jehon-docker-build \
+repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		debian/changelog \
 		files-build
 
@@ -364,7 +386,7 @@ repo/.built: dockers/jehon-docker-build \
 #call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
 	touch "$@"
 
-debian/changelog: dockers/jehon-docker-build \
+debian/changelog: dockers/jehon-docker-build/.dockerbuild \
 		debian/control \
 		debian/*.postinst \
 		debian/*.install \
