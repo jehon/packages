@@ -10,6 +10,7 @@ pipeline {
   stages {
     stage('setup') {
       steps {
+        sh 'md5sum $PACKAGES_GPG_FILE'
         sh 'gpg --import $PACKAGES_GPG_FILE'
         sh 'make all-setup'
       }
