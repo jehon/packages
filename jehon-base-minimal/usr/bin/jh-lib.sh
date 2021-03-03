@@ -79,9 +79,12 @@ ok_ko() {
     fi
 }
 
+JH_MSG_OK="$(echo -e "\033[01;32m✓\033[0m" )"
+JH_MSG_KO="$(echo -e "\033[01;31m✗\033[0m" )"
+
 ok() {
     if test -t 1 ; then
-    	echo -e "\033[01;32m✓\033[0m $*"
+    	echo "$JH_MSG_OK $*"
     else
         echo "✓ $*"
     fi
@@ -89,13 +92,27 @@ ok() {
 
 ko() {
     if test -t 1 ; then
-    	echo -e "\033[01;31m✗\033[0m $*"
+    	echo "$JH_MSG_KO $*"
     else
         echo "✗ $*"
     fi
+}
+
+parse_ok_ko() {
+    while read -r L; do
+        if [[ "$L" =~ ^ok\ * ]]; then
+            echo "$JH_MSG_OK ${L/ok /}"
+        elif [[ "$L" =~ ^ko\ * ]]; then
+            echo "$JH_MSG_KO ${L/ko /}"
+        else
+            echo "$L"
+        fi
+    done
 }
 
 export SWD
 export PKG_FOLDER
 
 export JH_SYNOLOGY_IP=192.168.1.9
+export JH_MSG_OK
+export JH_MSG_KO
