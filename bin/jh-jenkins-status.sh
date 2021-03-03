@@ -23,17 +23,29 @@ JENKINS_URL_JOB="$JENKINS_URL_PROJECT/job/${GIT_BRANCH//\//%2F}"
 GROOVY=$(cat <<-EOG
     import hudson.model.Job
 
+    def m(ok_ko, header, result, resultok = '', resultko = '') {
+        print ok_ko ? "ok " : "ko "
+        print "JENKINS".concat(header ? " ".concat(header) : "").concat(":").padRight(${PAD_HEADER})
+        print " "
+        print result
+        print (ok_ko ? resultok : resultko)
+        println ""
+    }
+
     jenkins.model.Jenkins.instance.getAllItems(Job)
         .find{job -> job.getFullName() == 'github/${GIT_PROJECT}/${GIT_BRANCH}'} // Comment out to have all names
         .each{
-            println(it.lastBuild)
-            println(it.lastBuild.result)
-            println(it.lastBuild.building)
+            // println(it.lastBuild)
+            m(it.lastBuild.result.toString() == "SUCCESS", "last build", it.lastBuild.result)
+            m(!it.lastBuild.building, '', '', 'idle', 'running')
+            m(it.lastBuild.nextBuild == null, 'Next build', '', 'No', it.lastBuild.nextBuild)
+
+            println("- ".concat("last build:".padRight(${PAD_HEADER})).concat(" ").concat(it.lastBuild.getTimestampString()))
         }
 EOG
 )
 
-echo "$GROOVY" | ssh "${JENKINS_HOST}" -p "${JENKINS_SSH}" groovy "="
+echo "$GROOVY" | ssh "${JENKINS_HOST}" -p "${JENKINS_SSH}" groovy "=" | parse_ok_ko
 
 # JOB_BUILDING="$(  echo "$BUILD_DATA" | jq -r ".building" )"
 # JOB_RESULT="$(    echo "$BUILD_DATA" | jq -r ".result" )"
