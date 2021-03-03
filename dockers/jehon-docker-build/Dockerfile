@@ -14,7 +14,5 @@ WORKDIR /app
 
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
-RUN groupadd hgrp -g 1000
-RUN adduser --system --uid 1000 --gid 1000 husr
 
 ENTRYPOINT [ "/start.sh" ]

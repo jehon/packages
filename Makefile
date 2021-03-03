@@ -95,8 +95,13 @@ endef
 # 1: command to be run
 #
 define in_docker
-	docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app,type=bind" jehon/jehon-docker-build "$1"
+	@echo "*** in docker: $1 ***"
+	@docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app,type=bind" jehon/jehon-docker-build "$1"
 endef
+
+debug-in-docker: dockers/jehon-docker-build/.dockerbuild
+	$(call in_docker,id)
+	$(call in_docker,sudo id)
 
 #
 #

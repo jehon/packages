@@ -5,12 +5,12 @@
 GN=$( grep ":$HOST_GID:" /etc/group | cut -d ":" -f 1 )
 if [ -z "$GN" ]; then
 	GN="host_group"
-	groupadd $GN -g "$HOST_GID"
+	groupadd $GN -g "$HOST_GID" >/dev/null
 fi
 
 if ! id -u "$HOST_UID" >/dev/null 2>/dev/null ; then
 	UN="host_user"
-	adduser --system --uid "$HOST_UID" --gid "$HOST_GID" $UN
+	adduser --system --uid "$HOST_UID" --gid "$HOST_GID" $UN >/dev/null
 else
 	UN="$(id -un "$HOST_UID")"
 fi
