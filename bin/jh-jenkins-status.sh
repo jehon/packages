@@ -47,6 +47,12 @@ EOG
 
 echo "$GROOVY" | ssh "${JENKINS_HOST}" -p "${JENKINS_SSH}" groovy "=" | parse_ok_ko
 
+# JENKINS_URL_PROJECT="http://$JENKINS_HOST:$JENKINS_PORT/job/github/job/${GIT_PROJECT}"
+# JENKINS_URL_JOB="$JENKINS_URL_PROJECT/job/${GIT_BRANCH//\//%2F}"
+# # curl http://jenkins.myserver.com/jenkins/job/utilities/job/my_job/8/api/json
+# # lastBuild/api/json
+# BUILD_DATA=$( curl --fail --silent -X POST "$JENKINS_URL_JOB/lastBuild/api/json" )
+
 # JOB_BUILDING="$(  echo "$BUILD_DATA" | jq -r ".building" )"
 # JOB_RESULT="$(    echo "$BUILD_DATA" | jq -r ".result" )"
 # JOB_TS="$(        echo "$BUILD_DATA" | jq -r ".timestamp" )"
