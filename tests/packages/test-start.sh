@@ -31,7 +31,7 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
     assert_success "Level-up docker image - apt-get install" apt install -y lsb-release gpg ca-certificates wget
     log_message "Level-up docker image - done"
 
-    export LOCAL_STORE="/app/repo/"
+    export JH_LOCAL_STORE="/app/repo/"
     # assert_success "start script"
     /app/start
 

@@ -6,9 +6,9 @@ SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 # shellcheck source=../lib/test-helpers.sh
 . "$SWD/../lib/test-helpers.sh"
 
-ROOT="$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
+JH_ROOT="$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
 
-. $ROOT/synology/scripts/rsync-parse-command.sh
+. $JH_ROOT/synology/scripts/rsync-parse-command.sh
 
 CFG="tests/data/vf.json"
 

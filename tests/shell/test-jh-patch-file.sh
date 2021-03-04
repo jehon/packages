@@ -15,7 +15,7 @@ BACKUP="$TARGET-before-patch-file"
 	echo "This is the end"
 ) > "$TARGET"
 
-capture "jh-patch-file-patch" $ROOT/jehon-base-minimal/usr/bin/jh-patch-file.sh $TEST_DATA/jh-patch-file-patch.txt
+capture "jh-patch-file-patch" $JH_ROOT/jehon-base-minimal/usr/bin/jh-patch-file.sh $JH_TEST_DATA/jh-patch-file-patch.txt
 assert_captured_success "should be successfull"
 
 capture "jh-patch-file-patch read" cat /tmp/jh-patch-file-original.txt
@@ -31,7 +31,7 @@ assert_captured_output_contains "This is the file"
 assert_captured_output_contains "Hello world"
 capture_empty
 
-capture "jh-patch-file-patch" $ROOT/jehon-base-minimal/usr/bin/jh-patch-file.sh "uninstall" "$TARGET" "test"
+capture "jh-patch-file-patch" $JH_ROOT/jehon-base-minimal/usr/bin/jh-patch-file.sh "uninstall" "$TARGET" "test"
 assert_captured_success "should be successfull"
 
 capture_file "read the generated file" "$TARGET"

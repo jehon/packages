@@ -29,7 +29,9 @@ jenkins:
 
   remotingSecurity:
     enabled: true
-  # agentProtocols ??
+  agentProtocols:
+    # - "JNLP4-connect"
+    - "Ping"
 
   nodes:
     # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/build_agents

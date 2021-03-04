@@ -12,13 +12,13 @@ TWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 # We need to re-import it for SWD to be set correctly
 #
 # shellcheck source=../../jehon-base-minimal/usr/bin/jh-lib.sh
-. "$ROOT/jehon-base-minimal/usr/bin/jh-lib.sh"
+. "$JH_ROOT/jehon-base-minimal/usr/bin/jh-lib.sh"
 
 assert_equals "SWD" "$TWD" "$SWD"
-assert_equals "ROOT" "$ROOT" "$JH_PKG_FOLDER"
+assert_equals "ROOT" "$JH_ROOT" "$JH_PKG_FOLDER"
 
 assert_equals "jhGetConfigFile from packages" \
-    "$ROOT/jehon-base-minimal/usr/share/jehon-base-minimal/etc/npmrc" \
+    "$JH_ROOT/jehon-base-minimal/usr/share/jehon-base-minimal/etc/npmrc" \
     "$( jhGetConfigFile "/etc/npmrc" )"
 
 assert_equals "jhGetConfigFile from etc" \

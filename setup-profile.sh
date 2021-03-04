@@ -11,9 +11,9 @@ SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 SRC="$( realpath "$JH_PKG_FOLDER/.." )"
 
 # shellcheck source=/dev/null
-. "$JH_PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc/profile.d/jehon-custom.sh"
+. "$JH_PKG_FOLDER/$JH_PKG_MINIMAL_NAME/usr/share/$JH_PKG_MINIMAL_NAME/etc/profile.d/jehon-custom.sh"
 
-export PATH="$JH_PKG_FOLDER/bin:$JH_PKG_FOLDER/$PKG_NAME/usr/bin:$PATH"
+export PATH="$JH_PKG_FOLDER/bin:$JH_PKG_FOLDER/$JH_PKG_MINIMAL_NAME/usr/bin:$PATH"
 
 header "** Looking for custom profile in $SRC"
 while read F ; do

@@ -6,8 +6,8 @@ SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 # shellcheck source=../lib/test-helpers.sh
 . "$SWD/../lib/test-helpers.sh"
 
-ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
-. $ROOT/synology/scripts/rsync-replace-tokens.sh
+JH_ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
+. $JH_ROOT/synology/scripts/rsync-replace-tokens.sh
 
 USER="myuser"
 TS="mytimestamp"

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-export PKG_NAME="jehon-base-minimal"
+export JH_PKG_MINIMAL_NAME="jehon-base-minimal"
 
 #
 # SWD (Script Working Directory)
 #   where the script currently execute
 #
 #   /usr/(s)bin
-#   ~/src/packages/$PKG_NAME/usr/(s)bin
+#   ~/src/packages/$JH_PKG_MINIMAL_NAME/usr/(s)bin
 #
 SWD="$( realpath "$( dirname "${BASH_SOURCE[1]}" )" )"
 
@@ -31,7 +31,7 @@ fi
 # Get the config file location
 #
 #   /usr/(s)bin => $1
-#   ~/src/packages/... => packages/$PKG_NAME/usr/share/$PKG_NAME/etc/$(basename)
+#   ~/src/packages/... => packages/$JH_PKG_MINIMAL_NAME/usr/share/$JH_PKG_MINIMAL_NAME/etc/$(basename)
 #
 #
 jhGetConfigFile() {
@@ -40,7 +40,7 @@ jhGetConfigFile() {
         return 0
     fi
 
-    CONF_DIR="$JH_PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc"
+    CONF_DIR="$JH_PKG_FOLDER/$JH_PKG_MINIMAL_NAME/usr/share/$JH_PKG_MINIMAL_NAME/etc"
     if [ -a "$CONF_DIR/$(basename "$1" )" ]; then
         echo "$CONF_DIR/$(basename "$1" )"
         return 0
