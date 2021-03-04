@@ -3,17 +3,23 @@
 # set -e
 
 # We need to calculate it us-self to be able to import jh-lib.sh
-SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
+JH_SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
+#
+# Will define JH_PKG_FOLDER
+#
 # shellcheck source=/dev/null
-. "$SWD/jehon-base-minimal/usr/bin/jh-lib.sh"
+. "$JH_SWD/jehon-base-minimal/usr/bin/jh-lib.sh"
+
+#
+# Look for the files locally
+#
+export PATH="$JH_PKG_FOLDER/bin:$JH_PKG_FOLDER/$JH_PKG_MINIMAL_NAME/usr/bin:$PATH"
 
 SRC="$( realpath "$JH_PKG_FOLDER/.." )"
 
 # shellcheck source=/dev/null
 . "$JH_PKG_FOLDER/$JH_PKG_MINIMAL_NAME/usr/share/$JH_PKG_MINIMAL_NAME/etc/profile.d/jehon-custom.sh"
-
-export PATH="$JH_PKG_FOLDER/bin:$JH_PKG_FOLDER/$JH_PKG_MINIMAL_NAME/usr/bin:$PATH"
 
 header "** Looking for custom profile in $SRC"
 while read F ; do
@@ -52,3 +58,5 @@ if [ "$ORIGINAL" != "$LINE" ]; then
 		echo "sudo cp jehon-package-repo.list /etc/apt/sources.list.d"
 	fi
 fi
+
+export JH_PKG_FOLDER

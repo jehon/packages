@@ -380,20 +380,6 @@ repo/jehon-base-minimal.deb: repo/.built
 	LD="$$( find repo/ -name "jehon-base-minimal_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
 
 repo/.built: dockers/jehon-docker-build/.dockerbuild \
-		debian/changelog \
-		jehon-base-minimal/usr/bin/shuttle-go \
-		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
-
-	$(call itself,shell-build)
-	@rm -fr repo
-	@mkdir -p "$(dir $@)"
-#echo "************ build indep ******************"
-	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
-#echo "************ build arch:armhf *************"
-#call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
-	touch "$@"
-
-debian/changelog: dockers/jehon-docker-build/.dockerbuild \
 		debian/control \
 		debian/*.postinst \
 		debian/*.install \
@@ -401,9 +387,22 @@ debian/changelog: dockers/jehon-docker-build/.dockerbuild \
 		debian/*.triggers \
 		debian/jehon-base-minimal.links \
 		jehon-base-minimal/usr/bin/shuttle-go \
-		$(shell find . -path "./jehon-*" -type f)
+		$(shell find . -path "./jehon-*" -type f) \
+		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 
-	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main)
+	$(call itself,shell-build)
+	@rm -fr repo
+	@mkdir -p "$(dir $@)"
+#echo "************ build indep ******************"
+	$(call in_docker,rsync -a /app /tmp/ \
+		&& cd /tmp/app \
+		&& gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main \
+		&& debuild -rsudo --no-lintian -uc -us --build=binary \
+		&& cp ../jehon-*.deb /app/repo/ \
+	)
+#echo "************ build arch:armhf *************"
+# && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/
+	touch "$@"
 
 debian/jehon-base-minimal.links: \
 		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )

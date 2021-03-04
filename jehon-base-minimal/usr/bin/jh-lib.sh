@@ -3,13 +3,13 @@
 export JH_PKG_MINIMAL_NAME="jehon-base-minimal"
 
 #
-# SWD (Script Working Directory)
+# JH_SWD (Script Working Directory)
 #   where the script currently execute
 #
 #   /usr/(s)bin
 #   ~/src/packages/$JH_PKG_MINIMAL_NAME/usr/(s)bin
 #
-SWD="$( realpath "$( dirname "${BASH_SOURCE[1]}" )" )"
+JH_SWD="$( realpath "$( dirname "${BASH_SOURCE[1]}" )" )"
 
 #
 # Where is this file located ?
@@ -110,7 +110,7 @@ parse_ok_ko() {
     done
 }
 
-export SWD
+export JH_SWD
 export JH_PKG_FOLDER
 
 export JH_SYNOLOGY_IP=192.168.1.9
