@@ -8,12 +8,12 @@ SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 # shellcheck source=/dev/null
 . "$SWD/jehon-base-minimal/usr/bin/jh-lib.sh"
 
-SRC="$( realpath "$PKG_FOLDER/.." )"
+SRC="$( realpath "$JH_PKG_FOLDER/.." )"
 
 # shellcheck source=/dev/null
-. "$PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc/profile.d/jehon-custom.sh"
+. "$JH_PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc/profile.d/jehon-custom.sh"
 
-export PATH="$PKG_FOLDER/bin:$PKG_FOLDER/$PKG_NAME/usr/bin:$PATH"
+export PATH="$JH_PKG_FOLDER/bin:$JH_PKG_FOLDER/$PKG_NAME/usr/bin:$PATH"
 
 header "** Looking for custom profile in $SRC"
 while read F ; do
@@ -36,7 +36,7 @@ CDPATH=".:$SRC"
 header "** Configure APT **"
 FILE="/etc/apt/sources.list.d/jehon-package-repo.list"
 
-LINE="deb [trusted=yes] file://$PKG_FOLDER/repo /"
+LINE="deb [trusted=yes] file://$JH_PKG_FOLDER/repo /"
 ORIGINAL="$( cat "$FILE" )"
 
 if [ "$ORIGINAL" != "$LINE" ]; then

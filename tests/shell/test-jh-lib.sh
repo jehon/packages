@@ -15,7 +15,7 @@ TWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 . "$ROOT/jehon-base-minimal/usr/bin/jh-lib.sh"
 
 assert_equals "SWD" "$TWD" "$SWD"
-assert_equals "ROOT" "$ROOT" "$PKG_FOLDER"
+assert_equals "ROOT" "$ROOT" "$JH_PKG_FOLDER"
 
 assert_equals "jhGetConfigFile from packages" \
     "$ROOT/jehon-base-minimal/usr/share/jehon-base-minimal/etc/npmrc" \

@@ -21,10 +21,10 @@ SELF="$( realpath "${BASH_SOURCE[0]}" )"
 # Where is the package source file located
 #
 #
-PKG_FOLDER="$(dirname "$(dirname "$(dirname "$(dirname "$SELF" )" )" )" )"
+JH_PKG_FOLDER="$(dirname "$(dirname "$(dirname "$(dirname "$SELF" )" )" )" )"
 # If SELF is as /usr/bin, then it is not under package source
-if [ "$PKG_FOLDER" = "/" ]; then
-    PKG_FOLDER=""
+if [ "$JH_PKG_FOLDER" = "/" ]; then
+    JH_PKG_FOLDER=""
 fi
 
 #
@@ -35,12 +35,12 @@ fi
 #
 #
 jhGetConfigFile() {
-    if [ -z "$PKG_FOLDER" ]; then
+    if [ -z "$JH_PKG_FOLDER" ]; then
         echo "$1"
         return 0
     fi
 
-    CONF_DIR="$PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc"
+    CONF_DIR="$JH_PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc"
     if [ -a "$CONF_DIR/$(basename "$1" )" ]; then
         echo "$CONF_DIR/$(basename "$1" )"
         return 0
@@ -111,7 +111,7 @@ parse_ok_ko() {
 }
 
 export SWD
-export PKG_FOLDER
+export JH_PKG_FOLDER
 
 export JH_SYNOLOGY_IP=192.168.1.9
 export JH_MSG_OK

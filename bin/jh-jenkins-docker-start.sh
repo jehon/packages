@@ -17,8 +17,8 @@ WEB=8080
 #   docker:dind
 
 if [ "$1" = "-f" ]; then
-    echo "PKG_FOLDER: $PKG_FOLDER"
-    pushd "$PKG_FOLDER" > /dev/null
+    echo "JH_PKG_FOLDER: $JH_PKG_FOLDER"
+    pushd "$JH_PKG_FOLDER" > /dev/null
 
     rm -fr dockers/jenkins/shared/generated
     docker stop jenkins || true > /dev/null
