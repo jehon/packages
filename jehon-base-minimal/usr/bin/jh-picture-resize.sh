@@ -43,13 +43,11 @@ function treatOne() {
 	if [ "$(basename "$1")" = "/" ] ; then return 0; fi;
 	if [ "$(basename "$1")" = "." ] ; then return 0; fi;
 	if [ "$(basename "$1")" = ".." ] ; then return 0; fi;
-	if [ -f "$1" ]
-	then
+	if [ -f "$1" ]; then
 		reduce "$1"
 	fi
-	if [ -d "$1" ]
-	then
-                echo "Directory $1"
+	if [ -d "$1" ]; then
+        echo "Directory $1"
 		for FILE in "$1"/* ;
 		do
 			if [ "$FILE" = "$1/*" ]; then return 0; fi;
