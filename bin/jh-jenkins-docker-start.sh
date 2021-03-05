@@ -46,4 +46,6 @@ cat <<EOT
 
 EOT
 
-docker run --name jenkins -p $WEB:8080 -p 2022:22 jehon/jenkins
+docker run --restart unless-stopped --name jenkins --detach -p $WEB:8080 -p 2022:22 jehon/jenkins
+
+docker logs --follow jenkins
