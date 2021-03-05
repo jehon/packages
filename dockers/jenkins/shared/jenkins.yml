@@ -32,6 +32,22 @@ jenkins:
   agentProtocols:
     # - "JNLP4-connect"
     - "Ping"
+  views:
+    - list:
+        name: "Master's"
+        recurse: true
+        includeRegex: "master"
+        jobFilters:
+        - "gitHubBranchFilter"
+        # columns:
+        # - "status"
+        # - "weather"
+        # - "jobName"
+        # - "lastSuccess"
+        # - "lastFailure"
+        # - "lastDuration"
+        # - "buildButton"
+        # - "favoriteColumn"
 
   nodes:
     # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/build_agents
