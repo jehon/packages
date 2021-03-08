@@ -24,13 +24,14 @@ SRC="$( realpath "$JH_PKG_FOLDER/.." )"
 header "** Looking for custom profile in $SRC"
 while read F ; do
 	echo "Importing $F"
+	# shellcheck source=/dev/null
 	source "$F"
 done < <( find "$SRC" -type d \
 	\( -name "node_modules" -o -name "vendor" -o -name "tmp" \) \
 	-prune -false \
 	-o -name "custom-profile.sh" )
 
-EBIN="$( realpath "$SWD/../bin" )"
+EBIN="$( realpath "$JH_SWD/../bin" )"
 if [ -d "$EBIN" ]; then
 	header "** Adding $EBIN"
 	export PATH="$EBIN:$PATH"
