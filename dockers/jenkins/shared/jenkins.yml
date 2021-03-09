@@ -52,14 +52,14 @@ jenkins:
   nodes:
     # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/build_agents
     - permanent:
-        labelString: "${JENKINS_SLAVE_HOST}"
+        name: "wsl"
+        labelString: "docker"
         mode: NORMAL
-        name: "${JENKINS_SLAVE_HOST}"
         numExecutors: 1
         remoteFS: "/home/${JENKINS_SLAVE_USER}/jenkins-slave"
         launcher:
           ssh:
-            host: "${JENKINS_SLAVE_HOST}"
+            host: "${JENKINS_SLAVE_WSL}"
             port: 22
             credentialsId: jenkins-master-to-slave-ssh
             # launchTimeoutSeconds: 60
