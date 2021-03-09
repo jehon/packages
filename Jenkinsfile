@@ -3,6 +3,8 @@ pipeline {
   options {
     ansiColor('xterm')
     skipStagesAfterUnstable()
+    disableConcurrentBuilds()
+    timeout(time: 15, unit: 'MINUTES')
   }
   environment {
     GIT_CRYPT_KEY = credentials('git-crypt-key')
