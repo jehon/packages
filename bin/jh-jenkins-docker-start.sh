@@ -9,13 +9,6 @@ set -e
 
 WEB=8080
 
-# docker run --name jenkins-docker --rm --detach ^
-#   --privileged ^
-#   --env DOCKER_TLS_CERTDIR=/certs ^
-#   --volume jenkins-docker-certs:/certs/client ^
-#   --volume jenkins-data:/var/jenkins_home ^
-#   docker:dind
-
 if [ "$1" = "-f" ]; then
     echo "JH_PKG_FOLDER: $JH_PKG_FOLDER"
     pushd "$JH_PKG_FOLDER" > /dev/null
@@ -23,9 +16,11 @@ if [ "$1" = "-f" ]; then
     rm -fr dockers/jenkins/shared/generated
     docker stop jenkins || true > /dev/null
     docker rm -f jenkins || true > /dev/null
+    docker image rm -f jehon/jenkins || true > /dev/null
+    rm -f dockers/jenkins/.dockerbuild
 fi
 
-make dockers/jenkins
+make dockers/jenkins/.dockerbuild
 
 ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "[localhost]:2022"
 
