@@ -29,16 +29,6 @@ GPG_KEYRING = conf/generated/keyring.gpg
 DOCKERS = $(shell find dockers/ -mindepth 1 -maxdepth 1 -type d )
 
 VERSION_LAST_GIT=$(shell git log -1 --format="%at" | xargs -I{} date --utc -d @{} "+%Y.%m.%d.%H.%M.%S" )
-#
-# git log -1 --format=%cd
-# git log -1 --format="%at" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S
-# git log -1 --format="%at" | xargs -I{} date -d @{} "+%Y.%m.%d.%H.%M.%S"
-#
-# if [ -z "$(git status --porcelain)" ]; then
-#   # Working directory clean
-# else
-#   # Uncommitted changes
-# fi
 VERSION_CURRENT_TIME_TAG=$(shell date --utc "+%Y%m%d%H%M%S")
 ifeq "$(shell git status --porcelain)" ""
 	VERSION=$(VERSION_LAST_GIT)
@@ -76,7 +66,7 @@ setup-computer:
 # find recursive dependencies in folder $1 (newer than $2)
 #
 # 1: folder where to look
-# 2: base file to have files newer than, to limit the length of the output
+# 2: base file to have files newer than this, to limit the length of the output
 #
 # See https://coderwall.com/p/cezf6g/define-your-own-function-in-a-makefile
 define recursive-dependencies
@@ -98,10 +88,6 @@ define in_docker
 	@echo "*** in docker: $1 ***"
 	@docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app,type=bind" jehon/jehon-docker-build "$1"
 endef
-
-debug-in-docker: dockers/jehon-docker-build/.dockerbuild
-	$(call in_docker,id)
-	$(call in_docker,sudo id)
 
 #
 #
@@ -160,7 +146,7 @@ dockers-dump:
 
 .PHONY: dockers-clean
 dockers-clean: dockers-stop
-	rm dockers/*/.dockerbuild
+	rm -f dockers/*/.dockerbuild
 
 .PHONY: dockers-build
 dockers-build: $(addsuffix /.dockerbuild,$(DOCKERS))
@@ -169,18 +155,11 @@ dockers-build: $(addsuffix /.dockerbuild,$(DOCKERS))
 dockers/*: dockers/*/.dockerbuild
 
 $(addsuffix /.dockerbuild,$(DOCKERS)): $$(call recursive-dependencies,dockers/$$*,$$@)
+
 	@DNAME=$$(dirname "$@"); FNAME=$$(basename $$DNAME); INAME="jehon/$$FNAME"; \
 	echo "Building $$INAME"; \
 	cd "$$DNAME" && docker build -t "$$INAME" . ;
 	touch "$@"
-
-# FNAME=$(notdir $@); INAME="jehon/$$FNAME"; \
-# if [[ "$$(docker images -q "$$INAME" 2>/dev/null)" == "" ]]; then \
-# 	echo "Building $$INAME"; \
-# 	cd "$@" && docker build -t "$$INAME" . ; \
-# else \
-# 	echo "Image $$INAME already exists"; \
-# fi ;
 
 # Enrich dependencies
 dockers/jenkins/.dockerbuild: \
@@ -404,8 +383,7 @@ repo/.built: dockers/jehon-docker-build/.dockerbuild \
 # && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/
 	touch "$@"
 
-debian/jehon-base-minimal.links: \
-		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
+debian/jehon-base-minimal.links: $(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
 
 	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
 		&& find * -type "f,l" -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"

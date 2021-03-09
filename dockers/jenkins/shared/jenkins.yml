@@ -1,5 +1,5 @@
 #
-# See http://192.168.100.2:18080/configuration-as-code/reference
+# See http://localhost:18080/configuration-as-code/reference
 #    from local install of jenkins
 
 configuration-as-code:
