@@ -10,7 +10,6 @@ set -e
 WEB=8080
 
 if [ "$1" = "-f" ]; then
-    echo "JH_PKG_FOLDER: $JH_PKG_FOLDER"
     pushd "$JH_PKG_FOLDER" > /dev/null
 
     rm -fr dockers/jenkins/shared/generated
