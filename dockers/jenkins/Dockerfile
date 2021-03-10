@@ -28,6 +28,7 @@ RUN jenkins-plugin-cli --plugins \
     \
     blueocean \
     nodelabelparameter \
+    xml-job-to-job-dsl \
     \
     ansicolor \
     lockable-resources \

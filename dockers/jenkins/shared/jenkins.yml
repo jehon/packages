@@ -145,6 +145,29 @@ unclassified:
 # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/jobs
 # https://jenkinsci.github.io/job-dsl-plugin/
 jobs:
+  # https://stackoverflow.com/questions/28488389/jenkins-how-to-run-one-housekeeping-job-on-all-nodes-slaves-master
+  # https://jenkinsci.github.io/job-dsl-plugin/#path/freeStyleJob-triggers-cron
+  - script: |
+      job("docker clean up") {
+        description("Clean up docker data")
+        keepDependencies(false)
+        disabled(false)
+        concurrentBuild(true)
+        parameters {
+          labelParam('Label') {
+              defaultValue('docker')
+              description('Select nodes')
+              allNodes('allCases', 'IgnoreOfflineNodeEligibility')
+          }
+        }
+        steps {
+          shell("docker system prune -f")
+        }
+        triggers {
+          cron('@daily')
+        }
+      }
+
   - script: |
       organizationFolder('github') {
         description("GitHub organizationnal folder")
