@@ -8,6 +8,7 @@ set -e
 # See https://www.jenkins.io/doc/book/installing/docker/
 
 WEB=8080
+REVERSE_IP="$(jh-ip-list | grep 172 | cut -f 2 -d ' ')"
 
 if [ "$1" = "-f" ]; then
     pushd "$JH_PKG_FOLDER" > /dev/null
@@ -29,7 +30,9 @@ cat <<EOT
 *
 * Ports:
 *      web interface:  $WEB
+*      reverse ip:     $REVERSE_IP
 *      sshd server:    2022
+*
 *
 * Run jenkins console:
 *      ssh admin@localhost -p 2022 help
@@ -40,6 +43,10 @@ cat <<EOT
 
 EOT
 
-docker run --restart unless-stopped --name jenkins --detach -p $WEB:8080 -p 2022:22 jehon/jenkins
+docker run --restart unless-stopped --name jenkins \
+    -p $WEB:8080 \
+    -p 2022:22 \
+    --detach \
+    -p 50000 jehon/jenkins
 
 docker logs --follow jenkins
