@@ -8,7 +8,7 @@ SWD="$( dirname "${BASH_SOURCE[0]}" )"
 
 PATCH="$JH_TEST_TMP/jh-patch-file-patch.txt"
 TARGET="$JH_TEST_TMP/jh-patch-file-original.txt"
-BACKUP="$JH_TEST_TMP/backup"
+BACKUP="$TARGET-before-patch-file"
 
 (
 	# Setup the source file
@@ -33,9 +33,7 @@ capture "jh-patch-file-patch read" cat "$TARGET"
 assert_captured_output_contains "Tag:[[:space:]]+test"
 assert_captured_output_contains "File:[[:space:]]+$TARGET"
 capture_empty
-
-[[ -r "$BACKUP" ]]
-assert_true "The backup file exists"
+assert_true "The backup file $BACKUP exists" "$([[ -r "$BACKUP" ]])"
 
 capture_file "read the generated file" "$TARGET"
 assert_captured_output_contains "This is the file"
@@ -47,5 +45,5 @@ assert_captured_success "should be successfull"
 
 capture_file "read the generated file" "$TARGET"
 assert_captured_output_contains "This is the file"
-assert_true "Should not contain patch" $([[ $(cat "$TARGET" | grep "Hello world") = "" ]])
+assert_true "Should not contain patch" "$([[ $(cat "$TARGET" | grep "Hello world") = "" ]])"
 capture_empty
