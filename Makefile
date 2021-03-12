@@ -139,10 +139,16 @@ all-stop: dockers-stop
 #  for docker, the file dockers/*/.dockerexists track the fact that the docker
 #  image exists. So, we need to check here if it is really the case.
 #
-DOCKERS_PRE_EXISTING = $(shell for L in dockers/* ; do I="jehon/$$(basename $$L)"; if docker image ls | grep "$$I" > /dev/null; then echo "$$I"; else rm -f $$L/.dockerbuild ; fi; done )
 
-dockers-dump:
-	$(info * DOCKERS_PRE_EXISTING:     $(DOCKERS_PRE_EXISTING))
+#
+#
+# Docker remove
+#
+#
+*: docker-init
+
+docker-init:
+	@for L in dockers/* ; do I="jehon/$$(basename $$L)"; if docker image ls | grep "$$I" > /dev/null; then echo "$$I"; else rm -f $$L/.dockerbuild ; fi; done
 
 .PHONY: dockers-clean
 dockers-clean: dockers-stop
@@ -214,6 +220,8 @@ externals/shuttle-go/shuttle-go: externals/shuttle-go/*.go
 
 all-clean: files-clean
 all-build: files-build
+all-test: files-test
+all-lint: files-lint
 
 files-clean:
 	rm -fr conf/generated
@@ -224,15 +232,38 @@ files-clean:
 
 .PHONY: files-build
 files-build: \
-	dockers/jenkins/shared/generated/authorized_keys \
-	dockers/jenkins/shared/generated/git-crypt-key \
-	dockers/jenkins/shared/generated/jenkins-github-ssh \
-	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
-	dockers/jenkins/shared/generated/secrets.properties \
-	dockers/jenkins/shared/generated/timezone \
-	jehon-base-minimal/usr/bin/shuttle-go \
-	jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
-	synology/ssh/root/authorized_keys
+		dockers/jenkins/shared/generated/authorized_keys \
+		dockers/jenkins/shared/generated/git-crypt-key \
+		dockers/jenkins/shared/generated/jenkins-github-ssh \
+		dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
+		dockers/jenkins/shared/generated/secrets.properties \
+		dockers/jenkins/shared/generated/timezone \
+		jehon-base-minimal/usr/bin/shuttle-go \
+		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
+		synology/ssh/root/authorized_keys
+
+	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find bin -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal/usr/bin -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal/usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
+
+.PHONY: files-test
+files-test: files-shell-test
+
+.PHONY: files-shell-test
+files-shell-test: files-build
+	run-parts --verbose --regex "test-.*" ./tests/shell
+
+.PHONY: files-lint
+files-lint:
+	@shopt -s globstar; \
+	RES=0; \
+	for f in jehon-*/**/*.sh bin/**/*.sh; do \
+		shellcheck -x "$$f"; RES=$$? || $$RES; \
+	done ; \
+	exit $$RES
+
 
 $(GPG_KEYRING): conf/private/packages-gpg
 	@mkdir -p "$(dir $@)"
@@ -369,7 +400,7 @@ repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		$(shell find . -path "./jehon-*" -type f) \
 		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 
-	$(call itself,shell-build)
+	$(call itself,files-build)
 	@rm -fr repo
 	@mkdir -p "$(dir $@)"
 #echo "************ build indep ******************"
@@ -387,36 +418,6 @@ debian/jehon-base-minimal.links: $(shell find jehon-base-minimal/usr/share/jehon
 
 	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
 		&& find * -type "f,l" -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
-
-#
-#
-# Shell
-#
-#
-all-build: shell-build
-all-test: shell-test
-all-lint: shell-lint
-
-shell-build:
-	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
-	find bin -exec "chmod" "+x" "{}" ";"
-	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
-	find jehon-base-minimal/usr/bin -exec "chmod" "+x" "{}" ";"
-	find jehon-base-minimal/usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
-
-.PHONY: shell-test
-shell-test: shell-build
-	run-parts --verbose --regex "test-.*" ./tests/shell
-
-.PHONY: shell-lint
-shell-lint:
-	@shopt -s globstar; \
-	RES=0; \
-	for f in jehon-*/**/*.sh bin/**/*.sh; do \
-		shellcheck -x "$$f"; RES=$$? || $$RES; \
-	done ; \
-	exit $$RES
-
 
 ######################################
 #
