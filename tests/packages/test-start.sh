@@ -10,9 +10,6 @@ SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
 ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
 
-# shellcheck source=../../synology/scripts/rsync-parse-command.sh
-. "$ROOT"/synology/scripts/rsync-parse-command.sh
-
 CONSTANT_RUN_TEST="i_am_in_docker"
 
 if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
