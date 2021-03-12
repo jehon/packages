@@ -7,16 +7,20 @@ set -e
 
 # See https://www.jenkins.io/doc/book/installing/docker/
 
+echo "********* Starting SSH on host...   ******************"
+sudo service ssh start
+echo "********* Starting SSH on host done ******************"
+
 WEB=8080
 REVERSE_IP="$(jh-ip-list | grep 172 | cut -f 2 -d ' ')"
 
-if [ "$1" = "-f" ]; then
-    pushd "$JH_PKG_FOLDER" > /dev/null
+pushd "$JH_PKG_FOLDER" > /dev/null
 
+if [ "$1" = "-f" ]; then
     rm -fr dockers/jenkins/shared/generated
-    docker stop jenkins || true > /dev/null
-    docker rm -f jenkins || true > /dev/null
-    docker image rm -f jehon/jenkins || true > /dev/null
+    ( docker stop jenkins || true )  &> /dev/null
+    ( docker rm -f jenkins || true ) &> /dev/null
+    ( docker image rm -f jehon/jenkins || true ) &> /dev/null
     rm -f dockers/jenkins/.dockerbuild
 fi
 
@@ -47,6 +51,6 @@ docker run --restart unless-stopped --name jenkins \
     -p $WEB:8080 \
     -p 2022:22 \
     --detach \
-    -p 50000 jehon/jenkins
+    jehon/jenkins
 
 docker logs --follow jenkins
