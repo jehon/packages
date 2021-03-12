@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
-
-clear
 
 ROOT="/media/$(whoami)/usb_drive/synology"
 
@@ -20,6 +17,12 @@ jhrsync() {
 		--chmod=ugo=rwX \
 		"--rsync-path=/bin/rsync" "root@synology:/volume3/$1/" "$ROOT/$1"
 }
+
+echo "************************************************"
+echo "* Don't forget to launch with systemd-inhibit  *"
+echo "************************************************"
+echo systemd-inhibit "$0" "$@"
+
 
 jhrsync documents
 jhrsync photo
