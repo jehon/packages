@@ -130,7 +130,6 @@ global-dump:
 #
 #
 all-clean: dockers-clean
-all-dump: dockers-dump
 all-stop: dockers-stop
 
 #
