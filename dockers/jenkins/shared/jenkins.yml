@@ -1,5 +1,5 @@
 #
-# See http://192.168.100.2:18080/configuration-as-code/reference
+# See http://localhost:18080/configuration-as-code/reference
 #    from local install of jenkins
 
 configuration-as-code:
@@ -29,21 +29,40 @@ jenkins:
 
   remotingSecurity:
     enabled: true
-  # agentProtocols ??
+  agentProtocols:
+    # - "JNLP4-connect"
+    - "Ping"
+  views:
+    - list:
+        name: "Master's"
+        recurse: true
+        includeRegex: "master"
+        jobFilters:
+        - "gitHubBranchFilter"
+        # columns:
+        # - "status"
+        # - "weather"
+        # - "jobName"
+        # - "lastSuccess"
+        # - "lastFailure"
+        # - "lastDuration"
+        # - "buildButton"
+        # - "favoriteColumn"
 
   nodes:
     # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/build_agents
     - permanent:
-        labelString: "${JENKINS_SLAVE_HOST}"
+        name: "wsl"
+        labelString: "docker"
         mode: NORMAL
-        name: "${JENKINS_SLAVE_HOST}"
         numExecutors: 1
         remoteFS: "/home/${JENKINS_SLAVE_USER}/jenkins-slave"
         launcher:
           ssh:
-            host: "${JENKINS_SLAVE_HOST}"
+            host: "host.docker.internal"
             port: 22
             credentialsId: jenkins-master-to-slave-ssh
+            javaPath: /usr/bin/java
             # launchTimeoutSeconds: 60
             # maxNumRetries: 3
             # retryWaitTime: 30
@@ -127,6 +146,29 @@ unclassified:
 # https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos/jobs
 # https://jenkinsci.github.io/job-dsl-plugin/
 jobs:
+  # https://stackoverflow.com/questions/28488389/jenkins-how-to-run-one-housekeeping-job-on-all-nodes-slaves-master
+  # https://jenkinsci.github.io/job-dsl-plugin/#path/freeStyleJob-triggers-cron
+  - script: |
+      job("docker clean up") {
+        description("Clean up docker data")
+        keepDependencies(false)
+        disabled(false)
+        concurrentBuild(true)
+        parameters {
+          labelParam('Label') {
+              defaultValue('docker')
+              description('Select nodes')
+              allNodes('allCases', 'IgnoreOfflineNodeEligibility')
+          }
+        }
+        steps {
+          shell("docker system prune -f")
+        }
+        triggers {
+          cron('@daily')
+        }
+      }
+
   - script: |
       organizationFolder('github') {
         description("GitHub organizationnal folder")

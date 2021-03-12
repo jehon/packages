@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
 # Usage:
-# - <file>
+# - <file> -> will dump on stdout the patched file
 # - "uninstall" <file> [tag]
+#
 
 #
 # File format example:
 #
-# File: /etc/ssh/ssh_config
-# Tag: minimal_ssh_config
+#   #
+#   # File: /etc/ssh/ssh_config
+#   # Tag: minimal_ssh_config
+#   #
 #
 
 if [ "$1" == "uninstall" ]; then

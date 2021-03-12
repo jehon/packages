@@ -12,4 +12,4 @@ fi
 # Monthly backups are taken, so 40 days is ok
 find "/var/backups/daily" -mtime +40 -delete
 
-"/usr/share/$PKG_NAME/jh-backup-take-snapshot.sh" daily
+"/usr/share/$JH_PKG_MINIMAL_NAME/jh-backup-take-snapshot.sh" daily

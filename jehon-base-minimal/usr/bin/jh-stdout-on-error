@@ -11,11 +11,11 @@ if [ "$LOGLEVEL" = "" ]; then
     LOGLEVEL=0
 fi
 
-export CAPTURED_OUTPUT=""
-export CAPTURED_EXITCODE=0
+export JH_CAPTURED_OUTPUT=""
+export JH_CAPTURED_EXITCODE=0
 
 # while IFS= read -r line; do
-#     CAPTURED_OUTPUT="$CAPTURED_OUTPUT\n$line"
+#     JH_CAPTURED_OUTPUT="$JH_CAPTURED_OUTPUT\n$line"
 # done
 
 if [ -z "$1" ]; then
@@ -24,12 +24,12 @@ if [ -z "$1" ]; then
 fi
 
 set +e
-CAPTURED_OUTPUT="$( "$@" 2>&1 )"
-CAPTURED_EXITCODE="$?"
+JH_CAPTURED_OUTPUT="$( "$@" 2>&1 )"
+JH_CAPTURED_EXITCODE="$?"
 set -e
 
-if [[ $CAPTURED_EXITCODE -gt 0 ]]; then
-    echo "$CAPTURED_OUTPUT"
+if [[ $JH_CAPTURED_EXITCODE -gt 0 ]]; then
+    echo "$JH_CAPTURED_OUTPUT"
 fi
 
-exit $CAPTURED_EXITCODE;
+exit $JH_CAPTURED_EXITCODE;

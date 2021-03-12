@@ -14,14 +14,23 @@ ENV SECRETS_FILE=/conf/generated/secrets.properties
 
 COPY --chown=jenkins:jenkins shared/ /conf/
 
+#
+# Add plugins:
+#   - to start up jenkins
+#   - to configure it
+#   - to run jobs
+#
 RUN jenkins-plugin-cli --plugins \
     configuration-as-code \
     job-dsl \
     ssh-slaves \
+    pipeline-github \
+    \
+    blueocean \
+    nodelabelparameter \
+    xml-job-to-job-dsl \
     \
     ansicolor \
-    blueocean \
     lockable-resources \
-    pipeline-github \
     ssh-agent \
-    ws-cleanup
+    ws-cleanup \

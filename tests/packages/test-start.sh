@@ -10,9 +10,6 @@ SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
 ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
 
-# shellcheck source=../../synology/scripts/rsync-parse-command.sh
-. "$ROOT"/synology/scripts/rsync-parse-command.sh
-
 CONSTANT_RUN_TEST="i_am_in_docker"
 
 if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
@@ -31,7 +28,7 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
     assert_success "Level-up docker image - apt-get install" apt install -y lsb-release gpg ca-certificates wget
     log_message "Level-up docker image - done"
 
-    export LOCAL_STORE="/app/repo/"
+    export JH_LOCAL_STORE="/app/repo/"
     # assert_success "start script"
     /app/start
 

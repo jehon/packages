@@ -5,11 +5,11 @@ if [ ! -t 1 ] ; then
 	    2> >(systemd-cat -t "$(realpath "$0")" -p err  )
 fi
 
-REMOTE_ROOT=/volume3/Backups/$(hostname)
-REMOTE_BACKUP=/volume3/transferts/auto/$(hostname)
+JH_REMOTE_ROOT=/volume3/Backups/$(hostname)
+JH_REMOTE_BACKUP=/volume3/transferts/auto/$(hostname)
 
-export REMOTE_ROOT
-export REMOTE_BACKUP
+export JH_REMOTE_ROOT
+export JH_REMOTE_BACKUP
 
 # This key is not delivered with packages
 KEY="/etc/jehon/restricted/synology_auto"

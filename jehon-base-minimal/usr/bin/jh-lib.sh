@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-export PKG_NAME="jehon-base-minimal"
+export JH_PKG_MINIMAL_NAME="jehon-base-minimal"
 
 #
-# SWD (Script Working Directory)
+# JH_SWD (Script Working Directory)
 #   where the script currently execute
 #
 #   /usr/(s)bin
-#   ~/src/packages/$PKG_NAME/usr/(s)bin
+#   ~/src/packages/$JH_PKG_MINIMAL_NAME/usr/(s)bin
 #
-SWD="$( realpath "$( dirname "${BASH_SOURCE[1]}" )" )"
+JH_SWD="$( realpath "$( dirname "${BASH_SOURCE[1]}" )" )"
 
 #
 # Where is this file located ?
@@ -21,26 +21,26 @@ SELF="$( realpath "${BASH_SOURCE[0]}" )"
 # Where is the package source file located
 #
 #
-PKG_FOLDER="$(dirname "$(dirname "$(dirname "$(dirname "$SELF" )" )" )" )"
+JH_PKG_FOLDER="$(dirname "$(dirname "$(dirname "$(dirname "$SELF" )" )" )" )"
 # If SELF is as /usr/bin, then it is not under package source
-if [ "$PKG_FOLDER" = "/" ]; then
-    PKG_FOLDER=""
+if [ "$JH_PKG_FOLDER" = "/" ]; then
+    JH_PKG_FOLDER=""
 fi
 
 #
 # Get the config file location
 #
 #   /usr/(s)bin => $1
-#   ~/src/packages/... => packages/$PKG_NAME/usr/share/$PKG_NAME/etc/$(basename)
+#   ~/src/packages/... => packages/$JH_PKG_MINIMAL_NAME/usr/share/$JH_PKG_MINIMAL_NAME/etc/$(basename)
 #
 #
 jhGetConfigFile() {
-    if [ -z "$PKG_FOLDER" ]; then
+    if [ -z "$JH_PKG_FOLDER" ]; then
         echo "$1"
         return 0
     fi
 
-    CONF_DIR="$PKG_FOLDER/$PKG_NAME/usr/share/$PKG_NAME/etc"
+    CONF_DIR="$JH_PKG_FOLDER/$JH_PKG_MINIMAL_NAME/usr/share/$JH_PKG_MINIMAL_NAME/etc"
     if [ -a "$CONF_DIR/$(basename "$1" )" ]; then
         echo "$CONF_DIR/$(basename "$1" )"
         return 0
@@ -110,8 +110,8 @@ parse_ok_ko() {
     done
 }
 
-export SWD
-export PKG_FOLDER
+export JH_SWD
+export JH_PKG_FOLDER
 
 export JH_SYNOLOGY_IP=192.168.1.9
 export JH_MSG_OK

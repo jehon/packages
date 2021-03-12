@@ -59,7 +59,8 @@ Depends: ${misc:Depends},
 	encfs,
 	thefuck,
 	ufw,
-	git-crypt
+	git-crypt,
+	imagemagick-6.q16
 Description: Jehon minimal hooks
 
 Package: jehon-base-thirdparties
