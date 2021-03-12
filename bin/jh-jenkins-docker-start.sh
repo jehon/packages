@@ -50,6 +50,7 @@ EOT
 docker run --restart unless-stopped --name jenkins \
     -p $WEB:8080 \
     -p 2022:22 \
+    --add-host="host.docker.internal:$REVERSE_IP" \
     --detach \
     jehon/jenkins
 

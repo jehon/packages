@@ -59,7 +59,7 @@ jenkins:
         remoteFS: "/home/${JENKINS_SLAVE_USER}/jenkins-slave"
         launcher:
           ssh:
-            host: "${JENKINS_SLAVE_WSL}"
+            host: "host.docker.internal"
             port: 22
             credentialsId: jenkins-master-to-slave-ssh
             javaPath: /usr/bin/java
