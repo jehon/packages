@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -e
+
+#
+# Loglevel can be:
+#   0 - normal
+#  10 - debug
+#
+if [ "$LOGLEVEL" = "" ]; then
+    LOGLEVEL=0
+fi
+
+export JH_CAPTURED_OUTPUT=""
+export JH_CAPTURED_EXITCODE=0
+
+# while IFS= read -r line; do
+#     JH_CAPTURED_OUTPUT="$JH_CAPTURED_OUTPUT\n$line"
+# done
+
+if [ -z "$1" ]; then
+    echo "Usage: capture <command> [args]+"
+    exit 255
+fi
+
+set +e
+JH_CAPTURED_OUTPUT="$( "$@" 2>&1 )"
+JH_CAPTURED_EXITCODE="$?"
+set -e
+
+if [[ $JH_CAPTURED_EXITCODE -gt 0 ]]; then
+    echo "$JH_CAPTURED_OUTPUT"
+fi
+
+exit $JH_CAPTURED_EXITCODE;

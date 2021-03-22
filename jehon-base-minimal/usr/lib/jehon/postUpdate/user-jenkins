@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if ! id -u jenkins >/dev/null 2>&1; then
+    adduser \
+        --gecos "" \
+        --disabled-password \
+        --ingroup docker \
+        jenkins
+fi

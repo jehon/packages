@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 
-echo "Should run as: $HOST_UID : $HOST_GID"
+# echo "Should run as: $HOST_UID : $HOST_GID"
 
 GN=$( grep ":$HOST_GID:" /etc/group | cut -d ":" -f 1 )
 if [ -z "$GN" ]; then
 	GN="host_group"
-	echo "Creating group $GN"
-	groupadd $GN -g "$HOST_GID"
+	groupadd $GN -g "$HOST_GID" >/dev/null
 fi
 
 if ! id -u "$HOST_UID" >/dev/null 2>/dev/null ; then
 	UN="host_user"
-	echo "Creating user $UN"
-	adduser --system --uid "$HOST_UID" --gid "$HOST_GID" $UN
+	adduser --system --uid "$HOST_UID" --gid "$HOST_GID" $UN >/dev/null
 else
 	UN="$(id -un "$HOST_UID")"
 fi
@@ -22,7 +20,7 @@ if ! grep "$UN" /etc/sudoers ; then
 	echo "$UN    ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers
 fi
 
-echo "Going with user $UN and group $GN"
-echo "Running in bash: '$*'"
+# echo "Going with user $UN and group $GN"
+# echo "Running in bash: '$*'"
 
 runuser -u "$UN" -- bash -c "$*"

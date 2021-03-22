@@ -1,32 +1,37 @@
 #!/usr/bin/env bash
 
-# TODO: use jh-lib.sh
+set -e
 
 # The root of the repository
-ROOT="$(dirname "$(dirname "$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" )" )" )"
-export ROOT
+JH_ROOT="$(dirname "$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" )" )"
+export JH_ROOT
 
-TMP="$ROOT/tmp"
-mkdir -p "$TMP"
-export TMP
+# shellcheck source=../../jehon-base-minimal/usr/bin/jh-lib.sh
+. "$JH_ROOT/jehon-base-minimal/usr/bin/jh-lib.sh"
 
-ORIGINAL_ARGS=( "$@" )
-export ORIGINAL_ARGS
+# TODO: use jh-lib.sh and factorized facilities
 
-TEST_DATA="$ROOT/tests/data"
-export TEST_DATA
+JH_TMP="$JH_ROOT/tmp"
+mkdir -p "$JH_TMP"
+export JH_TMP
 
-THISTMP="$TMP/$(basename "$0")"
-mkdir -p "$THISTMP"
+# JH_ORIGINAL_ARGS=( "$@" )
+# export JH_ORIGINAL_ARGS
+
+JH_TEST_DATA="$JH_ROOT/tests/data"
+export JH_TEST_DATA
+
+JH_TEST_TMP="$JH_TMP/$(basename "$0")"
+mkdir -p "$JH_TEST_TMP"
 
 #
-# Resolve a path according to the root of this git repository
+# Resolve a path according to the JH_ROOT of this git repository
 #
 relative_to_root() {
-	ROOT_RP="$(realpath "$ROOT")"
+	JH_ROOT_RP="$(realpath "$JH_ROOT")"
 	ARG_RP="$(realpath "$1")"
 
-	echo "${ARG_RP#${ROOT_RP}/}"
+	echo "${ARG_RP#${JH_ROOT_RP}/}"
 }
 
 # Create a "3"rd out where all structured messages will go
@@ -74,9 +79,9 @@ log_success() {
 #
 log_failure() {
     (
-		if [ ! -z "$CAPTURED_OUTPUT" ]; then
+		if [ -n "$JH_CAPTURED_OUTPUT" ]; then
         	echo "*** Captured output begin ***"
-        	echo -e "$CAPTURED_OUTPUT"
+        	echo -e "$JH_CAPTURED_OUTPUT"
         	echo "*** Captured output end ***"
 		fi
         echo -e "\e[1;31m\xE2\x9C\x98\e[1;00m Test '\e[1;33m$1\e[00m' failure: \e[1;31m$2\e[1;00m"
@@ -95,8 +100,8 @@ log_failure() {
 # 	# 3..n: arguments
 
 # 	if [ -z "$IN_DOCKER" ]; then
-# 		log_message "Restarting through docker: $0 ${ORIGINAL_ARGS[*]}"
-# 		"$ROOT"/bin/run-in-docker.sh "$1" "$0" "${ORIGINAL_ARGS[@]}"
+# 		log_message "Restarting through docker: $0 ${JH_ORIGINAL_ARGS[*]}"
+# 		"$JH_ROOT"/bin/run-in-docker.sh "$1" "$0" "${JH_ORIGINAL_ARGS[@]}"
 # 		exit $?
 # 	fi
 # }
@@ -138,8 +143,8 @@ assert_success() {
 
 capture() {
 	CAPTURED_HEADER="$1"
-    CAPTURED_OUTPUT=""
-	CAPTURED_EXITCODE=0
+    JH_CAPTURED_OUTPUT=""
+	JH_CAPTURED_EXITCODE=0
 	shift
 
 	if [ -z "$1" ]; then
@@ -147,7 +152,7 @@ capture() {
 		exit 255
 	fi
 
-    CAPTURED_OUTPUT="$( "$@" 2>&1 )" || CAPTURED_EXITCODE="$?" || true
+    JH_CAPTURED_OUTPUT="$( "$@" 2>&1 )" || JH_CAPTURED_EXITCODE="$?" || true
 
     log_debug ""
 	return 0
@@ -159,8 +164,8 @@ capture_file() {
 
 capture_empty() {
 	CAPTURED_HEADER=""
-    CAPTURED_OUTPUT=""
-	CAPTURED_EXITCODE=0
+    JH_CAPTURED_OUTPUT=""
+	JH_CAPTURED_EXITCODE=0
 }
 
 assert_captured_output_contains() {
@@ -177,7 +182,7 @@ assert_captured_output_contains() {
 
 	local FOUND=0
 	local BACKUP_IFS="$IFS"
-	IFS='\n'
+	IFS=$'\n'
 
 	while read -r R; do
         if [[ "$R" =~  $TEST ]]; then
@@ -187,7 +192,7 @@ assert_captured_output_contains() {
             LINE="[  ] $R" >&3
         fi
         log_debug "$LINE"
-	done < <(echo -e "$CAPTURED_OUTPUT")
+	done < <(echo -e "$JH_CAPTURED_OUTPUT")
 	IFS="$BACKUP_IFS"
     log_debug ""
 
@@ -199,17 +204,17 @@ assert_captured_output_contains() {
 }
 
 assert_captured_success() {
-    if [[ $CAPTURED_EXITCODE -gt 0 ]]; then
-        log_failure "$CAPTURED_HEADER: $1" "command return $CAPTURED_EXITCODE"
-		return $RES
+    if [[ $JH_CAPTURED_EXITCODE -gt 0 ]]; then
+        log_failure "$CAPTURED_HEADER: $1" "command return $JH_CAPTURED_EXITCODE"
+		return "$RES"
     fi
     log_success "$CAPTURED_HEADER: $1"
 }
 
 assert_captured_failure() {
-    if [[ $CAPTURED_EXITCODE -eq 0 ]]; then
-        log_failure "$CAPTURED_HEADER: $1" "command return $CAPTURED_EXITCODE (success)"
-		return $RES
+    if [[ $JH_CAPTURED_EXITCODE -eq 0 ]]; then
+        log_failure "$CAPTURED_HEADER: $1" "command return $JH_CAPTURED_EXITCODE (success)"
+		return "$RES"
     fi
     log_success "$CAPTURED_HEADER: $1"
 }
@@ -219,7 +224,7 @@ capture_dump_to_file() {
 		log_error "[capture_dump_to_file] Specify file as [1]"
 		exit 255
 	fi
-	echo -e "$CAPTURED_OUTPUT" > "$1"
+	echo -e "$JH_CAPTURED_OUTPUT" > "$1"
 }
 
 #
@@ -227,5 +232,5 @@ capture_dump_to_file() {
 # Main debug
 #
 #
-log_debug "ROOT: $ROOT"
-log_debug "TMP: $TMP"
+log_debug "JH_ROOT: $JH_ROOT"
+log_debug "JH_TMP: $JH_TMP"

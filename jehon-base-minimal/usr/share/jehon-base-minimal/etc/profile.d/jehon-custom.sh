@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# shellcheck source=../../../../bin/jh-lib.sh
+. jh-lib.sh
+
 # For pip (python) local install
 if [ -x /home/jehon/.local/bin ]; then
 	export PATH=~/.local/bin/:"$PATH"
@@ -42,14 +45,14 @@ __cmd_result() {
     __LAST_RESULT="$?"
     case "$__LAST_RESULT" in
         0)
-            echo -ne "\033[01;32m✓\033[00m"
+            echo -ne "$JH_MSG_OK"
             ;;
         130)
             # Ctrl-C
             echo -ne "\033[31m^C\033[00m"
             ;;
         *)
-            echo -ne "\033[31m✗\033[00m"
+            echo -ne "$JH_MSG_KO"
             ;;
     esac
 

@@ -24,20 +24,11 @@ endef
 
 ROOT = $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 SYNOLOGY_HOST = synology
-GPG_KEY="313DD85CEFADAF7E"
+GPG_KEY = 313DD85CEFADAF7E
+GPG_KEYRING = conf/generated/keyring.gpg
 DOCKERS = $(shell find dockers/ -mindepth 1 -maxdepth 1 -type d )
 
 VERSION_LAST_GIT=$(shell git log -1 --format="%at" | xargs -I{} date --utc -d @{} "+%Y.%m.%d.%H.%M.%S" )
-#
-# git log -1 --format=%cd
-# git log -1 --format="%at" | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S
-# git log -1 --format="%at" | xargs -I{} date -d @{} "+%Y.%m.%d.%H.%M.%S"
-#
-# if [ -z "$(git status --porcelain)" ]; then
-#   # Working directory clean
-# else
-#   # Uncommitted changes
-# fi
 VERSION_CURRENT_TIME_TAG=$(shell date --utc "+%Y%m%d%H%M%S")
 ifeq "$(shell git status --porcelain)" ""
 	VERSION=$(VERSION_LAST_GIT)
@@ -71,22 +62,31 @@ setup-computer:
 	@echo ". $(ROOT)/setup-profile.sh "
 	@echo "in your profile"
 
-# See https://coderwall.com/p/cezf6g/define-your-own-function-in-a-makefile
+#
+# find recursive dependencies in folder $1 (newer than $2)
+#
 # 1: folder where to look
-# 2: base file to have files newer than, to limit the length of the output
+# 2: base file to have files newer than this, to limit the length of the output
+#
+# See https://coderwall.com/p/cezf6g/define-your-own-function-in-a-makefile
 define recursive-dependencies
 	$(shell \
 		if [ -r "$(2)" ]; then \
 			find "$(1)" -name tests_data -prune -o -name tmp -prune -o -newer "$(2)"; \
 		else \
-			echo "$(1)";\
+			echo "$(1)/**";\
 		fi \
 	)
 endef
 
+#
+# Run the command in a docker container
+#
 # 1: command to be run
+#
 define in_docker
-	docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app,type=bind" jehon/jehon-docker-build "$1"
+	@echo "*** in docker: $1 ***"
+	@docker run -e HOST_UID="$(shell id -u)" -e HOST_GID="$(shell id -g)" --mount "source=$(ROOT),target=/app,type=bind" jehon/jehon-docker-build "$1"
 endef
 
 #
@@ -117,6 +117,7 @@ global-dump:
 	$(info * PATH:                     $(shell echo $$PATH))
 	$(info * ROOT:                     $(ROOT))
 	$(info * DOCKERS:                  $(DOCKERS))
+	$(info * GPG_KEYRING:              $(GPG_KEYRING))
 	$(info * GPG_KEY:                  $(GPG_KEY))
 	$(info * SYNOLOGY_HOST:            $(SYNOLOGY_HOST))
 	$(info * VERSION_LAST_GIT:         $(VERSION_LAST_GIT))
@@ -129,26 +130,50 @@ global-dump:
 #
 #
 all-clean: dockers-clean
-all-build: dockers-build
 all-stop: dockers-stop
+
+#
+# Check if dockers does exists or not
+#
+#  for docker, the file dockers/*/.dockerexists track the fact that the docker
+#  image exists. So, we need to check here if it is really the case.
+#
+
+#
+#
+# Docker remove
+#
+#
+*: docker-init
+
+docker-init:
+	@for L in dockers/* ; do I="jehon/$$(basename $$L)"; if docker image ls | grep "$$I" > /dev/null; then echo "$$I"; else rm -f $$L/.dockerbuild ; fi; done
 
 .PHONY: dockers-clean
 dockers-clean: dockers-stop
-	rm -f $(ROOT)/dockers/*.dockerbuild
+	rm -f dockers/*/.dockerbuild
 
 .PHONY: dockers-build
-dockers-build: $(addsuffix .dockerexists, $(DOCKERS)) $(addsuffix .dockerbuild, $(DOCKERS))
+dockers-build: $(addsuffix /.dockerbuild,$(DOCKERS))
 
-%.dockerexists:
-	@if [[ -r "$@" ]] && [[ "$$(docker images -q "jehon/$@" 2>/dev/null)" == "" ]]; then \
-		rm "$@.dockerbuild"; \
-	fi ;
+.PHONY: dockers/*
+dockers/*: dockers/*/.dockerbuild
 
-%.dockerbuild: $$(call recursive-dependencies,dockers/$$*,$$@)
-	@echo "Building $@ from $(notdir $(basename $@))"
-	cd $(basename $@) && \
-		docker build -t "jehon/$(notdir $(basename $@))" .
-	@touch "$@"
+$(addsuffix /.dockerbuild,$(DOCKERS)): $$(call recursive-dependencies,dockers/$$*,$$@)
+
+	@DNAME=$$(dirname "$@"); FNAME=$$(basename $$DNAME); INAME="jehon/$$FNAME"; \
+	echo "Building $$INAME"; \
+	cd "$$DNAME" && docker build -t "$$INAME" . ;
+	touch "$@"
+
+# Enrich dependencies
+dockers/jenkins/.dockerbuild: \
+	dockers/jenkins/shared/generated/authorized_keys \
+	dockers/jenkins/shared/generated/git-crypt-key \
+	dockers/jenkins/shared/generated/jenkins-github-ssh \
+	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
+	dockers/jenkins/shared/generated/secrets.properties \
+	dockers/jenkins/shared/generated/timezone
 
 .PHONY: dockers-stop
 dockers-stop:
@@ -188,6 +213,123 @@ externals/shuttle-go/shuttle-go: externals/shuttle-go/*.go
 
 #
 #
+# Files
+#
+#
+
+all-clean: files-clean
+all-build: files-build
+all-test: files-test
+all-lint: files-lint
+
+files-clean:
+	rm -fr conf/generated
+	rm -fr dockers/jenkins/shared/generated/
+	rm -f jehon-base-minimal/usr/bin/shuttle-go
+	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+	rm -f synology/ssh/root/authorized_keys
+
+.PHONY: files-build
+files-build: \
+		dockers/jenkins/shared/generated/authorized_keys \
+		dockers/jenkins/shared/generated/git-crypt-key \
+		dockers/jenkins/shared/generated/jenkins-github-ssh \
+		dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
+		dockers/jenkins/shared/generated/secrets.properties \
+		dockers/jenkins/shared/generated/timezone \
+		jehon-base-minimal/usr/bin/shuttle-go \
+		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
+		synology/ssh/root/authorized_keys
+
+	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find bin -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal/usr/bin -exec "chmod" "+x" "{}" ";"
+	find jehon-base-minimal/usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
+
+.PHONY: files-test
+files-test: files-shell-test
+
+.PHONY: files-shell-test
+files-shell-test: files-build
+	run-parts --verbose --regex "test-.*" ./tests/shell
+
+.PHONY: files-lint
+files-lint:
+	@shopt -s globstar; \
+	RES=0; \
+	for f in jehon-*/**/*.sh bin/**/*.sh; do \
+		shellcheck -x "$$f"; RES=$$? || $$RES; \
+	done ; \
+	exit $$RES
+
+
+$(GPG_KEYRING): conf/private/packages-gpg
+	@mkdir -p "$(dir $@)"
+	@rm -f $(GPG_KEYRING)
+	gpg --no-default-keyring --keyring="$@" --import "$<"
+
+dockers/jenkins/shared/generated/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+	@mkdir -p "$(dir $@)"
+	cat "$<" | grep -v -e "^#" | grep -v -e "^\$$"> "$@"
+
+dockers/jenkins/shared/generated/secrets.properties: conf/private/jenkins-secrets.properties
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/git-crypt-key: conf/private/git-crypt-key
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/jenkins-github-ssh: conf/private/jenkins-github-ssh
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: conf/private/jenkins-master-to-slave-ssh
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/secrets.yml: conf/private/jenkins-secrets.yml
+	@mkdir -p "$(dir $@)"
+	cp "$<" "$@"
+
+dockers/jenkins/shared/generated/timezone: jehon-base-minimal/usr/share/jehon-base-minimal/etc/timezone
+	@mkdir -p "$(dir $@)"
+	cat "$<" | tr -d '\n' > "$@"
+
+jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
+	@mkdir -p "$(dir $@)"
+	cp externals/shuttle-go/shuttle-go "$@"
+
+jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $(call recursive-dependencies,conf/keys/admin,$@)
+	@mkdir -p "$(dir $@)"
+	( \
+		echo -e "\n\n#\n#\n# Access \n#\n#   Generated on $$(date)\n#\n";\
+		for F in conf/keys/admin/* ; do \
+			echo -e "\\n# $$F"; \
+			cat "$$F"; \
+			echo ""; \
+		done \
+	) > "$@"; \
+
+synology/ssh/root/authorized_keys: \
+		$$(call recursive-dependencies,conf/synology-backup,$$@) \
+		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+
+	(\
+		cat jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon; \
+		echo -e "\n\n#\n#\n# Backups \n#\n#   Generated on $$(date)\n#\n";\
+		for F in conf/synology-backup/* ; do \
+			echo -e "\\n# $$F"; \
+			echo -ne "command=\"KEY=$$(basename "$$F") /volume3/scripts/synology/rsync-vf.sh\" ";\
+			cat "$$F" | tr --delete "\n\r"; \
+			echo ""; \
+		done \
+	) > "$@"; \
+
+
+#
+#
 # Node
 #
 #
@@ -205,12 +347,15 @@ node_modules/.dependencies: package.json package-lock.json
 #
 #
 all-clean: packages-clean
+	rm -fr tmp
+
 all-build: packages-build
-#all-test: packages-test
+all-test: packages-test
 
 .PHONY: packages-clean
 packages-clean:
 	make -f debian/rules clean
+	rm -f  $(ROOT)/debian/jehon-base-minimal.links
 	rm -f  $(ROOT)/debian/*.debhelper
 	rm -f  $(ROOT)/debian/*.substvars
 	rm -fr $(ROOT)/repo
@@ -219,10 +364,13 @@ packages-clean:
 .PHONY: packages-build
 packages-build: repo/Release
 
-repo/Release.gpg: repo/Release
-	gpg --sign --armor --detach-sign --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
+packages-test: packages-build
+	run-parts --verbose --regex "test-.*" ./tests/packages
 
-repo/Release: repo/Packages dockers/jehon-docker-build.dockerbuild
+repo/Release.gpg: repo/Release $(GPG_KEYRING)
+	gpg --sign --armor --detach-sign --no-default-keyring --keyring=$(GPG_KEYRING) --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
+
+repo/Release: repo/Packages dockers/jehon-docker-build/.dockerbuild
 	$(call in_docker,cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release . > Release)
 
 repo/Packages: repo/index.html repo/jehon-base-minimal.deb
@@ -240,24 +388,7 @@ repo/jehon-base-minimal.deb: repo/.built
 # create jehon-base-minimal.deb for /start...
 	LD="$$( find repo/ -name "jehon-base-minimal_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
 
-repo/.built: dockers/jehon-docker-build.dockerbuild \
-		debian/changelog \
-		jehon-base-minimal/usr/bin/shuttle-go
-
-	$(call itself,shell-build)
-	@rm -fr repo
-	mkdir -p "$(dir $@)"
-#echo "************ build indep ******************"
-	$(call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=binary && cp ../jehon-*.deb /app/repo/)
-#echo "************ build arch:armhf *************"
-#call in_docker,rsync -a /app /tmp/ && cd /tmp/app && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/)
-	touch "$@"
-
-jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
-	mkdir -p "$(dir $@)"
-	cp externals/shuttle-go/shuttle-go "$@"
-
-debian/changelog: dockers/jehon-docker-build.dockerbuild \
+repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		debian/control \
 		debian/*.postinst \
 		debian/*.install \
@@ -265,43 +396,27 @@ debian/changelog: dockers/jehon-docker-build.dockerbuild \
 		debian/*.triggers \
 		debian/jehon-base-minimal.links \
 		jehon-base-minimal/usr/bin/shuttle-go \
-		$(shell find . -path "./jehon-*" -type f)
+		$(shell find . -path "./jehon-*" -type f) \
+		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
 
-	$(call in_docker,gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main)
+	$(call itself,files-build)
+	@rm -fr repo
+	@mkdir -p "$(dir $@)"
+#echo "************ build indep ******************"
+	$(call in_docker,rsync -a /app /tmp/ \
+		&& cd /tmp/app \
+		&& gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main \
+		&& debuild -rsudo --no-lintian -uc -us --build=binary \
+		&& cp ../jehon-*.deb /app/repo/ \
+	)
+#echo "************ build arch:armhf *************"
+# && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/
+	touch "$@"
 
-debian/jehon-base-minimal.links: Makefile \
-		$(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
+debian/jehon-base-minimal.links: $(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
 
 	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
 		&& find * -type "f,l" -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
-
-#
-#
-# Shell
-#
-#
-all-build: shell-build
-all-test: shell-test
-all-lint: shell-lint
-
-shell-build:
-	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
-	find bin -name "*.sh" -exec "chmod" "+x" "{}" ";"
-	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
-
-.PHONY: shell-test
-shell-test: shell-build
-	run-parts --verbose --regex "test-.*" ./tests/shell/tests
-
-.PHONY: shell-lint
-shell-lint:
-	@shopt -s globstar; \
-	RES=0; \
-	for f in jehon-*/**/*.sh bin/**/*.sh; do \
-		shellcheck -x "$$f"; RES=$$? || $$RES; \
-	done ; \
-	exit $$RES
-
 
 ######################################
 #
@@ -345,7 +460,7 @@ deploy-synology:
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
 		./synology/ssh/root/ $(SYNOLOGY_HOST):/root/.ssh \
 		--rsync-path=/bin/rsync \
-		--chmod=F644
+		--chmod=F644 --chmod=D755
 
 # Not using vf-
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \

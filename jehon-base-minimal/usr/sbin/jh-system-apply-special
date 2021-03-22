@@ -2,29 +2,39 @@
 
 shopt -s nullglob
 
+# Where config files are present
 ROOT=/usr/lib/jehon/
+# Where we store the patching cache
 CACHE=/var/cache/jehon
 
 mkdir -p "$CACHE"
-
 
 ################################
 #
 # Patch
 #
 
+# The files that we are patching
 PATCHING="$CACHE/patching-files.txt"
+# The files that where previously patched (format: "file:tag")
 PATCHED="$CACHE/patched-files.txt"
 
-# Truncate the file
-> "$PATCHING"
+# We did not patch already
+truncate --size 0 "$PATCHING"
 
-# Patch
+#
+# For all files in $ROOT/patch, do patch it
+#    and add it to the PATCHING list
+#
 for S in "$ROOT"/patch/* ; do
 	/usr/bin/jh-patch-file.sh "$S" >> "$PATCHING"
 done
 
-# Unpatch non patched files
+#
+# Unpatch files
+#   For all files that where previously patched (see list in $PATCHED)
+#   and that are not patched anymore (not in $PATCHING)
+#
 while read L ; do
 	I=${L:2}
 	FILE=${I%:*}
@@ -37,7 +47,9 @@ while read L ; do
 	/usr/bin/jh-patch-file.sh "uninstall" "$FILE" "$TAG"
 done < <( diff --new-file "$PATCHED" "$PATCHING" | grep "<" )
 
-# echo "Commiting the list of patched files"
+#
+# Commiting the list of patched files
+#
 cp "$PATCHING" "$PATCHED"
 rm -f "$PATCHING"
 
@@ -48,5 +60,5 @@ rm -f "$PATCHING"
 
 for S in "$ROOT"/postUpdate/* ; do
 	chmod +x "$S"
-	$S
+	"$S" || echo "** Failed in $S **"
 done

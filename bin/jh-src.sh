@@ -2,7 +2,7 @@
 
 shopt -s nullglob
 
-ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+JH_THIS_ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 #
 # must_run: 0 -> call the topic on this one
@@ -14,7 +14,7 @@ ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 #
 
 myRunParts() {
-	for F in "$ROOT"/jh-src.d/*.sh; do
+	for F in "$JH_THIS_ROOT"/jh-src.d/*.sh; do
 		# shellcheck source=/dev/null
 		if ! source "$F" "$@"; then
 			return 1
@@ -28,7 +28,7 @@ myRunParts prepare "$@"
 
 treatDir() {
 	# Treat current directory
-	for F in "$ROOT"/jh-src.d/*.sh; do
+	for F in "$JH_THIS_ROOT"/jh-src.d/*.sh; do
 		# shellcheck source=/dev/null
 		if source "$F" "must_run"; then
 			# shellcheck source=/dev/null

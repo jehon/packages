@@ -3,14 +3,17 @@ pipeline {
   options {
     ansiColor('xterm')
     skipStagesAfterUnstable()
+    disableConcurrentBuilds()
+    timeout(time: 15, unit: 'MINUTES')
   }
   environment {
-    PACKAGES_GPG_FILE = credentials('packages-gpg-key')
+    GIT_CRYPT_KEY = credentials('git-crypt-key')
   }
   stages {
     stage('setup') {
       steps {
-        sh 'gpg --import $PACKAGES_GPG_FILE'
+        sh 'md5sum $GIT_CRYPT_KEY'
+        sh 'git-crypt unlock $GIT_CRYPT_KEY'
         sh 'make all-setup'
       }
     }
@@ -26,17 +29,17 @@ pipeline {
     }
     stage('sign') {
       steps {
-        sh 'make repo/Release.gpg'
+        sh 'make --debug repo/Release.gpg'
       }
     }
     stage('test') {
       steps {
-        sh 'make all-test'
+        sh 'make --debug all-test'
       }
     }
     stage('lint') {
       steps {
-        sh 'make all-lint'
+        sh 'make --debug all-lint'
       }
     }
     stage('Deploy') {
@@ -63,12 +66,12 @@ pipeline {
 
           // See username on top right -> credentials
           // Thanks to https://stackoverflow.com/a/44369176/1954789
-          sshagent(credentials: ['github-ssh']) {
+          sshagent(credentials: ['jenkins-github-ssh']) {
             // GIT_URL, GIT_USERNAME, GIT_PASSWORD => withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
             // sh 'echo "****** GIT_URL_SSH: $GIT_URL_SSH ******"'
             // sh 'git remote -v'
 
-            sh 'GIT_ORIGIN=sshorigin make deploy-github'
+            sh 'GIT_ORIGIN=sshorigin make --debug deploy-github'
           }
         }
       }

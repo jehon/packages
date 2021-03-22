@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+if ! find /etc/ssh/ssh_host_ &>/dev/null ; then
+    echo "Generating host keys for ssh"
+    cd /etc/ssh && ssh-keygen -A
+fi

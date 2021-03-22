@@ -108,7 +108,7 @@ function backupSecurity() {
 	backupSecurityOne "/home/jehon/.ssh/" "home-jehon"
 
 	# Dev secrets
-	backupSecurityOne "$PKG_FOLDER/../bin/" "home-jehon-secrets"
+	backupSecurityOne "$JH_PKG_FOLDER/../bin/" "home-jehon-secrets"
 
 	backupSecurityOne "root@kiosk:/opt/kiosk/etc" "kiosk-opt-etc"
 

@@ -3,9 +3,10 @@
 set -e
 
 # Script Working Directory
-TWD="$( dirname "${BASH_SOURCE[0]}" )"
+SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
-. "$TWD/../lib/test-helpers.sh"
+# shellcheck source=../lib/test-helpers.sh
+. "$SWD/../lib/test-helpers.sh"
 
 capture "ls /" ls /
 assert_captured_success "should be successfull"
