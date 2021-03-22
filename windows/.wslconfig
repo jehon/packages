@@ -1,0 +1,17 @@
+#
+# See https://docs.microsoft.com/en-us/windows/wsl/release-notes#build-18945
+# See https://docs.microsoft.com/en-us/windows/wsl/wsl-config
+#
+# Store to c:\Users\jho\.wslconfig
+#
+#
+# To activate changes:
+#   $ wsl --shutdown
+#
+
+[wsl2]
+memory=6GB                 # How much memory to assign to the WSL2 VM.
+processors=2               # How many processors to assign to the WSL2 VM.
+swap=0
+# swap=6Gb                   # How much swap space to add to the WSL2 VM. 0 for no swap file.
+# swapFile=C:\wsl.swap       # An absolute Windows path to the swap vhd.
