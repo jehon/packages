@@ -33,6 +33,8 @@ jenkins:
     # - "JNLP4-connect"
     - "Ping"
   views:
+    - all:
+        name: "All"
     - list:
         name: "Master's"
         recurse: true
