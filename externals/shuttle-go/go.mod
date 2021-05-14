@@ -3,7 +3,7 @@ module github.com/abourget/shuttle-go
 go 1.13
 
 require (
-	github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802
+	github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gvalkov/golang-evdev v0.0.0-20160925111049-87c03aa1a370
 	github.com/hypebeast/go-osc v0.0.0-20200115085105-85fee7fed692
