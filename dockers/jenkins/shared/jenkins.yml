@@ -171,7 +171,9 @@ jobs:
       cd "$ROOT" || exit 1
       docker run --rm -v "$(pwd):/app" -w /app bash chmod -R a+rwX .
       rm -fr "$ROOT/workspace"
-      mkdir "$ROOT/workspace"
+      mkdir -p "$ROOT/workspace"
+      mkdir -p "$ROOT/workspace/workspace clean up"
+
           ''')
         }
         steps {
