@@ -1,16 +1,16 @@
 Package: jehon-base-minimal
 Source: jehon-debs
-Version: 2021.05.10.13.39.32
+Version: 2021.05.17.07.19.38
 Architecture: all
 Maintainer: Jean Honlet <marielineet.jean@gmail.com>
 Installed-Size: 255
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: debconf (>= 0.5) | debconf-2.0, debconf, sed, bash, sudo, sshpass, curl, lsb-release, apt-transport-https, debfoster, ntp, openssh-server, openssh-client, nmap, parted, screen, multitail, less, fdupes, cifs-utils, htop, libexiv2-dev, exiftran, python-pkg-resources, jq, samba, lftp, entr, gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly, exif, libimage-exiftool-perl, gnupg2, dirmngr, rsync, git, gettext-base, xvfb, shellcheck, libnss3-dev, libatk1.0-dev, encfs, thefuck, ufw, git-crypt, imagemagick-6.q16, make, gcc, xdotool, exiv2, chromium-browser, virt-what, dialog
-Filename: jehon-base-minimal.deb
-Size: 40956
-MD5sum: c173e72518810d5573cc20d5e4758f80
-SHA1: cc8027139337e7e2519c341ca2fa902549abda54
-SHA256: 5f11c44c3665761985099858484a028c5b8d25faca9865c3e004a264527c234a
+Filename: jehon-base-minimal_2021.05.17.07.19.38_all.deb
+Size: 41000
+MD5sum: 18ddfaa9c10b5e96596cb7c768d95c99
+SHA1: cc7cb753f372503acd62e4d2fe2541160a64776a
+SHA256: be5d6c3fe1469d704d1384cafd026afda5da79bfd1fbc87d283d8f8188dfe7b8
 Section: unknown
 Priority: extra
 Homepage: http/www.bitbucket.org/jehon/packages/
@@ -18,17 +18,17 @@ Description: Jehon minimal hooks
 
 Package: jehon-base-minimal
 Source: jehon-debs
-Version: 2021.05.10.13.39.32
+Version: 2021.05.17.07.19.38
 Architecture: all
 Maintainer: Jean Honlet <marielineet.jean@gmail.com>
 Installed-Size: 255
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: debconf (>= 0.5) | debconf-2.0, debconf, sed, bash, sudo, sshpass, curl, lsb-release, apt-transport-https, debfoster, ntp, openssh-server, openssh-client, nmap, parted, screen, multitail, less, fdupes, cifs-utils, htop, libexiv2-dev, exiftran, python-pkg-resources, jq, samba, lftp, entr, gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly, exif, libimage-exiftool-perl, gnupg2, dirmngr, rsync, git, gettext-base, xvfb, shellcheck, libnss3-dev, libatk1.0-dev, encfs, thefuck, ufw, git-crypt, imagemagick-6.q16, make, gcc, xdotool, exiv2, chromium-browser, virt-what, dialog
-Filename: jehon-base-minimal_2021.05.10.13.39.32_all.deb
-Size: 40956
-MD5sum: c173e72518810d5573cc20d5e4758f80
-SHA1: cc8027139337e7e2519c341ca2fa902549abda54
-SHA256: 5f11c44c3665761985099858484a028c5b8d25faca9865c3e004a264527c234a
+Filename: jehon-base-minimal.deb
+Size: 41000
+MD5sum: 18ddfaa9c10b5e96596cb7c768d95c99
+SHA1: cc7cb753f372503acd62e4d2fe2541160a64776a
+SHA256: be5d6c3fe1469d704d1384cafd026afda5da79bfd1fbc87d283d8f8188dfe7b8
 Section: unknown
 Priority: extra
 Homepage: http/www.bitbucket.org/jehon/packages/
@@ -36,17 +36,17 @@ Description: Jehon minimal hooks
 
 Package: jehon-base-thirdparties
 Source: jehon-debs
-Version: 2021.05.10.13.39.32
+Version: 2021.05.17.07.19.38
 Architecture: all
 Maintainer: Jean Honlet <marielineet.jean@gmail.com>
 Installed-Size: 10
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: jehon-base-minimal, nodejs
-Filename: jehon-base-thirdparties_2021.05.10.13.39.32_all.deb
-Size: 3252
-MD5sum: 92f8bf70145920b0cc155c3b987e4ddf
-SHA1: b4b13ac7374d600c9c280710747a3f6aeb2291a8
-SHA256: da5d5638a387e731cb8ddd6cfd738c45ce9e308212f1679c370ce13515020fc6
+Filename: jehon-base-thirdparties_2021.05.17.07.19.38_all.deb
+Size: 3288
+MD5sum: be47e0ac68f5fdb74b2595e7f22b121d
+SHA1: 351c807e99e257b5dd716e013c54b9277bacd17e
+SHA256: d6ab181c116ae472634611b20a6acdd4a724651a27d405d02a84f94b55ae6f7d
 Section: unknown
 Priority: extra
 Homepage: http/www.bitbucket.org/jehon/packages/
@@ -55,16 +55,16 @@ Description:
 
 Package: jehon-env-desktop
 Source: jehon-debs
-Version: 2021.05.10.13.39.32
+Version: 2021.05.17.07.19.38
 Architecture: all
 Maintainer: Jean Honlet <marielineet.jean@gmail.com>
 Installed-Size: 10
 Depends: jehon-base-minimal, git-cola, xclip, gparted, pdfsam, activity-log-manager, terminator, xtermcontrol, meld, exfat-fuse, exfat-utils, xprintidle, snapd, libgtk2.0-0, libnotify-dev, libgconf-2-4, libnss3, libxss1, libasound2, google-chrome-stable
-Filename: jehon-env-desktop_2021.05.10.13.39.32_all.deb
-Size: 3360
-MD5sum: cc1e2f041cd2c2ec305afc035621bed2
-SHA1: 9302a5277f8e86813865159073c03c8cc336525e
-SHA256: e69aeab292b0a3deaacb02b1780998291ae4d7abfc1908b93c67c1ccf154eb88
+Filename: jehon-env-desktop_2021.05.17.07.19.38_all.deb
+Size: 3388
+MD5sum: 8796b258ad5d54853cc7d9557d0a58de
+SHA1: 6bb786f42c29a4961165b383c19c9d5791fdc4dc
+SHA256: 36cb6b0722aec6e34882d30f9c56ae3bfb7af60d63e8803736c85285ef10f6d1
 Section: unknown
 Priority: extra
 Homepage: http/www.bitbucket.org/jehon/packages/
@@ -72,16 +72,16 @@ Description: Jehon environnement
 
 Package: jehon-system-tv
 Source: jehon-debs
-Version: 2021.05.10.13.39.32
+Version: 2021.05.17.07.19.38
 Architecture: all
 Maintainer: Jean Honlet <marielineet.jean@gmail.com>
 Installed-Size: 11
 Depends: jehon-base-minimal, build-essential, rbp-userland-dev-osmc, libvncserver-dev, libconfig++-dev
-Filename: jehon-system-tv_2021.05.10.13.39.32_all.deb
-Size: 3588
-MD5sum: 8aeabf58c01244989df1821c36424717
-SHA1: f55b8f1fe55aa17f365cded7d3699212b4318d72
-SHA256: 4352fcec0717389f7b2bb3f4d14357dc243f66d82c20127459448f12e75db4de
+Filename: jehon-system-tv_2021.05.17.07.19.38_all.deb
+Size: 3624
+MD5sum: b15353995ed663716fc6a37cf277fc95
+SHA1: 575f8bb95cbbfcbf5937b806432a19f7d082a57f
+SHA256: 38993c8f15a6b53441c848c90731889e186b1212cfc33e633c0cf9ba3f328cdd
 Section: unknown
 Priority: extra
 Homepage: http/www.bitbucket.org/jehon/packages/
