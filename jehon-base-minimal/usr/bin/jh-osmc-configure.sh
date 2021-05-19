@@ -71,3 +71,4 @@ EOC
 
 # envsubst < "$SWD"/../lib/jehon/src/sources.xml > /home/osmc/.kodi/userdata/sources.xml
 chown osmc.osmc /home/osmc/.kodi/userdata/sources.xml
+chown osmc.osmc /home/osmc/.kodi/userdata/keymaps/zKeymap.xml
