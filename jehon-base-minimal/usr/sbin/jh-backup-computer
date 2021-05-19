@@ -5,24 +5,54 @@ if [ ! -t 1 ] ; then
 	    2> >(systemd-cat -t "$(realpath "$0")" -p err  )
 fi
 
-JH_REMOTE_ROOT=/volume3/Backups/$(hostname)
-JH_REMOTE_BACKUP=/volume3/transferts/auto/$(hostname)
+set -e
+set -o pipefail
 
-export JH_REMOTE_ROOT
-export JH_REMOTE_BACKUP
+CFG_FILE="/etc/jehon/restricted/env"
 
 # This key is not delivered with packages
 KEY="/etc/jehon/restricted/synology_auto"
-
-# TODO: use get config file
-
 if [ -r "$KEY" ]; then
-	/usr/bin/jh-rsync-backup.sh \
-		/ root@synology:/synology/backup \
-		-e "ssh -i $KEY" \
-		--filter ". /etc/jehon/jh-rsync-backup-computer-filter" \
-
-else
-	echo "No $KEY found, no backup will run"
-#	exit 1
+	echo "Please remove old key: $KEY"
+	echo "sudo rm -f $KEY"
+	exit 1
 fi
+
+if [ ! -r "$CFG_FILE" ]; then
+	echo "$CFG_FILE not found, not backuping"
+	exit 0
+fi
+
+# shellcheck source=/dev/null
+. "$CFG_FILE"
+
+if [ -z "$JH_BACKUP_USER" ]; then
+	echo "Need a JH_BACKUP_USER and a JH_BACKUP_PASS in $CFG_FILE"
+	exit 0
+fi
+
+if [ -z "$JH_BACKUP_PASS" ]; then
+	echo "Need a JH_BACKUP_PASS in $CFG_FILE"
+	exit 1
+fi
+
+DAY=$( date "+%Y-%m-%d" )
+(
+	set -x
+	sshpass -p"$JH_BACKUP_PASS" \
+		rsync \
+			-e "ssh" \
+			--filter ". /etc/jehon/jh-rsync-backup-computer-filter" \
+			--recursive --times \
+			--omit-dir-times \
+			--itemize-changes \
+			--modify-window=2 \
+			--one-file-system \
+			--delete --delete-excluded \
+			--filter ": .jhrsync-filter" \
+			--filter ":- .gitignore" \
+			--backup --backup-dir "/backups/$DAY" \
+			/ "$JH_BACKUP_USER"@192.168.1.9::home/backups/root/
+) | ( grep -v "skipping non-regular file" || test $? = 1 )
+
+
