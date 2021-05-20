@@ -291,21 +291,8 @@ jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $
 		done \
 	) > "$@"; \
 
-synology/ssh/root/authorized_keys: \
-		$$(call recursive-dependencies,conf/synology-backup,$$@) \
-		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
-
-	(\
-		cat jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon; \
-		echo -e "\n\n#\n#\n# Backups \n#\n#   Generated on $$(date)\n#\n";\
-		for F in conf/synology-backup/* ; do \
-			echo -e "\\n# $$F"; \
-			echo -ne "command=\"KEY=$$(basename "$$F") /volume3/scripts/synology/rsync-vf.sh\" ";\
-			cat "$$F" | tr --delete "\n\r"; \
-			echo ""; \
-		done \
-	) > "$@"; \
-
+synology/ssh/root/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+	cp jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon "$@"
 
 #
 #
