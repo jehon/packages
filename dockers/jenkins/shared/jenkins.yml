@@ -36,9 +36,9 @@ jenkins:
     - all:
         name: "All"
     - list:
-        name: "Master's"
+        name: "Main"
         recurse: true
-        includeRegex: "master"
+        includeRegex: "main"
         jobFilters:
         - "gitHubBranchFilter"
         # columns:
