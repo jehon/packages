@@ -1,1 +1,3 @@
-/usr/sbin/jh-backup-computer
+#!/usr/bin/env bash
+
+jh-backup-computer
