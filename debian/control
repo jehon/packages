@@ -1,12 +1,12 @@
 Source: jehon-debs
 Section: unknown
 Priority: extra
-Maintainer: Jean Honlet <marielineet.jean@gmail.com>
+Maintainer: Jean Honlet <jeanhonlet@gmail.com>
 Build-Depends: debhelper (>= 10)
 Standards-Version: 4.1.2
-Homepage: http://www.bitbucket.org/jehon/packages/
-Vcs-Git: git@bitbucket.org:jehon/packages.git
-Vcs-Browser: https://bitbucket.org/jehon/packages/
+Homepage: http://www.github.org/jehon/packages/
+Vcs-Git: git@github.org:jehon/packages.git
+Vcs-Browser: https://wwW.github.org/jehon/packages/
 
 
 ##########################
