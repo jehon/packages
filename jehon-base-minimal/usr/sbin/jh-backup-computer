@@ -54,5 +54,3 @@ DAY=$( date "+%Y-%m-%d" )
 			--backup --backup-dir "/backups/$DAY" \
 			/ "$JH_BACKUP_USER"@192.168.1.9::home/backups/root/
 ) | ( grep -v "skipping non-regular file" || test $? = 1 )
-
-
