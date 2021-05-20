@@ -7,10 +7,10 @@ Installed-Size: 253
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: debconf (>= 0.5) | debconf-2.0, debconf, sed, bash, sudo, sshpass, curl, lsb-release, apt-transport-https, debfoster, ntp, openssh-server, openssh-client, nmap, parted, screen, multitail, less, fdupes, cifs-utils, htop, libexiv2-dev, exiftran, python-pkg-resources, jq, samba, lftp, entr, gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly, exif, libimage-exiftool-perl, gnupg2, dirmngr, rsync, git, gettext-base, xvfb, shellcheck, libnss3-dev, libatk1.0-dev, encfs, thefuck, ufw, git-crypt, imagemagick-6.q16, make, gcc, xdotool, exiv2, chromium-browser | chromium, virt-what, dialog
 Filename: jehon-base-minimal_2021.05.20.12.11.56_all.deb
-Size: 40836
-MD5sum: 9253f6e756fe75e7a47bf06eeffee94b
-SHA1: 6033ce4eb1455191e322443ad9dc7623fc405ee7
-SHA256: fd105a65c85ee9e0a6aa3fa69e1ae31f9fbc06cc0b5f3d4490e1f562e1a6bf1a
+Size: 40832
+MD5sum: 461ca9d19f02950b8b3f0a9df7229b54
+SHA1: 11c4b27517b470be5d52566c26e1236569bd47cf
+SHA256: b8a9d6739248ac71a0ce7f771534e80dd566ed96d8acae94bbe0c8a746f3eb57
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -25,10 +25,10 @@ Installed-Size: 253
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: debconf (>= 0.5) | debconf-2.0, debconf, sed, bash, sudo, sshpass, curl, lsb-release, apt-transport-https, debfoster, ntp, openssh-server, openssh-client, nmap, parted, screen, multitail, less, fdupes, cifs-utils, htop, libexiv2-dev, exiftran, python-pkg-resources, jq, samba, lftp, entr, gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly, exif, libimage-exiftool-perl, gnupg2, dirmngr, rsync, git, gettext-base, xvfb, shellcheck, libnss3-dev, libatk1.0-dev, encfs, thefuck, ufw, git-crypt, imagemagick-6.q16, make, gcc, xdotool, exiv2, chromium-browser | chromium, virt-what, dialog
 Filename: jehon-base-minimal.deb
-Size: 40836
-MD5sum: 9253f6e756fe75e7a47bf06eeffee94b
-SHA1: 6033ce4eb1455191e322443ad9dc7623fc405ee7
-SHA256: fd105a65c85ee9e0a6aa3fa69e1ae31f9fbc06cc0b5f3d4490e1f562e1a6bf1a
+Size: 40832
+MD5sum: 461ca9d19f02950b8b3f0a9df7229b54
+SHA1: 11c4b27517b470be5d52566c26e1236569bd47cf
+SHA256: b8a9d6739248ac71a0ce7f771534e80dd566ed96d8acae94bbe0c8a746f3eb57
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -43,10 +43,10 @@ Installed-Size: 10
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: jehon-base-minimal, nodejs
 Filename: jehon-base-thirdparties_2021.05.20.12.11.56_all.deb
-Size: 3448
-MD5sum: 770699fea024ef2a957fc5f7e4b850cb
-SHA1: dde537c8cf7bed3e320369ec476c277066ac3f26
-SHA256: a59147e78ce5cc873a62c8d94257b854b47ae0c850fed8697f7dee6b89e16ae2
+Size: 3444
+MD5sum: 4c248f8f376a9358dbad856232cce92d
+SHA1: 31ab35abe0ab3aeb3e0da697aeab8947fbbcb31e
+SHA256: 0e0b0aeb30b2053b8d415904cfe31e1471ecb677f3787418892421e936016d10
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -61,10 +61,10 @@ Maintainer: Jean Honlet <jeanhonlet@gmail.com>
 Installed-Size: 10
 Depends: jehon-base-minimal, git-cola, xclip, gparted, pdfsam, activity-log-manager, terminator, xtermcontrol, meld, exfat-fuse, exfat-utils, xprintidle, snapd, libgtk2.0-0, libnotify-dev, libgconf-2-4, libnss3, libxss1, libasound2, google-chrome-stable
 Filename: jehon-env-desktop_2021.05.20.12.11.56_all.deb
-Size: 3548
-MD5sum: e1ebf43002ed3ef63f82e6d531a89344
-SHA1: 726d4670d59b0e56fcb39f9534d8a3631a6b8ae5
-SHA256: 2a07efef7c7bfd1f6d2d6449d16700db055929ca7de308c2b39480bdbddf236b
+Size: 3544
+MD5sum: fc298c382003f5976385a9fecc81ef64
+SHA1: 5c9feb1e59dad2f8c9ec0f6abd1e5e46fb15928c
+SHA256: 3edb035fa2b21efcda8d108007817dad81a5a5f0952ddcbf69e66b491367506b
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -79,9 +79,9 @@ Installed-Size: 11
 Depends: jehon-base-minimal, build-essential, rbp-userland-dev-osmc, libvncserver-dev, libconfig++-dev
 Filename: jehon-system-tv_2021.05.20.12.11.56_all.deb
 Size: 3780
-MD5sum: d445a369e2fea357b887e4fce5f6e61a
-SHA1: ae1f9b2a68ccfe65ff9ed90ab5ea59adc323b44c
-SHA256: ce3cacad32b1dd793ad607d2e1e96a910a9cc1a210b05966ca3705a8286f963b
+MD5sum: cf4f070d005286bbb3c9b8108627e686
+SHA1: 1b10f33c17ba21a8948ea1d2c9ac76c054d4bf03
+SHA256: 1f8b87efbc1c964ee6e23dd8b5fa268c60d7713270e0e240f6f324d06df6c8fa
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
