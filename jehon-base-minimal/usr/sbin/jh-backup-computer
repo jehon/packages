@@ -38,7 +38,6 @@ fi
 
 DAY=$( date "+%Y-%m-%d" )
 (
-	set -x
 	sshpass -p"$JH_BACKUP_PASS" \
 		rsync \
 			-e "ssh" \
@@ -51,6 +50,6 @@ DAY=$( date "+%Y-%m-%d" )
 			--delete --delete-excluded \
 			--filter ": .jhrsync-filter" \
 			--filter ":- .gitignore" \
-			--backup --backup-dir "/backups/$DAY" \
-			/ "$JH_BACKUP_USER"@192.168.1.9::home/backups/root/
+			--backup --backup-dir "/backup/$DAY" \
+			/ "$JH_BACKUP_USER"@192.168.1.9::home/backup/root/
 ) | ( grep -v "skipping non-regular file" || test $? = 1 )
