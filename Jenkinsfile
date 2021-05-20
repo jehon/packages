@@ -44,7 +44,7 @@ pipeline {
     }
     stage('Deploy') {
       when {
-        branch 'master'
+        branch 'main'
       }
       environment {
         // Transform the http url into ssh url
