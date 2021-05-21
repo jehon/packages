@@ -23,13 +23,23 @@ cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
             <allowsharing>true</allowsharing>
         </source>
         <source>
-            <name>videos (synology)</name>
-            <path>smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD@192.168.1.9/video/</path>
+            <name>Films (Français)</name>
+            <path>smb://192.168.1.9/video/films</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
-            <name>transfert (synology)</name>
-            <path>smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD@192.168.1.9/transferts/videos/</path>
+            <name>Movies (English)</name>
+            <path>smb://192.168.1.9/video/movies</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Compositions</name>
+            <path>smb://192.168.1.9/photo/films/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Temporary</name>
+            <path>smb://192.168.1.9/transferts/videos/</path>
             <allowsharing>true</allowsharing>
         </source>
     </video>
@@ -42,7 +52,7 @@ cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
         </source>
         <source>
             <name>music (synology)</name>
-            <path>smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD@192.168.1.9/music/</path>
+            <path>smb://192.168.1.9/music/</path>
             <allowsharing>true</allowsharing>
         </source>
     </music>
@@ -50,6 +60,23 @@ cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
         <default pathversion="1"></default>
     </files>
 </sources>
+EOC
+
+cat > /home/osmc/.kodi/userdata/passwords.xml <<EOC
+<passwords>
+    <path>
+        <from pathversion="1">smb://192.168.1.9/transferts</from>
+        <to pathversion="1">smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD/transferts/videos/</to>
+    </path>
+    <path>
+        <from pathversion="1">smb://192.168.1.9/video</from>
+        <to pathversion="1">smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD/video/</to>
+    </path>
+    <path>
+        <from pathversion="1">smb://192.168.1.9/music</from>
+        <to pathversion="1">smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD/music/</to>
+    </path>
+</passwords>
 EOC
 
 cat > /home/osmc/.kodi/userdata/keymaps/zKeymap.xml <<EOC
@@ -71,4 +98,5 @@ EOC
 
 # envsubst < "$SWD"/../lib/jehon/src/sources.xml > /home/osmc/.kodi/userdata/sources.xml
 chown osmc.osmc /home/osmc/.kodi/userdata/sources.xml
+chown osmc.osmc /home/osmc/.kodi/userdata/passwords.xml
 chown osmc.osmc /home/osmc/.kodi/userdata/keymaps/zKeymap.xml
