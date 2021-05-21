@@ -27,7 +27,7 @@ function start() {
 	else
 		echo "Encore un secret???"
 
-		if encfs -o allow_other -o uid=1000 -o gid=33 "${CRYPTED_SOURCE}" "${CRYPTED_MOUNTED}" ; then
+		if encfs -o allow_other -o uid=1000 -o gid=33 "${CRYPTED_SOURCE}" "${CRYPTED_MOUNTED}"; then
 			echo "Mounted"
 		else
 			echo "erreur in encfs: $?" >&2
@@ -37,7 +37,7 @@ function start() {
 
 	if stat "${TO_BE_ENCRYPTED}"/* >/dev/null 2>&1; then
 		echo "Copying all files from ${TO_BE_ENCRYPTED} to encrypted dir"
-		for F in "$TO_BE_ENCRYPTED"/* ; do
+		for F in "$TO_BE_ENCRYPTED"/*; do
 			echo "Moving $F"
 			mv "$F" "${CRYPTED_MOUNTED}/"
 		done
@@ -78,25 +78,25 @@ function stop() {
 
 function treatAction() {
 	case "$1" in
-		"s" | "forget" | "stop" )
-			echo "Force unmounting"
-			return 1
-			;;
-		"d" )
-			start
-			echo "Launching digikam"
-			digikam --database-directory "${CRYPTED_MOUNTED}"/.metadata/ &
-			;;
-		"f" | "firefox" )
-			start
-			echo "Launching firefox with profile ${FIREFOX_PROFILE}"
-			firefox -profile "${FIREFOX_PROFILE}" -no-remote &
-			;;
-		"n" )
-			start
-			echo "Launching nautilus"
-			nautilus "${CRYPTED_MOUNTED}"/ &
-			;;
+	"s" | "forget" | "stop")
+		echo "Force unmounting"
+		return 1
+		;;
+	"d")
+		start
+		echo "Launching digikam"
+		digikam --database-directory "${CRYPTED_MOUNTED}"/.metadata/ &
+		;;
+	"f" | "firefox")
+		start
+		echo "Launching firefox with profile ${FIREFOX_PROFILE}"
+		firefox -profile "${FIREFOX_PROFILE}" -no-remote &
+		;;
+	"n")
+		start
+		echo "Launching nautilus"
+		nautilus "${CRYPTED_MOUNTED}"/ &
+		;;
 	esac
 	return 0
 }
@@ -114,7 +114,7 @@ while echo -n "?" && read -r A; do
 	echo "Action (s/d/f/n): $A"
 	if ! treatAction "$A"; then
 		echo "error?"
-		break;
+		break
 	fi
 done
 stop

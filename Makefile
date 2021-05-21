@@ -435,7 +435,6 @@ deploy-synology:
 			--exclude "tmp" \
 		 	--chmod=F755 --chmod=D755
 
-
 ## fix it:
 # ln -s /volume3/scripts/synology/authorized_keys /root/.ssh/authorized_keys
 # chmod 644 /volume3/scripts/synology/authorized_keys
