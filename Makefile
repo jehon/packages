@@ -424,13 +424,12 @@ deploy-local: packages-build
 
 .PHONY: deploy-synology
 deploy-synology:
-# Not using vf-
-	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
-		./synology/ssh/root/ $(SYNOLOGY_HOST):/root/.ssh \
-		--rsync-path=/bin/rsync \
-		--chmod=F644 --chmod=D755
-
-# Not using vf-
 	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
 		"synology/scripts/" "$(SYNOLOGY_HOST):/volume3/scripts/synology" \
-		--copy-links --rsync-path=/bin/rsync
+		--copy-links --rsync-path=/bin/rsync \
+	 	--chmod=F644 --chmod=D755
+
+## fix it:
+# ln -s /volume3/scripts/synology/authorized_keys /root/.ssh/authorized_keys
+# chmod 644 /volume3/scripts/synology/authorized_keys
+# chmod 755 /volume3/scripts/synology/
