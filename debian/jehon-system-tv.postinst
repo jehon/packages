@@ -2,15 +2,6 @@
 
 case "$1" in
 	configure)
-		if [ ! -d /opt/dispmanx ]; then
-			# https://github.com/patrikolausson/dispmanx_vnc
-			wget https://github.com/patrikolausson/dispmanx_vnc/archive/master.zip -O /opt/dispmanx.zip
-			unzip /opt/dispmanx.zip -d /opt/
-			mv /opt/dispmanx_vnc-master/ /opt/dispmanx
-			cd /opt/dispmanx/
-			make
-		fi
-
 		if [ ! -r /etc/jehon/restricted/jehon.env ]; then
 			echo "!! You need to specify config in /etc/jehon.jehon.env" >&2
 		fi
