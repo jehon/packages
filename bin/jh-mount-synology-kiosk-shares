@@ -7,7 +7,7 @@ set -e
 
 domount() {
 	sudo mkdir -p "/media/$1"
-	sudo mount //"$JH_SYNOLOGY_IP"/$1 /media/$1 \
+	sudo mount //"$JH_NAS_IP"/"$1" /media/"$1" \
 		-t cifs \
 		-o vers=1.0,auto,user,noexec,nosuid,ro,credentials=/home/jehon/src/bin/synology.credentials,iocharset=utf8,cache=strict
 	echo "Mounted $1 to $1"
@@ -16,4 +16,4 @@ domount() {
 domount photo
 
 mkdir -p /media/nfs
-mount "$JH_SYNOLOGY_IP":/volume3/tftp ~/media/nfs
+mount "$JH_NAS_IP":/volume3/tftp ~/media/nfs

@@ -1,6 +1,24 @@
 #!/usr/bin/env bash
 
+#
+# Configs
+#
+#
+export JH_NAS_IP=192.168.1.9
+
+# ... src/
+export JH_SRC
+
+# ...src/packages
+export JH_PKG_FOLDER
+
 export JH_PKG_MINIMAL_NAME="jehon-base-minimal"
+
+# relative to +1 script
+export JH_SWD
+
+export JH_MSG_OK
+export JH_MSG_KO
 
 #
 # JH_SWD (Script Working Directory)
@@ -9,23 +27,24 @@ export JH_PKG_MINIMAL_NAME="jehon-base-minimal"
 #   /usr/(s)bin
 #   ~/src/packages/$JH_PKG_MINIMAL_NAME/usr/(s)bin
 #
-JH_SWD="$( realpath "$( dirname "${BASH_SOURCE[1]}" )" )"
+JH_SWD="$(realpath "$(dirname "${BASH_SOURCE[1]}")")"
 
 #
 # Where is this file located ?
 #
-SELF="$( realpath "${BASH_SOURCE[0]}" )"
+SELF="$(realpath "${BASH_SOURCE[0]}")"
 
 #
 #
 # Where is the package source file located
 #
 #
-JH_PKG_FOLDER="$(dirname "$(dirname "$(dirname "$(dirname "$SELF" )" )" )" )"
+JH_PKG_FOLDER="$(dirname "$(dirname "$(dirname "$(dirname "$SELF")")")")"
 # If SELF is as /usr/bin, then it is not under package source
 if [ "$JH_PKG_FOLDER" = "/" ]; then
     JH_PKG_FOLDER=""
 fi
+JH_SRC="$(dirname "$JH_PKG_FOLDER")"
 
 #
 # Get the config file location (relative to /usr/share/jehon-base-minimal/)
@@ -73,7 +92,7 @@ jhGetSharedFile() {
 }
 
 header() {
-    if test -t 1 ; then
+    if test -t 1; then
         echo -e "\e[93m$*\e[00m"
     else
         echo "* $*"
@@ -81,7 +100,7 @@ header() {
 }
 
 warning() {
-    if test -t 1 ; then
+    if test -t 1; then
         echo -e "\e[91m$*\e[00m"
     else
         echo "! $*"
@@ -94,27 +113,27 @@ ok_ko() {
     shift
     shift
 
-    if [[ "$T1" == "$T2" ]] ; then
+    if [[ "$T1" == "$T2" ]]; then
         ok "$@"
     else
         ko "$@"
     fi
 }
 
-JH_MSG_OK="$(echo -e "\033[01;32m✓\033[0m" )"
-JH_MSG_KO="$(echo -e "\033[01;31m✗\033[0m" )"
+JH_MSG_OK="$(echo -e "\033[01;32m✓\033[0m")"
+JH_MSG_KO="$(echo -e "\033[01;31m✗\033[0m")"
 
 ok() {
-    if test -t 1 ; then
-    	echo -e "$JH_MSG_OK $*"
+    if test -t 1; then
+        echo -e "$JH_MSG_OK $*"
     else
         echo "✓ $*"
     fi
 }
 
 ko() {
-    if test -t 1 ; then
-    	echo -e "$JH_MSG_KO $*"
+    if test -t 1; then
+        echo -e "$JH_MSG_KO $*"
     else
         echo "✗ $*"
     fi
@@ -131,10 +150,3 @@ parse_ok_ko() {
         fi
     done
 }
-
-export JH_SWD
-export JH_PKG_FOLDER
-
-export JH_SYNOLOGY_IP=192.168.1.9
-export JH_MSG_OK
-export JH_MSG_KO

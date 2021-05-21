@@ -2,11 +2,10 @@
 
 set -e
 
-SWD="$( dirname "${BASH_SOURCE[0]}" )"
+SWD="$(dirname "${BASH_SOURCE[0]}")"
 . $SWD/../lib/test-helpers.sh
 
-JH_ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
-#. $JH_ROOT/synology/scripts/rsync-parse-command.sh
+JH_ROOT="$(dirname "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")")"
 
 test_capture_empty
 

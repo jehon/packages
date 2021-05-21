@@ -205,7 +205,6 @@ files-clean:
 	rm -fr dockers/jenkins/shared/generated/
 #	rm -f jehon-base-minimal/usr/bin/shuttle-go
 	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
-	rm -f synology/ssh/root/authorized_keys
 
 .PHONY: files-build
 files-build: \
@@ -216,7 +215,6 @@ files-build: \
 		dockers/jenkins/shared/generated/secrets.properties \
 		dockers/jenkins/shared/generated/timezone \
 		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
-		synology/ssh/root/authorized_keys
 
 #		jehon-base-minimal/usr/bin/shuttle-go
 
@@ -290,9 +288,6 @@ jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $
 			echo ""; \
 		done \
 	) > "$@"; \
-
-synology/ssh/root/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
-	cp jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon "$@"
 
 #
 #
@@ -424,10 +419,22 @@ deploy-local: packages-build
 
 .PHONY: deploy-synology
 deploy-synology:
-	jehon-base-minimal/usr/bin/jh-rsync-deploy.sh \
-		"synology/scripts/" "$(SYNOLOGY_HOST):/volume3/scripts/synology" \
-		--copy-links --rsync-path=/bin/rsync \
-	 	--chmod=F644 --chmod=D755
+	. ~/src/bin/secrets.sh; \
+	set -x ; \
+	SSHPASS=$$JH_NAS_ADMIN_PASS sshpass -e \
+		rsync \
+			"synology/scripts/" "$$JH_NAS_ADMIN_USER@$$JH_NAS_IP::scripts/synology" \
+			-e ssh \
+			--recursive --times \
+			--omit-dir-times \
+			--itemize-changes \
+			--modify-window=2 \
+			--delete \
+			--copy-links \
+			--exclude ".git" \
+			--exclude "tmp" \
+		 	--chmod=F755 --chmod=D755
+
 
 ## fix it:
 # ln -s /volume3/scripts/synology/authorized_keys /root/.ssh/authorized_keys

@@ -1,23 +1,13 @@
 #!/usr/bin/env bash
 
-if [ ! -t 1 ] ; then
-	exec > >(systemd-cat -t "$(realpath "$0")" -p info ) \
-	    2> >(systemd-cat -t "$(realpath "$0")" -p err  )
+if [ ! -t 1 ]; then
+	exec > >(systemd-cat -t "$(realpath "$0")" -p info) 2> >(systemd-cat -t "$(realpath "$0")" -p err)
 fi
 
 set -e
 set -o pipefail
 
 CFG_FILE="/etc/jehon/restricted/env"
-
-# This key is not delivered with packages
-KEY="/etc/jehon/restricted/synology_auto"
-if [ -r "$KEY" ]; then
-	echo "Please remove old key: $KEY"
-	echo "sudo rm -f $KEY"
-	exit 1
-fi
-
 if [ ! -r "$CFG_FILE" ]; then
 	echo "$CFG_FILE not found, not backuping"
 	exit 0
@@ -36,20 +26,20 @@ if [ -z "$JH_BACKUP_PASS" ]; then
 	exit 1
 fi
 
-DAY=$( date "+%Y-%m-%d" )
+DAY=$(date "+%Y-%m-%d")
 (
 	sshpass -p"$JH_BACKUP_PASS" \
 		rsync \
-			-e "ssh" \
-			--filter ". /etc/jehon/jh-rsync-backup-computer-filter" \
-			--recursive --times \
-			--omit-dir-times \
-			--itemize-changes \
-			--modify-window=2 \
-			--one-file-system \
-			--delete --delete-excluded \
-			--filter ": .jhrsync-filter" \
-			--filter ":- .gitignore" \
-			--backup --backup-dir "/backup/$DAY" \
-			/ "$JH_BACKUP_USER"@192.168.1.9::home/backup/root/
-) | ( grep -v "skipping non-regular file" || test $? = 1 )
+		-e "ssh" \
+		--filter ". /etc/jehon/jh-rsync-backup-computer-filter" \
+		--recursive --times \
+		--omit-dir-times \
+		--itemize-changes \
+		--modify-window=2 \
+		--one-file-system \
+		--delete --delete-excluded \
+		--filter ": .jhrsync-filter" \
+		--filter ":- .gitignore" \
+		--backup --backup-dir "/backup/$DAY" \
+		/ "$JH_BACKUP_USER"@192.168.1.9::home/backup/root/
+) | (grep -v "skipping non-regular file" || test $? = 1)

@@ -2,8 +2,7 @@
 
 # This script should sent its output to email
 
-SWD="$( dirname "${BASH_SOURCE[0]}" )"
-. "$SWD/rsync-lib.sh"
+SWD="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
 # Clean up picture folder
 chown -R admin /volume3/photo/
