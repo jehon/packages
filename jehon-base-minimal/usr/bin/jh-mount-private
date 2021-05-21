@@ -5,10 +5,15 @@ set -e
 # shellcheck source=/dev/null
 . jh-lib
 
-CRYPTED_SOURCE="${HOME}/.restricted"
+# shellcheck source=/dev/null
+. "$JH_SRC"/bin/secrets.sh
+
+. jh-ensure-network
+
+#CRYPTED_SOURCE="${HOME}/.restricted"
+CRYPTED_SOURCE="$JH_NETWORK_NAS/home/restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
 TO_BE_ENCRYPTED="${HOME}/Downloads/enc"
-
 SECURITY_BACKUP="${CRYPTED_MOUNTED}/Security_Backup/"
 FIREFOX_PROFILE="${SECURITY_BACKUP}/firefox-private"
 
