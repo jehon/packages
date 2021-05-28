@@ -13,8 +13,10 @@ if [ -z "$1" ]; then
     exit 255
 fi
 
+echo -en "[capturing stdout]\r"
+
 set +e
-JH_RUN_CAPTURED_OUTPUT="$( "$@" 2>&1 )"
+JH_RUN_CAPTURED_OUTPUT="$("$@")"
 JH_RUN_CAPTURED_EXITCODE="$?"
 set -e
 
@@ -22,7 +24,7 @@ if [[ $JH_RUN_CAPTURED_EXITCODE -gt 0 ]]; then
     ko "\033[01;36m$*\033[0m"
     echo "$JH_RUN_CAPTURED_OUTPUT" >&2
     echo "Exit code: $JH_RUN_CAPTURED_EXITCODE" >&2
-    exit $JH_RUN_CAPTURED_EXITCODE;
+    exit $JH_RUN_CAPTURED_EXITCODE
 fi
 
 ok "\033[01;36m$*\033[0m"
