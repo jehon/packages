@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # shellcheck source=./jh-lib
 . jh-lib
@@ -18,7 +18,7 @@ echo -en "[capturing stdout]\r"
 set +e
 JH_RUN_CAPTURED_OUTPUT="$("$@")"
 JH_RUN_CAPTURED_EXITCODE="$?"
-set -e
+set -o errexit
 
 if [[ $JH_RUN_CAPTURED_EXITCODE -gt 0 ]]; then
     ko "\033[01;36m$*\033[0m"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # shellcheck source=/dev/null
 . jh-lib
@@ -14,9 +14,9 @@ fi
 header "Configuring git"
 jh-git-config-global
 
-curl --silent --show-error "https://api.github.com/users/jehon/repos?page=1&per_page=100" \
-    | jq -c ".[] | select (.archived == false) | select(.)" \
-    | while read -r L ; do \
+curl --silent --show-error "https://api.github.com/users/jehon/repos?page=1&per_page=100" |
+    jq -c ".[] | select (.archived == false) | select(.)" |
+    while read -r L; do
 
         NAME="$(echo "$L" | jq -r ".name")"
         URL="$(echo "$L" | jq -r ".ssh_url")"
@@ -27,10 +27,10 @@ curl --silent --show-error "https://api.github.com/users/jehon/repos?page=1&per_
 
         if [ -r "$NAME" ]; then
             ok "Already checked out: $NAME"
-            ( cd "$NAME" && git pull ) > /dev/null
+            (cd "$NAME" && git pull) >/dev/null
             continue
         else
-            git clone "$URL" "$NAME" > /dev/null
+            git clone "$URL" "$NAME" >/dev/null
             ok "Checked out at $NAME"
         fi
     done
@@ -152,7 +152,7 @@ EOF
     FILE="/etc/apt/sources.list.d/jehon-package-repo.list"
 
     LINE="deb [trusted=yes] file://$(pwd -L)/packages/repo /"
-    ORIGINAL="$( cat "$FILE" )"
+    ORIGINAL="$(cat "$FILE")"
 
     if [ "$ORIGINAL" != "$LINE" ]; then
         warning "!! Need to update $FILE (as root) !!"
@@ -162,19 +162,19 @@ EOF
         if [ -w /etc/apt/sources.list.d/jehon-package-repo.list ]; then
             echo "$LINE" | sudo tee /etc/apt/sources.list.d/jehon-package-repo.list
         else
-            echo "$LINE" > ~/jehon-package-repo.list
+            echo "$LINE" >~/jehon-package-repo.list
             echo "Copy it to target:"
             echo "sudo cp jehon-package-repo.list /etc/apt/sources.list.d"
         fi
     fi
 fi
 
-for F in ./* ; do
+for F in ./*; do
     if [ -r "$F/.git/git-crypt/keys/default" ]; then
         header "Uncrypting $F"
-        pushd "$F" > /dev/null
+        pushd "$F" >/dev/null
         git-crypt unlock "../$KEY" || ko "Could not use git-crypt, repository $F not clean"
-        popd > /dev/null
+        popd >/dev/null
     fi
 done
 

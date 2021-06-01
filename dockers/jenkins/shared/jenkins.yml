@@ -165,7 +165,7 @@ jobs:
         }
         steps {
           shell('''
-      set -e
+      set -o errexit
       ROOT="$( dirname "$( dirname "$( pwd )" )" )"
       echo "ROOT= $ROOT"
       cd "$ROOT" || exit 1

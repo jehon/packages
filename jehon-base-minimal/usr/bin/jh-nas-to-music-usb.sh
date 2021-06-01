@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 if [ "$1" = "-f" ]; then
 	echo "Forcing sync here..."

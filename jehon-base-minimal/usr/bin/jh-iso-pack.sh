@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
-CURDIR="$( pwd )"
+CURDIR="$(pwd)"
 
 ISO="target-patched-$(date +"%Y-%m-%d_%H-%M-%S").iso"
 TARGET="$CURDIR/iso"
@@ -29,7 +29,7 @@ catfile="$(find "$TARGET" -name "boot.cat" -printf "%P")"
 
 echo "** Mk ISO FS **"
 sudo mkisofs -U -r -v -T -J -joliet-long \
-    -V "BOOT" -volset "BOOT"  -A "BOOT"  \
+    -V "BOOT" -volset "BOOT" -A "BOOT" \
     -b "$bootfile" -c "$catfile" -no-emul-boot -boot-load-size 4 -boot-info-table \
     -o "$ISO" "$TARGET/"
 
@@ -38,4 +38,3 @@ sudo "isohybrid.pl" "$ISO"
 
 echo "*** Packing $TARGET into $ISO done"
 echo "*** Do not forget to remove $TARGET when finished"
-

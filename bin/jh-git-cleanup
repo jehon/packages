@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # Thanks to https://stackoverflow.com/a/454750/1954789
 # See https://git-scm.com/docs/git-filter-branch
 #
-
 
 # shellcheck source=../jehon-base-minimal/usr/bin/jh-lib
 . jh-lib
@@ -13,7 +12,7 @@ set -e
 SWD="$(pwd)"
 export SWD
 
-git log > jh-git-cleanup.before.log
+git log >jh-git-cleanup.before.log
 rm -f jh-git-cleanup.debug.log
 
 FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --prune-empty --env-filter '
@@ -124,7 +123,6 @@ header "Remaining commiters: "
 git log --format='%ae' | sort | uniq
 
 # cat jh-git-cleanup.debug.log
-git log > jh-git-cleanup.after.log
+git log >jh-git-cleanup.after.log
 
 ok "Done"
-

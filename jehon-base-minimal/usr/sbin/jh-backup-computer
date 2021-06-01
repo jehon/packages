@@ -4,7 +4,7 @@ if [ ! -t 1 ]; then
 	exec > >(systemd-cat -t "$(realpath "$0")" -p info) 2> >(systemd-cat -t "$(realpath "$0")" -p err)
 fi
 
-set -e
+set -o errexit
 set -o pipefail
 
 CFG_FILE="/etc/jehon/restricted/env"

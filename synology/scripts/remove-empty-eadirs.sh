@@ -1,37 +1,36 @@
 #!/bin/sh
 
-set -e
+set -o errexit
 
-if [ "$1" != "" ]
-then
+if [ "$1" != "" ]; then
 	P="$1"
 else
-	P=$( pwd )
+	P=$(pwd)
 fi
 
 isEmpty() {
 	#echo "? $1"
 	EMPTY="1"
-	for L in "$1"/* ; do
+	for L in "$1"/*; do
 		if [ ! -e "$L" ]; then
 			# There is no file in there ($L = ".../*")
-			continue;
+			continue
 		fi
-		BN=`basename "$L"`
-		DN=`dirname "$L"`
+		BN=$(basename "$L")
+		DN=$(dirname "$L")
 		if [ "$BN" = "Thumbs.db@SynoEAStream" ]; then
 			# Don't take that file into account (is present everywhere)
 			EMPTY="0"
-			continue;
+			continue
 		fi
 		if [ -f "$DN/../$BN" ]; then
 			EMPTY="0"
-			continue;
+			continue
 		fi
 		if [ ! -f "$DN/../$BN" ]; then
 			# No matching file above
 			rm -fr "$L"
-			continue;
+			continue
 		fi
 		#echo "???? $L"
 		EMPTY="0"
@@ -44,9 +43,9 @@ isEmpty() {
 }
 
 checkThisOne() {
-	for L in "$1"/* ; do
+	for L in "$1"/*; do
 		if [ -d "$L" ]; then
-			BN=`basename "$L"`
+			BN=$(basename "$L")
 			if [ "$BN" = "@eaDir" ]; then
 				isEmpty "$L"
 			else

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # Script Working Directory
-SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
+SWD="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
 # shellcheck source=../lib/test-helpers.sh
 . "$SWD/../lib/test-helpers.sh"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "kiosk"
 ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "$(dig +short kiosk)"
@@ -14,7 +14,7 @@ echo "*** setup remote home start... ***"
 ./setup-remote-home.sh kiosk
 echo "*** setup remote home done ***"
 
-ssh root@kiosk -T << EOS
+ssh root@kiosk -T <<EOS
 	cd /opt/
 	wget https://raw.githubusercontent.com/jehon/kiosk/master/kickstart.sh -O /opt/kickstart.sh
 	chmod +x /opt/kickstart.sh

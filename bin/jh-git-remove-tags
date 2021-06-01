@@ -3,7 +3,7 @@
 # shellcheck source=../jehon-base-minimal/usr/bin/jh-lib
 . jh-lib
 
-set -e
+set -o errexit
 
 header "Remove remote tags"
 git tag | xargs git tag -d

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # shellcheck source=/dev/null
 . jh-lib
@@ -20,7 +20,8 @@ JENKINS_URL_JOB="$JENKINS_URL_PROJECT/job/${GIT_BRANCH//\//%2F}"
 #     lastBuild: https://javadoc.jenkins.io/plugin/workflow-job/org/jenkinsci/plugins/workflow/job/WorkflowRun.html
 #        getPreviousCompletedBuild()
 #
-GROOVY=$(cat <<-EOG
+GROOVY=$(
+    cat <<-EOG
     import hudson.model.Job
 
     def m(ok_ko, header, result, resultok = '', resultko = '') {

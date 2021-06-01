@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 . jh-ensure-network
 
@@ -33,4 +33,3 @@ syncThis documents
 syncThis photo
 syncThis music
 syncThis downloads
-

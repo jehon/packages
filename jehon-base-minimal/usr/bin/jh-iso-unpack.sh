@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 if [ -z "$1" ]; then
     echo "You must provide iso as [1]"
@@ -8,8 +8,8 @@ if [ -z "$1" ]; then
 fi
 
 ISO="$1"
-CURDIR="$( pwd )"
-NAME="$(basename -s ".iso" "$ISO" )"
+CURDIR="$(pwd)"
+NAME="$(basename -s ".iso" "$ISO")"
 
 TARGET="$CURDIR/$NAME"
 MOUNTED="$CURDIR/$NAME.mounted"
@@ -29,9 +29,9 @@ clean_up() {
     cd "$CURDIR"
 
     if [[ -d "$MOUNTED" ]]; then
-        mount | grep -qF " $MOUNTED " \
-            && sudo umount "$MOUNTED";
-            # && fusermount -u "$MOUNTED";
+        mount | grep -qF " $MOUNTED " &&
+            sudo umount "$MOUNTED"
+        # && fusermount -u "$MOUNTED";
         sleep 1s
         rmdir "$MOUNTED"
     fi
@@ -40,7 +40,7 @@ trap clean_up INT
 trap clean_up EXIT
 
 if [[ -d "$TARGET" ]]; then
-    if (( DO_FORCE )); then
+    if ((DO_FORCE)); then
         echo "Local dir $TARGET already exists, removing it"
         sudo rm -fr "$TARGET"
     else

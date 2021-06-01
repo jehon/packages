@@ -5,13 +5,13 @@
 if [ "$2" = "" ]; then
 	cat <<-EOL
 		1: file
-		2: 
-		.	0 = 90CounterCLockwise and Vertical Flip (default) 
-		.	1 = 90Clockwise 
-		.	2 = 90CounterClockwise 
-		.	3 = 90Clockwise and Vertical Flip
+		2:
+		- 0 = 90CounterCLockwise and Vertical Flip (default)
+		- 1 = 90Clockwise
+		- 2 = 90CounterClockwise
+		- 3 = 90Clockwise and Vertical Flip
 	EOL
-	exit 
+	exit
 fi
 
 filename="${1%.*}"
@@ -22,7 +22,7 @@ echo "Target: $TARGET"
 
 # https://stackoverflow.com/a/38993717/1954789
 
-set -x
+set -o xtrace
 ffmpeg -i "$1" \
 	-c:a copy -vf "transpose=$2" -crf 18 \
 	"$TARGET"

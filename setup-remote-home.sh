@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 if [ -z "$1" ]; then
 	echo "Need hostname as [1]"

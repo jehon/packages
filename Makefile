@@ -398,7 +398,7 @@ deploy-github: repo/Release.gpg node-setup
 	git remote -v
 
 	UE="$$( git --no-pager show -s --format="%an" ) <$$( git --no-pager show -s --format="%ae" )>"; \
-	set -x && ./node_modules/.bin/gh-pages --dist repo --user "$$UE" --remote "$${GIT_ORIGIN:origin}";
+	set -o xtrace && ./node_modules/.bin/gh-pages --dist repo --user "$$UE" --remote "$${GIT_ORIGIN:origin}";
 
 	@echo "***********************************************************************"
 	@echo "***                                                                 ***"
@@ -425,7 +425,7 @@ deploy-local: packages-build
 deploy-synology:
 	. jh-lib; \
 	. $(JH_CRYPTED_FOLDER)/secrets.sh; \
-	set -x ; \
+	set -o xtrace ; \
 	SSHPASS=$$JH_NAS_ADMIN_PASS sshpass -e \
 		rsync \
 			"synology/scripts/" "$$JH_NAS_ADMIN_USER@$$JH_NAS_IP::scripts/synology" \

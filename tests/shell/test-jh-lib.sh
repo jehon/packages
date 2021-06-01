@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # Script Working Directory
-TWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
+TWD="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
 # shellcheck source=../lib/test-helpers.sh
 . "$TWD/../lib/test-helpers.sh"
@@ -19,14 +19,14 @@ assert_equals "ROOT" "$JH_ROOT" "$JH_PKG_FOLDER"
 
 assert_equals "jhGetConfigFile from packages" \
     "$JH_ROOT/jehon-base-minimal/usr/share/jehon-base-minimal/etc/npmrc" \
-    "$( jhGetConfigFile "/etc/npmrc" )"
+    "$(jhGetConfigFile "/etc/npmrc")"
 
 assert_equals "jhGetConfigFile from etc" \
     "/etc/host" \
-    "$( jhGetConfigFile "/etc/host" )"
+    "$(jhGetConfigFile "/etc/host")"
 
 assert_equals "jhGetSharedFile from share" \
     "$JH_ROOT/jehon-base-minimal/usr/share/jehon/hyperv" \
-    "$( jhGetSharedFile "/usr/share/jehon/hyperv" )"
+    "$(jhGetSharedFile "/usr/share/jehon/hyperv")"
 
 assert_file_exists "/etc/hosts"

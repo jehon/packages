@@ -2,8 +2,8 @@
 
 # /root/mytrafficshaping.sh && watch tc -s -d class show dev eth0
 
-set -x
-set -e
+set -o xtrace
+set -o errexit
 
 # Nomenclature:
 # [  x:   ] = qdisc   parent y:z    handle x:    => parent = class [y:z]) (convention: z=x)
@@ -21,7 +21,6 @@ set -e
 #
 #
 
-
 # tc -stats -details qdisc show dev eth0
 # not working: tc show -graph -stats
 
@@ -32,52 +31,51 @@ echo "Loading traffic shaping on $DEV"
 
 tc -s qdisc ls dev $DEV
 
-tc qdisc del dev $DEV root    2> /dev/null > /dev/null || true
-tc qdisc del dev $DEV ingress 2> /dev/null > /dev/null || true
+tc qdisc del dev $DEV root 2>/dev/null >/dev/null || true
+tc qdisc del dev $DEV ingress 2>/dev/null >/dev/null || true
 
 ## See if it is still necessary:
 exit 0
 
-
 ########## uplink #############
 # qdisc [  1:   ] < [ root  ]   = Root handle qdisk -> 1 band (10)
-tc qdisc add dev $DEV root           handle 1:       htb default 10
+tc qdisc add dev $DEV root handle 1: htb default 10
 # class [  1:10 ] < [  1:   ]   = Root handle class (handle root 1: band 10) ==> limit flow
-tc class add dev $DEV parent  1:     classid 1:10    htb rate 175kbit burst 2k
+tc class add dev $DEV parent 1: classid 1:10 htb rate 175kbit burst 2k
 
 # qdisc [ 10:   ] < [  1:10 ]   = QDisc below Root handle in Class 1:10
 # Priomap send by default everything to band :2 (map 0 -> band :1, map 1 -> band :2)
-tc qdisc add dev $DEV parent  1:10   handle 10:      prio bands 2 priomap 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+tc qdisc add dev $DEV parent 1:10 handle 10: prio bands 2 priomap 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 # class [ 10:1  ] < [ 10:   ]   = Auto created - priority 1 => VOIP
 # class [ 10:2  ] < [ 10:   ]   = Auto created - priority 2 => The Rest (see 102:)
 
-tc qdisc add dev $DEV parent  10:2   handle 102:     htb default 3
+tc qdisc add dev $DEV parent 10:2 handle 102: htb default 3
 # qdisc [102:   ] < [ 10:2  ]   = Priority 2 (rest)
 
-tc class add dev $DEV parent  102:   classid 102:1   htb rate 175kbit burst 2k
+tc class add dev $DEV parent 102: classid 102:1 htb rate 175kbit burst 2k
 # class [102:1  ] < [102:   ]   = The 80/443 traffic
 
-tc class add dev $DEV parent  102:   classid 102:2   htb rate 175kbit burst 2k
+tc class add dev $DEV parent 102: classid 102:2 htb rate 175kbit burst 2k
 # class [102:2  ] < [102:   ]   = The SSH traffic
 
-tc class add dev $DEV parent  102:   classid 102:3   htb rate 175kbit burst 2k
+tc class add dev $DEV parent 102: classid 102:3 htb rate 175kbit burst 2k
 # class [102:3  ] < [102:   ]   = The remaining traffic
 
-tc class add dev $DEV parent  102:   classid 102:4   htb rate 175kbit burst 2k
+tc class add dev $DEV parent 102: classid 102:4 htb rate 175kbit burst 2k
 # class [102:4  ] < [102:   ]   = Synology and Backend
 
 ## Traffic on leafs
 
-tc qdisc add dev $DEV parent 102:1   handle 1021:    sfq
+tc qdisc add dev $DEV parent 102:1 handle 1021: sfq
 # qdisc [1021:  ] < [ 102:1 ]   = The 80/443 traffic
 
-tc qdisc add dev $DEV parent 102:2   handle 1022:    sfq
+tc qdisc add dev $DEV parent 102:2 handle 1022: sfq
 # qdisc [1022:  ] < [ 102:2 ]   = The SSH traffic
 
-tc qdisc add dev $DEV parent 102:3   handle 1023:    sfq
+tc qdisc add dev $DEV parent 102:3 handle 1023: sfq
 # qdisc [1023:  ] < [ 102:3 ]   = The remaining traffic
 
-tc qdisc add dev $DEV parent 102:4   handle 1024:    sfq
+tc qdisc add dev $DEV parent 102:4 handle 1024: sfq
 # qdisc [1024:  ] < [ 102:4 ]   = Synology and Backend
 
 #### Filters ####
@@ -89,37 +87,37 @@ tc qdisc add dev $DEV parent 102:4   handle 1024:    sfq
 ## Prio queues:
 
 # Prio 1: VOIP
-tc filter add dev $DEV parent 10:   prio 10   protocol ip   u32 match u32 0xb061c706 0xFFFFFFFF at -8  match u16 0xc7d7 0xFFFF at -4 flowid 10:1
-tc filter add dev $DEV parent 10:   prio 11   protocol ipv6 u32 match u32 0xb061c706 0xFFFFFFFF at -8  match u16 0xc7d7 0xFFFF at -4 flowid 10:1
+tc filter add dev $DEV parent 10: prio 10 protocol ip u32 match u32 0xb061c706 0xFFFFFFFF at -8 match u16 0xc7d7 0xFFFF at -4 flowid 10:1
+tc filter add dev $DEV parent 10: prio 11 protocol ipv6 u32 match u32 0xb061c706 0xFFFFFFFF at -8 match u16 0xc7d7 0xFFFF at -4 flowid 10:1
 
 # Prio 1: icmp / icmpv6 (see /etc/protocols)
-tc filter add dev $DEV parent 10:   prio 10   protocol ip   u32 match ip protocol  1 0xff flowid 10:1
-tc filter add dev $DEV parent 10:   prio 11   protocol ipv6 u32 match ip protocol 58 0xff flowid 10:1
+tc filter add dev $DEV parent 10: prio 10 protocol ip u32 match ip protocol 1 0xff flowid 10:1
+tc filter add dev $DEV parent 10: prio 11 protocol ipv6 u32 match ip protocol 58 0xff flowid 10:1
 
 # Prio 1: dhcp (v4 only)
-tc filter add dev $DEV parent 10:   prio 10   protocol ip   u32 match ip sport 67 0xffff flowid 10:1
-tc filter add dev $DEV parent 10:   prio 10   protocol ip   u32 match ip dport 67 0xffff flowid 10:1
-tc filter add dev $DEV parent 10:   prio 10   protocol ip   u32 match ip sport 68 0xffff flowid 10:1
-tc filter add dev $DEV parent 10:   prio 10   protocol ip   u32 match ip dport 68 0xffff flowid 10:1
+tc filter add dev $DEV parent 10: prio 10 protocol ip u32 match ip sport 67 0xffff flowid 10:1
+tc filter add dev $DEV parent 10: prio 10 protocol ip u32 match ip dport 67 0xffff flowid 10:1
+tc filter add dev $DEV parent 10: prio 10 protocol ip u32 match ip sport 68 0xffff flowid 10:1
+tc filter add dev $DEV parent 10: prio 10 protocol ip u32 match ip dport 68 0xffff flowid 10:1
 
 ## Htb queues (Prio 2)
 # Prio2/htb3 = default
 
 # Prio2/htb4: Synology
-tc filter add dev $DEV parent 102:  prio 20  protocol ip   u32 match u32 0x0011321b 0xFFFFFFFF at -8  match u16 0x8f92 0xFFFF at -4 flowid 102:4
-tc filter add dev $DEV parent 102:  prio 21  protocol ipv6 u32 match u32 0x0011321b 0xFFFFFFFF at -8  match u16 0x8f92 0xFFFF at -4 flowid 102:4
+tc filter add dev $DEV parent 102: prio 20 protocol ip u32 match u32 0x0011321b 0xFFFFFFFF at -8 match u16 0x8f92 0xFFFF at -4 flowid 102:4
+tc filter add dev $DEV parent 102: prio 21 protocol ipv6 u32 match u32 0x0011321b 0xFFFFFFFF at -8 match u16 0x8f92 0xFFFF at -4 flowid 102:4
 
 # Prio2/htb1: SSH
-tc filter add dev $DEV parent 102:  prio 30  protocol ip   u32 match ip dport  22 0xffff flowid 102:1
-tc filter add dev $DEV parent 102:  prio 31  protocol ipv6 u32 match ip dport  22 0xffff flowid 102:1
+tc filter add dev $DEV parent 102: prio 30 protocol ip u32 match ip dport 22 0xffff flowid 102:1
+tc filter add dev $DEV parent 102: prio 31 protocol ipv6 u32 match ip dport 22 0xffff flowid 102:1
 
 # Prio2/htb2: Http
-tc filter add dev $DEV parent 102:  prio 32  protocol ip   u32 match ip dport  80 0xffff flowid 102:2
-tc filter add dev $DEV parent 102:  prio 33  protocol ipv6 u32 match ip dport  80 0xffff flowid 102:2
+tc filter add dev $DEV parent 102: prio 32 protocol ip u32 match ip dport 80 0xffff flowid 102:2
+tc filter add dev $DEV parent 102: prio 33 protocol ipv6 u32 match ip dport 80 0xffff flowid 102:2
 
 # Prio2/htb2: Https
-tc filter add dev $DEV parent 102:  prio 34  protocol ip   u32 match ip dport 443 0xffff flowid 102:2
-tc filter add dev $DEV parent 102:  prio 35  protocol ipv6 u32 match ip dport 443 0xffff flowid 102:2
+tc filter add dev $DEV parent 102: prio 34 protocol ip u32 match ip dport 443 0xffff flowid 102:2
+tc filter add dev $DEV parent 102: prio 35 protocol ipv6 u32 match ip dport 443 0xffff flowid 102:2
 
 ########## downlink #############
 # slow downloads down to somewhat less than the real speed  to prevent

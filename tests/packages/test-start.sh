@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # Script Working Directory
-SWD="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
+SWD="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
 # shellcheck source=../lib/test-helpers.sh
 . "$SWD/../lib/test-helpers.sh"
 
-ROOT="$( dirname "$( dirname "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )" )"
+ROOT="$(dirname "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")")"
 
 CONSTANT_RUN_TEST="i_am_in_docker"
 
@@ -20,8 +20,8 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
     truncate --size=0 /etc/apt/apt.conf.d/99-test-packages.conf
 
     # Allow unsigned repositories just in case
-    echo "APT::Get::AllowUnauthenticated \"true\";" >> /etc/apt/apt.conf.d/99-test-packages.conf
-    echo "Acquire::AllowInsecureRepositories \"true\";" >> /etc/apt/apt.conf.d/99-test-packages.conf
+    echo "APT::Get::AllowUnauthenticated \"true\";" >>/etc/apt/apt.conf.d/99-test-packages.conf
+    echo "Acquire::AllowInsecureRepositories \"true\";" >>/etc/apt/apt.conf.d/99-test-packages.conf
 
     log_message "Level-up docker image - start"
     assert_success "Level-up docker image - apt-get update" apt update -y

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 debug() {
 	if [[ -n "$DEBUG" ]]; then
@@ -15,25 +15,25 @@ fi
 SSH_HOST="$1"
 ORIGINAL_HOST="$SSH_HOST"
 case "$SSH_HOST" in
-	* )
-		;;
+*) ;;
+
 esac
 
 case "$2" in
-	root )
-		SSH_USER="root"
-		SSH_CMD="$3"
-		shift
-		;;
-	sftp )
-		SFTP=sftp
-		SSH_CMD=""
-		;;
-	sftp-root )
-		SSH_USER="root"
-		SSH_CMD=""
-		SFTP="sftp"
-		;;
+root)
+	SSH_USER="root"
+	SSH_CMD="$3"
+	shift
+	;;
+sftp)
+	SFTP=sftp
+	SSH_CMD=""
+	;;
+sftp-root)
+	SSH_USER="root"
+	SSH_CMD=""
+	SFTP="sftp"
+	;;
 esac
 
 SSH_USER="${SSH_USER:-root}"
@@ -58,15 +58,15 @@ debug "$H Launching ssh"
 if [ -z "$SFTP" ]; then
 	sshpass -p "$SSH_PASS" \
 		ssh \
-			-t \
-			-o StrictHostKeyChecking=no \
-			-o UserKnownHostsFile=/dev/null \
-			"$SSH_USER@$SSH_HOST" "$SSH_CMD"
+		-t \
+		-o StrictHostKeyChecking=no \
+		-o UserKnownHostsFile=/dev/null \
+		"$SSH_USER@$SSH_HOST" "$SSH_CMD"
 else
 	sshpass -p "$SSH_PASS" \
 		sftp \
-			-o StrictHostKeyChecking=no \
-			-o UserKnownHostsFile=/dev/null \
-			"$SSH_USER@$SSH_HOST" "$SSH_CMD"
+		-o StrictHostKeyChecking=no \
+		-o UserKnownHostsFile=/dev/null \
+		"$SSH_USER@$SSH_HOST" "$SSH_CMD"
 fi
 debug "$H SSH ended"

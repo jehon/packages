@@ -2,7 +2,7 @@
 
 # This script can be run more than once
 
-set -e
+set -o errexit
 
 if [[ "$(whoami)" != "root" ]]; then
     echo "You need to be root to run this script"

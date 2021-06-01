@@ -1,12 +1,11 @@
 #!/bin/sh
 
 # See https://debian-administration.org/article/23/Setting_up_a_simple_Debian_gateway
-echo 1 > /tmp/myfirewall.sh
+echo 1 >/tmp/myfirewall.sh
 
-set -x
+set -o xtrace
 
 PATH=/usr/sbin:/sbin:/bin:/usr/bin
-
 
 #### Configuration:
 # eth0 = WAN interface
@@ -17,38 +16,36 @@ PATH=/usr/sbin:/sbin:/bin:/usr/bin
 doFor() {
   IPTABLES="$1"
 
-
   ## http://www.gossamer-threads.com/lists/iptables/user/59029#59029
 
   ####
   #### delete all existing rules.
   ####
 
-  $IPTABLES -P INPUT    ACCEPT   # Accept everything, since we will delete all 'allow' rules
-  $IPTABLES -P FORWARD  ACCEPT   # Accept everything, since we will delete all 'allow' rules
-  $IPTABLES -P OUTPUT   ACCEPT   # Accept everything, since we will delete all 'allow' rules
+  $IPTABLES -P INPUT ACCEPT   # Accept everything, since we will delete all 'allow' rules
+  $IPTABLES -P FORWARD ACCEPT # Accept everything, since we will delete all 'allow' rules
+  $IPTABLES -P OUTPUT ACCEPT  # Accept everything, since we will delete all 'allow' rules
 
-  $IPTABLES -F                   # Flush the tables
-  $IPTABLES -X                   # Delete all rules
+  $IPTABLES -F # Flush the tables
+  $IPTABLES -X # Delete all rules
 
   ####
   #### OUTPUT
   ####
-  $IPTABLES -P OUTPUT   ACCEPT   # Accept all on output
-
+  $IPTABLES -P OUTPUT ACCEPT # Accept all on output
 
   ####
   #### INPUT
   ####
 
   #### INPUT LAN
-  $IPTABLES -A INPUT  -i lo                                    -j ACCEPT
-  $IPTABLES -A INPUT  -i eth1                                  -j ACCEPT
-  $IPTABLES -A INPUT  -i eth2                                  -j ACCEPT
-  $IPTABLES -A INPUT  -m physdev --physdev-in eth1             -j ACCEPT # Accept all from LAN on BRIDGE
+  $IPTABLES -A INPUT -i lo -j ACCEPT
+  $IPTABLES -A INPUT -i eth1 -j ACCEPT
+  $IPTABLES -A INPUT -i eth2 -j ACCEPT
+  $IPTABLES -A INPUT -m physdev --physdev-in eth1 -j ACCEPT # Accept all from LAN on BRIDGE
 
   #### INPUT WAN
-  $IPTABLES -A INPUT  -m state --state ESTABLISHED,RELATED     -j ACCEPT # Allow established connections
+  $IPTABLES -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT # Allow established connections
   # Enable later - $IPTABLES -A INPUT  -p tcp --destination-port 22            -j ACCEPT # SSH from WAN
 
   ####
@@ -56,25 +53,24 @@ doFor() {
   ####
 
   #### FORWARD LAN
-  $IPTABLES -A FORWARD -i lo                                   -j ACCEPT
-  $IPTABLES -A FORWARD -i eth1                                 -j ACCEPT # Lan interface
-  $IPTABLES -A FORWARD -i eth2                                 -j ACCEPT # Fallback interface
-  $IPTABLES -A FORWARD -m physdev --physdev-in eth1            -j ACCEPT # Accept all from LAN on BRIDGE
-
+  $IPTABLES -A FORWARD -i lo -j ACCEPT
+  $IPTABLES -A FORWARD -i eth1 -j ACCEPT                      # Lan interface
+  $IPTABLES -A FORWARD -i eth2 -j ACCEPT                      # Fallback interface
+  $IPTABLES -A FORWARD -m physdev --physdev-in eth1 -j ACCEPT # Accept all from LAN on BRIDGE
 
   ### FORWARD WAN
   # Establisehd connections are ok
   #$IPTABLES -A FORWARD -m state     --state ESTABLISHED,RELATED   -j ACCEPT # Allow established connections
   $IPTABLES -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT # Allow established connections
-  $IPTABLES -A FORWARD -p tcp --tcp-flags RST RST              -j ACCEPT # Allow RST (reset) to pass through (SSL/HTTPS)
+  $IPTABLES -A FORWARD -p tcp --tcp-flags RST RST -j ACCEPT                 # Allow RST (reset) to pass through (SSL/HTTPS)
 
   ####
   #### End of the road
   ####
-  $IPTABLES -A INPUT   -m limit --limit 2/min -j LOG --log-prefix "$IPTABLES-Input__-Dropped: " --log-level 4
+  $IPTABLES -A INPUT -m limit --limit 2/min -j LOG --log-prefix "$IPTABLES-Input__-Dropped: " --log-level 4
   $IPTABLES -A FORWARD -m limit --limit 2/min -j LOG --log-prefix "$IPTABLES-Forward-Dropped: " --log-level 4
 
-  $IPTABLES -P INPUT   DROP
+  $IPTABLES -P INPUT DROP
   $IPTABLES -P FORWARD DROP
 }
 
@@ -86,31 +82,31 @@ doFor ip6tables
 ####
 
 # ICMPv4
-iptables  -A INPUT   -p icmp -j ACCEPT
-iptables  -A OUTPUT  -p icmp -j ACCEPT
-iptables  -A FORWARD -p icmp -j ACCEPT
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -A OUTPUT -p icmp -j ACCEPT
+iptables -A FORWARD -p icmp -j ACCEPT
 
 # DHCP
-iptables  -I INPUT  -p udp --dport 67:68                    -j ACCEPT # Dhcp configuration
-iptables  -I INPUT  -p udp --sport 67:68                    -j ACCEPT # Dhcp configuration
+iptables -I INPUT -p udp --dport 67:68 -j ACCEPT # Dhcp configuration
+iptables -I INPUT -p udp --sport 67:68 -j ACCEPT # Dhcp configuration
 
 # Broadcast address
-iptables  -A FORWARD --destination 224.0.0.0/4              -j ACCEPT # Multicast requests
+iptables -A FORWARD --destination 224.0.0.0/4 -j ACCEPT # Multicast requests
 
 # DHCPv4
-iptables  -A FORWARD -p udp --dport 67:68 -j ACCEPT # Dhcp configuration
-iptables  -A FORWARD -p udp --sport 67:68 -j ACCEPT # Dhcp configuration
+iptables -A FORWARD -p udp --dport 67:68 -j ACCEPT # Dhcp configuration
+iptables -A FORWARD -p udp --sport 67:68 -j ACCEPT # Dhcp configuration
 
 # SSH on IPv4 is forwarded to Synology only
-iptables -A INPUT  -p tcp --destination-port 22            -j ACCEPT # SSH from WAN
+iptables -A INPUT -p tcp --destination-port 22 -j ACCEPT # SSH from WAN
 
 ####
 #### IPv6 specific rules
 ####
 
 # ICMPv6
-ip6tables -A INPUT   -p icmpv6 -j ACCEPT
-ip6tables -A OUTPUT  -p icmpv6 -j ACCEPT
+ip6tables -A INPUT -p icmpv6 -j ACCEPT
+ip6tables -A OUTPUT -p icmpv6 -j ACCEPT
 ip6tables -A FORWARD -p icmpv6 -j ACCEPT
 
 # SSH on IPv6 can go to anything

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 if [ -n "$1" ]; then
 	pushd "$1"

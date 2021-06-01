@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 SWD="$(dirname "${BASH_SOURCE[0]}")"
 . $SWD/../lib/test-helpers.sh

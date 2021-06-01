@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # shellcheck source=../jehon-base-minimal/usr/bin/jh-lib
 . jh-lib
@@ -8,7 +8,7 @@ set -e
 # See https://www.jenkins.io/doc/book/installing/docker/
 
 header "Starting SSH on host..."
-if ! nc -vz 127.0.0.1 22 ; then
+if ! nc -vz 127.0.0.1 22; then
     sudo service ssh start
     ok "Starting SSH on host done"
 else
@@ -24,13 +24,13 @@ fi
 WEB=8080
 REVERSE_IP="$(jh-ip-list | grep docker | grep 172 | cut -f 2 -d ' ')"
 
-pushd "$JH_PKG_FOLDER" > /dev/null
+pushd "$JH_PKG_FOLDER" >/dev/null
 
 if [ "$1" = "-f" ]; then
     rm -fr dockers/jenkins/shared/generated
-    ( docker stop jenkins || true )  &> /dev/null
-    ( docker rm -f jenkins || true ) &> /dev/null
-    ( docker image rm -f jehon/jenkins || true ) &> /dev/null
+    (docker stop jenkins || true) &>/dev/null
+    (docker rm -f jenkins || true) &>/dev/null
+    (docker image rm -f jehon/jenkins || true) &>/dev/null
     rm -f dockers/jenkins/.dockerbuild
 fi
 
@@ -69,8 +69,7 @@ docker run --restart unless-stopped --name jenkins \
     --add-host="host.docker.internal:$REVERSE_IP" \
     jehon/jenkins
 
-
-while ! nc -vz 127.0.0.1 $WEB ; do
+while ! nc -vz 127.0.0.1 $WEB; do
     header "Waiting for service to be up..."
     sleep 1s
 done

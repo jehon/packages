@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # shellcheck source=/dev/null
 . jh-lib
@@ -11,7 +11,7 @@ ORIGIN="$(git remote get-url origin)"
 GIT_SLUG="$ORIGIN"
 GIT_SLUG="${GIT_SLUG##git@github.com:}"
 GIT_SLUG="${GIT_SLUG%.git}"
-GIT_OWNER="${GIT_SLUG/\/*}"
+GIT_OWNER="${GIT_SLUG/\/*/}"
 GIT_PROJECT="${GIT_SLUG#*\/}"
 GIT_BRANCH="$(git name-rev --name-only HEAD)"
 
@@ -34,7 +34,7 @@ export GIT_BRANCH
 export GIT_STASH_CNT
 
 # LOCAL COMMIT NOT PUSHED
-AHEAD=$(git status -sb | grep -E '\[(ahead|behind)' | sed -r 's/^.*\[//g' | sed -r 's/\].*$//g' )
+AHEAD=$(git status -sb | grep -E '\[(ahead|behind)' | sed -r 's/^.*\[//g' | sed -r 's/\].*$//g')
 if [ -z "$AHEAD" ]; then
     m "$JH_MSG_OK" "GIT origin" "up-to-date"
 else
@@ -43,7 +43,7 @@ fi
 
 # STASH LIST
 GIT_STASH_CNT=$(git stash list | wc -l)
-if [[ $GIT_STASH_CNT -eq 0 ]] ; then
+if [[ $GIT_STASH_CNT -eq 0 ]]; then
     m "$JH_MSG_OK" "GIT Stash" "None"
 else
     m "$JH_MSG_KO" "GIT Stash" "$GIT_STASH_CNT"

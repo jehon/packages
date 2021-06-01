@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 # shellcheck source=/dev/null
 . jh-jenkins-status.sh
 

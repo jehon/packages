@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 # shellcheck source=../bin/jh-lib
 . jh-lib
 
-HV_ROOT="$( jhGetSharedFile "/usr/share/jehon/hyperv" )"
+HV_ROOT="$(jhGetSharedFile "/usr/share/jehon/hyperv")"
 
 if [ ! -w /dev/sda1 ]; then
     echo "You should be root to run this script" >&2
@@ -28,7 +28,7 @@ inst() {
 
 header "UFW: Waiting for lock"
 # Wait for xtable lock to be available
-iptables -L -n --wait > /dev/null
+iptables -L -n --wait >/dev/null
 
 header "Configuring grub"
 inst "$HV_ROOT"/grub-hyperv.cfg /etc/default/grub.d/80-hyperv.cfg

@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 
 IWIFI="wlp2s0"
 echo "Using IWIFI: $IWIFI"
 
-IWAN="$(ip a | grep LOWER_UP | grep -v "lo:" | cut -d ":" -f 2 | sed 's/ //g' )"
+IWAN="$(ip a | grep LOWER_UP | grep -v "lo:" | cut -d ":" -f 2 | sed 's/ //g')"
 echo "Found IWAN:  $IWAN"
-
 
 #
 # Initial config

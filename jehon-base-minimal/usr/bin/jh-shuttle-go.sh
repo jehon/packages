@@ -3,7 +3,7 @@
 # shellcheck source=/dev/null
 . jh-lib
 
-set -e
+set -o errexit
 
 EXE="/usr/bin/shuttle-go"
 CFG="/usr/share/jehon-base-minimal/shuttle-go.json"
