@@ -1,0 +1,47 @@
+<html>
+
+<body>
+    <script src="../node_modules/qrcode/build/qrcode.js"></script>
+    <table>
+        <tr>
+            <td>
+                <canvas id=qr></canvas>
+            </td>
+            <td>
+                Nom: <input name='name'><br>
+                Compte: <input name='account'><br>
+                Montant: <input name='amount' type='number'><br>
+                Communication: <input name='com' pattern='[0-9]{3}/[0-9]{5}/[0-9]{4}'><br>
+                Device: <input name='device'><br>
+            </td>
+        </tr>
+    </table>
+    <script>
+        function generate(txt) {
+            QRCode.toCanvas(document.getElementById('qr'), txt, function (error) {
+                if (error) {
+                    console.error(error)
+                }
+            })
+        }
+
+        function banking(name, account, amount, com, device) {
+            generate(
+                `BCD
+002
+1
+SCT
+
+${name}
+${account}
+${device}${amount}
+
+
+${com}`);
+
+        }
+        banking('KDM France', 'FR7616807001380381902780674', '249.88', 'solde', 'EUR');
+    </script>
+</body>
+
+</html>
