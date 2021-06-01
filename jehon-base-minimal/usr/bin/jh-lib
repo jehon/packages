@@ -4,6 +4,10 @@
 # Configs
 #
 #
+
+# For Debug easy (https://wiki.bash-hackers.org/scripting/debuggingtips)
+export PS4='\033[0;33m+${BASH_SOURCE[0]: -10}:${LINENO}:\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+
 export JH_NAS_IP=192.168.1.9
 
 # ... src/
