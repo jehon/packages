@@ -2,7 +2,7 @@
 
 # Create user jehon if it does not exists
 if ! id -u jehon >/dev/null 2>&1; then
-    U1000GRPS=$(id -Gn 1000 | sed -e 's/ /,/g' )
+    U1000GRPS=$(id -Gn 1000 | sed -e 's/ /,/g')
 
     useradd --groups "$U1000GRPS" jehon || true
 
@@ -16,9 +16,14 @@ usermod -a -G "docker" "jehon" || true
 mkdir -p /etc/jehon/restricted/
 chmod 500 /etc/jehon/restricted
 
-if getent group "sudo" > /dev/null; then
+if getent group "sudo" >/dev/null; then
     usermod -a -G "sudo" "jehon" || true
 fi
+
+if ! getent group "fuse" >/dev/null; then
+    groupadd "fuse"
+fi
+usermod -a -G "fuse" "jehon" || true
 
 # Fix ssh rights
 if [ -r /home/jehon/.ssh ]; then
