@@ -11,6 +11,7 @@ export JH_SRC
 
 # ...src/packages
 export JH_PKG_FOLDER
+export JH_CRYPTED_FOLDER="$JH_SRC/secrets/crypted/"
 
 export JH_PKG_MINIMAL_NAME="jehon-base-minimal"
 

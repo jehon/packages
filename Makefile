@@ -419,7 +419,8 @@ deploy-local: packages-build
 
 .PHONY: deploy-synology
 deploy-synology:
-	. ~/src/bin/secrets.sh; \
+	. jh-lib; \
+	. $(JH_CRYPTED_FOLDER)/secrets.sh; \
 	set -x ; \
 	SSHPASS=$$JH_NAS_ADMIN_PASS sshpass -e \
 		rsync \

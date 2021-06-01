@@ -6,7 +6,7 @@ set -e
 . jh-lib
 
 # shellcheck source=/dev/null
-. "$JH_SRC"/bin/secrets.sh
+. "$JH_CRYPTED_FOLDER"/secrets.sh
 
 . jh-ensure-network
 
