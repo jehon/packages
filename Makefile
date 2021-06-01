@@ -38,6 +38,9 @@ endif
 
 export PATH := $(ROOT)/jehon-base-minimal/usr/bin:$(PATH)
 
+# Path to local crypted informations
+SECRETS=$(shell jh-lib; echo "$$JH_CRYPTED_FOLDER/jenkins")
+
 #
 #
 # Generic functions
@@ -93,6 +96,7 @@ global-dump:
 	$(info * PWD:                      $(shell pwd))
 	$(info * PATH:                     $(shell echo $$PATH))
 	$(info * ROOT:                     $(ROOT))
+	$(info * SECRETS:                  $(SECRETS))
 	$(info * DOCKERS:                  $(DOCKERS))
 	$(info * GPG_KEYRING:              $(GPG_KEYRING))
 	$(info * GPG_KEY:                  $(GPG_KEY))
@@ -241,7 +245,7 @@ files-lint:
 	exit $$RES
 
 
-$(GPG_KEYRING): conf/private/packages-gpg
+$(GPG_KEYRING): $(SECRETS)/packages-gpg
 	@mkdir -p "$(dir $@)"
 	@rm -f $(GPG_KEYRING)
 	gpg --no-default-keyring --keyring="$@" --import "$<"
@@ -250,23 +254,23 @@ dockers/jenkins/shared/generated/authorized_keys: jehon-base-minimal/usr/share/j
 	@mkdir -p "$(dir $@)"
 	cat "$<" | grep -v -e "^#" | grep -v -e "^\$$"> "$@"
 
-dockers/jenkins/shared/generated/secrets.properties: conf/private/jenkins-secrets.properties
+dockers/jenkins/shared/generated/secrets.properties: $(SECRETS)/jenkins-secrets.properties
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/git-crypt-key: conf/private/git-crypt-key
+dockers/jenkins/shared/generated/git-crypt-key: $(SECRETS)/git-crypt-key
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/jenkins-github-ssh: conf/private/jenkins-github-ssh
+dockers/jenkins/shared/generated/jenkins-github-ssh: $(SECRETS)/jenkins-github-ssh
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: conf/private/jenkins-master-to-slave-ssh
+dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: $(SECRETS)/jenkins-master-to-slave-ssh
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/secrets.yml: conf/private/jenkins-secrets.yml
+dockers/jenkins/shared/generated/secrets.yml: $(SECRETS)/jenkins-secrets.yml
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
