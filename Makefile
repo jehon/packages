@@ -212,12 +212,6 @@ files-clean:
 
 .PHONY: files-build
 files-build: \
-		dockers/jenkins/shared/generated/authorized_keys \
-		dockers/jenkins/shared/generated/git-crypt-key \
-		dockers/jenkins/shared/generated/jenkins-github-ssh \
-		dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
-		dockers/jenkins/shared/generated/secrets.properties \
-		dockers/jenkins/shared/generated/timezone \
 		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
 
 #		jehon-base-minimal/usr/bin/shuttle-go
