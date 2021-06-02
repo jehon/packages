@@ -17,7 +17,7 @@ export JH_SRC
 export JH_PKG_FOLDER
 
 # where to store local sensible data
-export JH_CRYPTED_FOLDER
+export JH_SECRETS_FOLDER
 
 export JH_PKG_MINIMAL_NAME="jehon-base-minimal"
 
@@ -52,7 +52,7 @@ if [ "$JH_PKG_FOLDER" = "/" ]; then
     JH_PKG_FOLDER=""
 fi
 JH_SRC="$(dirname "$JH_PKG_FOLDER")"
-JH_CRYPTED_FOLDER="${JH_SRC}/secrets/crypted"
+JH_SECRETS_FOLDER="${JH_SRC}/secrets"
 
 #
 # Get the config file location (relative to /usr/share/jehon-base-minimal/)

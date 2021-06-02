@@ -126,13 +126,11 @@ credentials:
             id: cryptomedic-deploy
             secret: ${CRYPTOMEDIC_DEPLOY}
 
-        - file:
-            # This work only if the original file is binary ???
+        - string:
             scope: GLOBAL
-            id: git-crypt-key
-            description: to unlock git crypted part
-            fileName: git-crypt-key2
-            secretBytes: ${readFileBase64:/conf/generated/git-crypt-key}
+            description: secrets-password
+            id: secrets-password
+            secret: ${SECRETS_PASSWORD}
 
 unclassified:
   location:

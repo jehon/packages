@@ -7,39 +7,49 @@ pipeline {
     timeout(time: 15, unit: 'MINUTES')
   }
   environment {
-    GIT_CRYPT_KEY = credentials('git-crypt-key')
+    MAKEOPT = "--debug=basic"
+    SECRETS_PASSWORD = credentials('secrets-password')
+    SECRETS = "tmp/secrets"
   }
   stages {
-    stage('setup') {
+    stage('clean up') {
       steps {
-        sh 'md5sum $GIT_CRYPT_KEY'
-        sh 'git-crypt unlock $GIT_CRYPT_KEY'
-        sh 'make all-setup'
+        sh 'rm -fr tmp/'
       }
     }
-    stage('dump') {
+    stage('all-setup') {
       steps {
-        sh 'make all-dump'
+        sshagent(credentials: ['jenkins-github-ssh']) {
+          sh 'mkdir -p "${SECRETS}"'
+          sh 'git clone git@github.com:jehon/secrets.git tmp/secrets'
+          sh '${SECRETS}/start ${SECRETS_PASSWORD}'
+        }
+        sh 'make ${MAKEOPT} ${STAGE_NAME}'
       }
     }
-    stage('build') {
+    stage('all-dump') {
       steps {
-        sh 'make all-build'
+        sh 'make ${MAKEOPT} ${STAGE_NAME}'
       }
     }
-    stage('sign') {
+    stage('all-build') {
       steps {
-        sh 'make --debug repo/Release.gpg'
+        sh 'make ${MAKEOPT} ${STAGE_NAME}'
       }
     }
-    stage('test') {
+    stage('packages-sign') {
       steps {
-        sh 'make --debug all-test'
+        sh 'make --debug ${STAGE_NAME}'
       }
     }
-    stage('lint') {
+    stage('all-test') {
       steps {
-        sh 'make --debug all-lint'
+        sh 'make ${MAKEOPT} ${STAGE_NAME}'
+      }
+    }
+    stage('all-lint') {
+      steps {
+        sh 'make ${MAKEOPT} ${STAGE_NAME}'
       }
     }
     stage('Deploy') {
@@ -71,7 +81,7 @@ pipeline {
             // sh 'echo "****** GIT_URL_SSH: $GIT_URL_SSH ******"'
             // sh 'git remote -v'
 
-            sh 'GIT_ORIGIN=sshorigin make --debug deploy-github'
+            sh 'GIT_ORIGIN=sshorigin make ${MAKEOPT} deploy-github'
           }
         }
       }
