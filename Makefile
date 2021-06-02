@@ -39,7 +39,7 @@ endif
 export PATH := $(ROOT)/jehon-base-minimal/usr/bin:$(PATH)
 
 # Path to local crypted informations
-SECRETS=$(shell jh-lib; echo "$$JH_CRYPTED_FOLDER/jenkins")
+SECRETS ?= $(shell jh-lib; echo "$$JH_SECRETS_FOLDER")
 
 #
 #
@@ -150,7 +150,6 @@ $(addsuffix /.dockerbuild,$(DOCKERS)): $$(call recursive-dependencies,dockers/$$
 # Enrich dependencies
 dockers/jenkins/.dockerbuild: \
 	dockers/jenkins/shared/generated/authorized_keys \
-	dockers/jenkins/shared/generated/git-crypt-key \
 	dockers/jenkins/shared/generated/jenkins-github-ssh \
 	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
 	dockers/jenkins/shared/generated/secrets.properties \
@@ -239,7 +238,7 @@ files-lint:
 	exit $$RES
 
 
-$(GPG_KEYRING): $(SECRETS)/packages-gpg
+$(GPG_KEYRING): $(SECRETS)/crypted/jenkins/packages-gpg
 	@mkdir -p "$(dir $@)"
 	@rm -f $(GPG_KEYRING)
 	gpg --no-default-keyring --keyring="$@" --import "$<"
@@ -248,23 +247,19 @@ dockers/jenkins/shared/generated/authorized_keys: jehon-base-minimal/usr/share/j
 	@mkdir -p "$(dir $@)"
 	cat "$<" | grep -v -e "^#" | grep -v -e "^\$$"> "$@"
 
-dockers/jenkins/shared/generated/secrets.properties: $(SECRETS)/jenkins-secrets.properties
+dockers/jenkins/shared/generated/secrets.properties: $(SECRETS)/crypted/jenkins/jenkins-secrets.properties
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/git-crypt-key: $(SECRETS)/git-crypt-key
+dockers/jenkins/shared/generated/jenkins-github-ssh: $(SECRETS)/crypted/jenkins/jenkins-github-ssh
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/jenkins-github-ssh: $(SECRETS)/jenkins-github-ssh
+dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: $(SECRETS)/crypted/jenkins/jenkins-master-to-slave-ssh
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: $(SECRETS)/jenkins-master-to-slave-ssh
-	@mkdir -p "$(dir $@)"
-	cp "$<" "$@"
-
-dockers/jenkins/shared/generated/secrets.yml: $(SECRETS)/jenkins-secrets.yml
+dockers/jenkins/shared/generated/secrets.yml: $(SECRETS)/crypted/jenkins/jenkins-secrets.yml
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
@@ -325,6 +320,8 @@ packages-build: repo/Release
 
 packages-test: packages-build
 	run-parts --verbose --regex "test-.*" ./tests/packages
+
+packages-sign: repo/Release.gpg
 
 repo/Release.gpg: repo/Release $(GPG_KEYRING)
 	gpg --sign --armor --detach-sign --no-default-keyring --keyring=$(GPG_KEYRING) --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
@@ -418,7 +415,7 @@ deploy-local: packages-build
 .PHONY: deploy-synology
 deploy-synology:
 	. jh-lib; \
-	. $(JH_CRYPTED_FOLDER)/secrets.sh; \
+	. $(JH_SECRETS_FOLDER)/crypted/secrets.sh; \
 	set -o xtrace ; \
 	SSHPASS=$$JH_NAS_ADMIN_PASS sshpass -e \
 		rsync \
