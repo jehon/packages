@@ -8,10 +8,10 @@ set -o errexit
 # shellcheck source=/dev/null
 . "$JH_CRYPTED_FOLDER"/secrets.sh
 
-. jh-ensure-network
+. jh-mount-smb "$JH_NAS_IP" "home" "$JH_NAS_USER" "$JH_NAS_PASS"
+ok "Mounted at $JH_SMB_MOUNTED"
 
-#CRYPTED_SOURCE="${HOME}/.restricted"
-CRYPTED_SOURCE="$JH_NETWORK_NAS/home/restricted"
+CRYPTED_SOURCE="$JH_SMB_MOUNTED/restricted"
 CRYPTED_MOUNTED="${HOME}/Desktop/Private"
 TO_BE_ENCRYPTED="${HOME}/Downloads/enc"
 SECURITY_BACKUP="${CRYPTED_MOUNTED}/Security_Backup/"
@@ -76,6 +76,8 @@ function stop() {
 
 	echo "Removing thumbnails"
 	rm -fr ~/.thumbnails/
+
+	sudo umount "$JH_SMB_MOUNTED"
 
 	echo "Stopped !"
 	exit 0
