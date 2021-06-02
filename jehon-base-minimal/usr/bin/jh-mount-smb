@@ -13,6 +13,7 @@ PASSWORD="$4"
 TARGET="$5"
 
 JH_SMB_MOUNTED=~/tmp/"$HOST/$SHARE"
+declare _JH_SMB_MOUNTED="$JH_SMB_MOUNTED"
 #JH_SMB_MOUNTED="/run/user/$(id -u)/gvfs/smb-share:server=${HOST},share=${SHARE},user=${USERNAME}"
 
 if [[ -z "$USERNAME" ]]; then
@@ -49,11 +50,22 @@ mkdir -p "$JH_SMB_MOUNTED"
 
 header "Launching the mount"
 
+jh_smb_unmount() {
+    # TODO: this will not work in case of multiple mounts
+    exit_code=$?
+    header "Cleaning up..."
+    if mount -l | grep "$_JH_SMB_MOUNTED"; then
+        header "Unmounting samba share $_JH_SMB_MOUNTED"
+        sudo umount --lazy "$_JH_SMB_MOUNTED"
+    fi
+    ok "Cleaning done"
+    exit $exit_code
+}
+
+trap jh_smb_unmount EXIT INT TERM
+
 # sudo mount -t cifs -o username=<win_share_user> //WIN_SHARE_IP/<share_name> /mnt/win_share
-sudo mount -t cifs -o "username=$USERNAME,password=$PASSWORD,uid=$(id -u),gid=$(id -g)" "//$HOST/$SHARE" "$JH_SMB_MOUNTED"
+sudo mount -t cifs -o "username=$USERNAME,password=$PASSWORD,uid=$(id -u),gid=$(id -g),nosetuids,noperm" "//$HOST/$SHARE" "$JH_SMB_MOUNTED"
 chmod 777 "$JH_SMB_MOUNTED"
 
 ok "mounted"
-
-header "What do we have there ?"
-ls "$JH_SMB_MOUNTED"

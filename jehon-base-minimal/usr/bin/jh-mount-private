@@ -77,8 +77,6 @@ function stop() {
 	echo "Removing thumbnails"
 	rm -fr ~/.thumbnails/
 
-	sudo umount "$JH_SMB_MOUNTED"
-
 	echo "Stopped !"
 	exit 0
 }
