@@ -4,9 +4,18 @@
 . jh-lib
 
 # For pip (python) local install
-if [ -x /home/jehon/.local/bin ]; then
-	export PATH=~/.local/bin/:"$PATH"
+if [ -x ~/.local/bin ]; then
+    export PATH=~/.local/bin/:"$PATH"
 fi
+
+while read -r F; do
+    header "setup-profile in $(dirname "$F") "
+
+    # shellcheck source=/dev/null
+    source "$F"
+done < <(find ~/src \
+    -type d \( -name "node_modules" -o -name "vendor" -o -name "tmp" \) -prune -false \
+    -o -name "setup-profile.sh")
 
 # See https://unix.stackexchange.com/a/26782/240487
 # interactive => if [[ $- == *i* ]]
@@ -32,9 +41,9 @@ __parse_git_branch() {
         return
     fi
     echo -n "("
-    echo -n "$(basename "$(git rev-parse --show-toplevel)" )"
+    echo -n "$(basename "$(git rev-parse --show-toplevel)")"
     echo -n ":"
-    echo -n "$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
+    echo -n "$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
     if [[ -n $(git status -s) ]]; then
         echo -n "*"
     fi
@@ -44,23 +53,23 @@ __parse_git_branch() {
 __cmd_result() {
     __LAST_RESULT="$?"
     case "$__LAST_RESULT" in
-        0)
-            echo -ne "$JH_MSG_OK"
-            ;;
-        130)
-            # Ctrl-C
-            echo -ne "\033[31m^C\033[00m"
-            ;;
-        *)
-            echo -ne "$JH_MSG_KO"
-            ;;
+    0)
+        echo -ne "$JH_MSG_OK"
+        ;;
+    130)
+        # Ctrl-C
+        echo -ne "\033[31m^C\033[00m"
+        ;;
+    *)
+        echo -ne "$JH_MSG_KO"
+        ;;
     esac
 
-  # shellcheck disable=2154 # (no undeclared variables)
+    # shellcheck disable=2154 # (no undeclared variables)
     PS1+="${RCol}@${BBlu}\h ${Pur}\W${BYel}$ ${RCol}"
 }
 
-if [[ "$( id -u )" != "0" ]]; then
+if [[ "$(id -u)" != "0" ]]; then
     # Only if not root
 
     # Start with a white line
@@ -86,7 +95,7 @@ if [[ "$( id -u )" != "0" ]]; then
     export GID
 fi
 
-if type thefuck &> /dev/null; then
+if type thefuck &>/dev/null; then
     eval "$(thefuck --alias)"
     alias z="fuck"
 fi

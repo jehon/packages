@@ -135,19 +135,6 @@ curl --silent --show-error "https://api.github.com/users/jehon/repos?page=1&per_
 #   }
 
 if [ -x packages/setup-profile.sh ]; then
-    header "Setting up the profile ($HOME/.bashrc)"
-    PF="$(pwd -L)/packages/repo/profile-patch"
-    cat <<-EOF >"$PF"
-#
-# File: $HOME/.bashrc
-# Tag: jh-git-checkout
-#
-
-. $(pwd -L)/packages/setup-profile.sh
-
-EOF
-    jh-patch-file "$PF"
-
     header "** Configure APT **"
     FILE="/etc/apt/sources.list.d/jehon-package-repo.list"
 
