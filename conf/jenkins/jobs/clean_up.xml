@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+    <actions/>
+    <description>Clean up docker data</description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <hudson.model.ParametersDefinitionProperty>
+            <parameterDefinitions>
+                <org.jvnet.jenkins.plugins.nodelabelparameter.LabelParameterDefinition>
+                    <name>Label</name>
+                    <defaultValue>docker</defaultValue>
+                    <description>Select nodes</description>
+                    <allNodesMatchingLabel>true</allNodesMatchingLabel>
+                    <triggerIfResult>allCases</triggerIfResult>
+                    <nodeEligibility class="org.jvnet.jenkins.plugins.nodelabelparameter.node.IgnoreOfflineNodeEligibility"/>
+                </org.jvnet.jenkins.plugins.nodelabelparameter.LabelParameterDefinition>
+            </parameterDefinitions>
+        </hudson.model.ParametersDefinitionProperty>
+    </properties>
+    <scm class="hudson.scm.NullSCM"/>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers>
+        <hudson.triggers.TimerTrigger>
+            <spec>@daily</spec>
+        </hudson.triggers.TimerTrigger>
+    </triggers>
+    <concurrentBuild>true</concurrentBuild>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>
+set -o errexit
+ROOT="$( dirname "$( dirname "$( pwd )" )" )"
+echo "ROOT= $ROOT"
+cd "$ROOT" || exit 1
+docker run --rm -v "$(pwd):/app" -w /app bash chmod -R a+rwX .
+rm -fr "$ROOT/workspace"
+mkdir -p "$ROOT/workspace"
+mkdir -p "$ROOT/workspace/clean_up"
+
+    </command>
+        </hudson.tasks.Shell>
+        <hudson.tasks.Shell>
+            <command>docker system prune -f</command>
+        </hudson.tasks.Shell>
+    </builders>
+    <publishers/>
+    <buildWrappers/>
+</project>

@@ -74,5 +74,7 @@ while ! nc -vz 127.0.0.1 $WEB; do
     sleep 1s
 done
 
+jh-jenkins-job all "set"
+
 header "*** Service is up and running! ***"
 docker logs --follow jenkins
