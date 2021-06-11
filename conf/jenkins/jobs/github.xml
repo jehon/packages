@@ -1,8 +1,19 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <jenkins.branch.OrganizationFolder plugin="branch-api@2.6.4">
+  <actions/>
   <description>GitHub organizationnal folder</description>
   <displayName>github</displayName>
   <properties>
+    <jenkins.branch.OrganizationChildHealthMetricsProperty>
+      <templates>
+        <com.cloudbees.hudson.plugins.folder.health.WorstChildHealthMetric plugin="cloudbees-folder@6.15">
+          <nonRecursive>false</nonRecursive>
+        </com.cloudbees.hudson.plugins.folder.health.WorstChildHealthMetric>
+      </templates>
+    </jenkins.branch.OrganizationChildHealthMetricsProperty>
+    <jenkins.branch.OrganizationChildOrphanedItemsProperty>
+      <strategy class="jenkins.branch.OrganizationChildOrphanedItemsProperty$Inherit"/>
+    </jenkins.branch.OrganizationChildOrphanedItemsProperty>
     <jenkins.branch.OrganizationChildTriggersProperty>
       <templates>
         <com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger plugin="cloudbees-folder@6.15">
@@ -11,9 +22,9 @@
         </com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger>
       </templates>
     </jenkins.branch.OrganizationChildTriggersProperty>
-    <jenkins.branch.OrganizationChildOrphanedItemsProperty>
-      <strategy class="jenkins.branch.OrganizationChildOrphanedItemsProperty$Inherit"/>
-    </jenkins.branch.OrganizationChildOrphanedItemsProperty>
+    <jenkins.branch.NoTriggerOrganizationFolderProperty>
+      <branches>.*</branches>
+    </jenkins.branch.NoTriggerOrganizationFolderProperty>
   </properties>
   <folderViews class="jenkins.branch.OrganizationFolderViewHolder">
     <owner reference="../.."/>
@@ -41,6 +52,7 @@
   <navigators>
     <org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator plugin="github-branch-source@2.10.4">
       <repoOwner>jehon</repoOwner>
+      <apiUri>https://api.github.com</apiUri>
       <credentialsId>github-app</credentialsId>
       <traits>
         <com.cloudbees.jenkins.plugins.bitbucket.WebhookRegistrationTrait plugin="cloudbees-bitbucket-branch-source@2.9.9">
@@ -53,6 +65,15 @@
           <strategyId>2</strategyId>
         </org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait>
         <org.jenkinsci.plugins.github__branch__source.ExcludeArchivedRepositoriesTrait/>
+        <jenkins.plugins.git.traits.CloneOptionTrait plugin="git@4.7.2">
+          <extension class="hudson.plugins.git.extensions.impl.CloneOption">
+            <shallow>true</shallow>
+            <noTags>false</noTags>
+            <reference></reference>
+            <depth>10</depth>
+            <honorRefspec>false</honorRefspec>
+          </extension>
+        </jenkins.plugins.git.traits.CloneOptionTrait>
       </traits>
     </org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator>
   </navigators>
@@ -62,4 +83,7 @@
     </org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProjectFactory>
   </projectFactories>
   <buildStrategies/>
+  <strategy class="jenkins.branch.DefaultBranchPropertyStrategy">
+    <properties class="empty-list"/>
+  </strategy>
 </jenkins.branch.OrganizationFolder>
