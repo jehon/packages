@@ -74,7 +74,14 @@ while ! nc -vz 127.0.0.1 $WEB; do
     sleep 1s
 done
 
+header "Waiting for jenkins to be ready"
+while ! jh-jenkins-job server up; do
+    echo -n "."
+done
+ok "Server up"
+
 jh-jenkins-job all "set"
+jh-jenkins-job github "run"
 
 header "*** Service is up and running! ***"
 docker logs --follow jenkins
