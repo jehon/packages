@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 
-# shellcheck source=../../../../bin/jh-lib
-. jh-lib
-
 # For pip (python) local install
 if [ -x ~/.local/bin ]; then
     export PATH=~/.local/bin/:"$PATH"
 fi
 
 while read -r F; do
-    header "setup-profile in $(dirname "$F") "
+    echo "* setup-profile in $(dirname "$F") "
 
     # shellcheck source=/dev/null
     source "$F"
