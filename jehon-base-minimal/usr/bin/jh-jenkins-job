@@ -9,10 +9,10 @@ set -o errexit
 . jh-lib
 
 # shellcheck source=/dev/null
-. "$JH_SECRETS_FOLDER"/crypted/public.sh ""
+. jh-secrets-public
 
 # shellcheck source=/dev/null
-. "$JH_SECRETS_FOLDER"/crypted/secrets.sh ""
+. jh-secrets-secrets
 
 if [ -z "$2" ]; then
     echo "Usage: $(basename "$0") job_name action"
@@ -54,6 +54,11 @@ call_jenkins() {
 }
 
 case "$ACTION" in
+"up")
+    header "Checking if the server is ready"
+    call_jenkins "/cli" --head --silent --fail >/dev/null
+    ok "Ready"
+    ;;
 "get")
     header "Downloading '$JOB' to '$FILE'"
     call_jenkins "/job/$JOB/config.xml" -o "$FILE"
@@ -99,6 +104,9 @@ case "$ACTION" in
     ok "done"
     ;;
 
+"scan-sub")
+    # http://192.168.100.2:8080/job/github/api/json?tree=jobs[name]
+    ;;
 *)
     echo "Action invalid!"
     exit 1
