@@ -54,9 +54,11 @@ call_jenkins() {
 }
 
 case "$ACTION" in
-"up")
-    header "Checking if the server is ready"
-    call_jenkins "/cli" --head --silent --fail >/dev/null
+"wait_ready")
+    header "Waiting for the server to be ready"
+    while ! call_jenkins "/cli" --head --silent --fail >/dev/null; do
+        echo -n "."
+    done
     ok "Ready"
     ;;
 "get")
