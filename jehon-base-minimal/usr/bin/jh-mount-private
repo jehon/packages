@@ -6,7 +6,7 @@ set -o errexit
 . jh-lib
 
 # shellcheck source=/dev/null
-. jh-secrets-secrets
+. jh-secrets
 
 . jh-mount-smb "$JH_NAS_IP" "home" "$JH_NAS_USER" "$JH_NAS_PASS"
 ok "Mounted at $JH_SMB_MOUNTED"

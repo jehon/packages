@@ -9,10 +9,10 @@ set -o errexit
 . jh-lib
 
 # shellcheck source=/dev/null
-. jh-secrets-public
+. jh-public
 
 # shellcheck source=/dev/null
-. jh-secrets-secrets
+. jh-secrets
 
 if [ -z "$2" ]; then
     echo "Usage: $(basename "$0") job_name action"

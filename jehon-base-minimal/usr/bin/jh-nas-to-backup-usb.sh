@@ -4,6 +4,9 @@ set -o errexit
 
 . jh-ensure-network
 
+# shellcheck source=/dev/null
+. jh-secrets
+
 ROOT="/media/$(whoami)/usb_drive/synology"
 
 syncThis() {
