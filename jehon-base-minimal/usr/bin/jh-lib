@@ -107,6 +107,18 @@ header() {
     fi
 }
 
+# For recursion of header_start / header_done
+export CR_HEADER_PREFIX="*$CR_HEADER_PREFIX"
+
+header_start() {
+    LASTMSG="$*"
+    echo -e "\e[93m$CR_HEADER_PREFIX $*...\e[00m"
+}
+
+header_done() {
+    echo -e "\e[93m$CR_HEADER_PREFIX $LASTMSG done\e[00m"
+}
+
 warning() {
     if test -t 1; then
         echo -e "\e[91m$*\e[00m"
