@@ -5,14 +5,16 @@ if [ -x ~/.local/bin ]; then
     export PATH=~/.local/bin/:"$PATH"
 fi
 
-while read -r F; do
-    echo "* setup-profile in $(dirname "$F") "
+if [ -r ~/src ]; then
+    while read -r F; do
+        echo "* setup-profile in $(dirname "$F") "
 
-    # shellcheck source=/dev/null
-    source "$F"
-done < <(find ~/src \
-    -type d \( -name "node_modules" -o -name "vendor" -o -name "tmp" \) -prune -false \
-    -o -name "setup-profile.sh")
+        # shellcheck source=/dev/null
+        source "$F"
+    done < <(find ~/src \
+        -type d \( -name "node_modules" -o -name "vendor" -o -name "tmp" \) -prune -false \
+        -o -name "setup-profile.sh")
+fi
 
 # See https://unix.stackexchange.com/a/26782/240487
 # interactive => if [[ $- == *i* ]]
