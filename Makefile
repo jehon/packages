@@ -415,7 +415,7 @@ deploy-local: packages-build
 .PHONY: deploy-synology
 deploy-synology:
 	. jh-lib; \
-	. jh-secrets-secrets; \
+	. jh-secrets; \
 	set -o xtrace ; \
 	SSHPASS=$$JH_NAS_ADMIN_PASS sshpass -e \
 		rsync \
