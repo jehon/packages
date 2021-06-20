@@ -1,24 +1,34 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
-. /etc/jehon/restricted/osmc.env
+OSMC_ENV="./osmc.env"
+if [ -n "$1" ]; then
+    OSMC_ENV="$1"
+fi
+
+# shellcheck source=/dev/null
+. "$OSMC_ENV"
+
+TARGET="/home/osmc/.kodi/userdata"
+if [ -n "$2" ]; then
+    TARGET="$2"
+fi
 
 if [ -z "$NAS_OSMC_USER" ]; then
-    echo "Need a NAS_OSMC_USER in /etc/jehon/restricted/osmc.env" >&2
+    echo "Need a NAS_OSMC_USER in $OSMC_ENV" >&2
     exit 255
 fi
 
 if [ -z "$NAS_OSMC_PASS" ]; then
-    echo "Need a NAS_OSMC_PASS in /etc/jehon/restricted/osmc.env" >&2
+    echo "Need a NAS_OSMC_PASS in $OSMC_ENV" >&2
     exit 255
 fi
 
 if [ -z "$NAS_IP" ]; then
-    echo "Need a NAS_IP in /etc/jehon/restricted/osmc.env" >&2
+    echo "Need a NAS_IP in $OSMC_ENV" >&2
     exit 255
 fi
 
-cat >/home/osmc/.kodi/userdata/sources.xml <<EOC
+cat >"$TARGET"/sources.xml <<EOC
 <sources>
     <video>
         <default pathversion="1"></default>
@@ -29,22 +39,22 @@ cat >/home/osmc/.kodi/userdata/sources.xml <<EOC
         </source>
         <source>
             <name>Films (Français)</name>
-            <path>smb://$NAS_IP/video/films</path>
+            <path pathversion="1">smb://$NAS_IP/video/films</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Movies (English)</name>
-            <path>smb://$NAS_IP/video/movies</path>
+            <path pathversion="1">smb://$NAS_IP/video/movies</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Compositions</name>
-            <path>smb://$NAS_OSMC_USER:$NAS_OSMC_PASS@$NAS_IP/photo/films/</path>
+            <path pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS@$NAS_IP/photo/films/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Temporary</name>
-            <path>smb://$NAS_IP/transferts/videos/</path>
+            <path pathversion="1">smb://$NAS_IP/transferts/videos/</path>
             <allowsharing>true</allowsharing>
         </source>
     </video>
@@ -67,41 +77,36 @@ cat >/home/osmc/.kodi/userdata/sources.xml <<EOC
 </sources>
 EOC
 
-cat >/home/osmc/.kodi/userdata/passwords.xml <<EOC
+cat >"$TARGET"/passwords.xml <<EOC
 <passwords>
     <path>
-        <from pathversion="1">smb://$NAS_IP/transferts</from>
-        <to pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS/transferts/</to>
-    </path>
-    <path>
-        <from pathversion="1">smb://$NAS_IP/video</from>
-        <to pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS/video/</to>
-    </path>
-    <path>
-        <from pathversion="1">smb://$NAS_IP/music</from>
-        <to pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS/music/</to>
+        <from pathversion="1">smb://$NAS_IP</from>
+        <to pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS@$NAS_IP</to>
     </path>
 </passwords>
 EOC
 
-cat >/home/osmc/.kodi/userdata/keymaps/zKeymap.xml <<EOC
+cat >"$TARGET"/keymaps/zKeymap.xml <<EOC
 <keymap>
 	<!-- https://kodi.wiki/view/Window_IDs -->
 	<!-- https://github.com/xbmc/xbmc/blob/master/system/keymaps/keyboard.xml -->
 	<FullscreenVideo>
 		<remote>
+             <!-- red / green / yellow / blue -->
 			<!-- https://kodi.wiki/view/CEC -->
 			<!-- https://github.com/xbmc/xbmc/blob/master/system/keymaps/remote.xml -->
 			<red>AudioNextLanguage</red>
-			<green>ShowSubtitles</green>
-			<yellow>NextSubtitle</yellow>
-			<blue></blue>
+			<!-- <green>ShowSubtitles</green> -->
+			<!-- <yellow>NextSubtitle</yellow> -->
+            <green>NextSubtitle</green>
+			<yellow>SubtitleDelayMinus</yellow>
+			<blue>SubtitleDelayPlus</blue>
 		</remote>
 	</FullscreenVideo>
 </keymap>
 EOC
 
-# envsubst < "$SWD"/../lib/jehon/src/sources.xml > /home/osmc/.kodi/userdata/sources.xml
-chown osmc.osmc /home/osmc/.kodi/userdata/sources.xml
-chown osmc.osmc /home/osmc/.kodi/userdata/passwords.xml
-chown osmc.osmc /home/osmc/.kodi/userdata/keymaps/zKeymap.xml
+# envsubst < "$SWD"/../lib/jehon/src/sources.xml > "$TARGET"/sources.xml
+chown osmc.osmc "$TARGET"/sources.xml
+chown osmc.osmc "$TARGET"/passwords.xml
+chown osmc.osmc "$TARGET"/keymaps/zKeymap.xml
