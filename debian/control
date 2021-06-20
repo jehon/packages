@@ -100,17 +100,3 @@ Depends: ${misc:Depends}
 	google-chrome-stable,
 	smbnetfs
 Description: Jehon environnement
-
-##########################
-#
-# system's
-#
-##########################
-
-Package: jehon-system-tv
-Architecture: all
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}
-	jehon-base-minimal,
-	build-essential, rbp-userland-dev-osmc, libvncserver-dev, libconfig++-dev,
-Description: Jehon environnement

@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC1091
-. /etc/jehon/restricted/jehon.env
+. /etc/jehon/restricted/osmc.env
 
-if [ -z "$SYNOLOGY_USERNAME" ]; then
-    echo "Need a SYNOLOGY_USERNAME in /etc/jehon/restricted/jehon.env" >&2
+if [ -z "$NAS_OSMC_USER" ]; then
+    echo "Need a NAS_OSMC_USER in /etc/jehon/restricted/osmc.env" >&2
     exit 255
 fi
 
-if [ -z "$SYNOLOGY_PASSWORD" ]; then
-    echo "Need a SYNOLOGY_PASSWORD in /etc/jehon/restricted/jehon.env" >&2
+if [ -z "$NAS_OSMC_PASS" ]; then
+    echo "Need a NAS_OSMC_PASS in /etc/jehon/restricted/osmc.env" >&2
     exit 255
 fi
 
-cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
+if [ -z "$NAS_IP" ]; then
+    echo "Need a NAS_IP in /etc/jehon/restricted/osmc.env" >&2
+    exit 255
+fi
+
+cat >/home/osmc/.kodi/userdata/sources.xml <<EOC
 <sources>
     <video>
         <default pathversion="1"></default>
@@ -24,22 +29,22 @@ cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
         </source>
         <source>
             <name>Films (Français)</name>
-            <path>smb://192.168.1.9/video/films</path>
+            <path>smb://$NAS_IP/video/films</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Movies (English)</name>
-            <path>smb://192.168.1.9/video/movies</path>
+            <path>smb://$NAS_IP/video/movies</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Compositions</name>
-            <path>smb://192.168.1.9/photo/films/</path>
+            <path>smb://$NAS_OSMC_USER:$NAS_OSMC_PASS@$NAS_IP/photo/films/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Temporary</name>
-            <path>smb://192.168.1.9/transferts/videos/</path>
+            <path>smb://$NAS_IP/transferts/videos/</path>
             <allowsharing>true</allowsharing>
         </source>
     </video>
@@ -52,7 +57,7 @@ cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
         </source>
         <source>
             <name>music (synology)</name>
-            <path>smb://192.168.1.9/music/</path>
+            <path>smb://$NAS_IP/music/</path>
             <allowsharing>true</allowsharing>
         </source>
     </music>
@@ -62,24 +67,24 @@ cat > /home/osmc/.kodi/userdata/sources.xml <<EOC
 </sources>
 EOC
 
-cat > /home/osmc/.kodi/userdata/passwords.xml <<EOC
+cat >/home/osmc/.kodi/userdata/passwords.xml <<EOC
 <passwords>
     <path>
-        <from pathversion="1">smb://192.168.1.9/transferts</from>
-        <to pathversion="1">smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD/transferts/videos/</to>
+        <from pathversion="1">smb://$NAS_IP/transferts</from>
+        <to pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS/transferts/</to>
     </path>
     <path>
-        <from pathversion="1">smb://192.168.1.9/video</from>
-        <to pathversion="1">smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD/video/</to>
+        <from pathversion="1">smb://$NAS_IP/video</from>
+        <to pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS/video/</to>
     </path>
     <path>
-        <from pathversion="1">smb://192.168.1.9/music</from>
-        <to pathversion="1">smb://$SYNOLOGY_USERNAME:$SYNOLOGY_PASSWORD/music/</to>
+        <from pathversion="1">smb://$NAS_IP/music</from>
+        <to pathversion="1">smb://$NAS_OSMC_USER:$NAS_OSMC_PASS/music/</to>
     </path>
 </passwords>
 EOC
 
-cat > /home/osmc/.kodi/userdata/keymaps/zKeymap.xml <<EOC
+cat >/home/osmc/.kodi/userdata/keymaps/zKeymap.xml <<EOC
 <keymap>
 	<!-- https://kodi.wiki/view/Window_IDs -->
 	<!-- https://github.com/xbmc/xbmc/blob/master/system/keymaps/keyboard.xml -->

@@ -12,13 +12,6 @@ header_start "Setup remote start..."
 header_done
 
 header_start "Install jehon-system-tv..."
-#
-# TODO: copy jehon.env from secrets into /etc/jehon/restricted/jehon.env
-# TODO: run jh-osmc-setup
-# TODO: remove jehon-system-tv package
-#
-
-ssh "root@$SSH_HOST" -T <<EOS
-	apt install jehon-system-tv
-EOS
+scp "$JH_SECRETS_FOLDER"/osmc/jehon.env root@$SSH_HOST/etc/jehon/restricted/jehon.env
+ssh "root@$SSH_HOST" jh-osmc-system-setup
 header_done
