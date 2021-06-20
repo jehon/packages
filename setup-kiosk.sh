@@ -2,23 +2,22 @@
 
 set -o errexit
 
-ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "kiosk"
-ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "$(dig +short kiosk)"
+# shellcheck source=/dev/null
+. jh-lib
 
-jh-ping-ssh.sh kiosk
+SSH_HOST="kiosk"
 
-echo "*** setup remote start... ***"
-./setup-remote.sh kiosk pi raspberry
-echo "*** setup remote done ***"
-echo "*** setup remote home start... ***"
-./setup-remote-home.sh kiosk
-echo "*** setup remote home done ***"
+header_start "Setup remote start..."
+./setup-remote.sh $SSH_HOST pi raspberry
+header_done
 
-ssh root@kiosk -T <<EOS
+header_start "Run kickstart from kiosk github"
+ssh "root@$SSH_HOST" -T <<EOS
 	cd /opt/
 	wget https://raw.githubusercontent.com/jehon/kiosk/master/kickstart.sh -O /opt/kickstart.sh
 	chmod +x /opt/kickstart.sh
 	/opt/kickstart.sh && rm /opt/kickstart.sh
 EOS
+header_done
 
 # TODO: copy fstab file from local repo
