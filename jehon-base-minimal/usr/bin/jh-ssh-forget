@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# shellcheck source=/dev/null
+. jh-lib
+
+if [ -z "$1" ]; then
+    echo "You need to specify the host as [1]"
+    exit 255
+fi
+
+header "Removing $1 ($IP)"
+
+IP="$(dig +short "$1")"
+
+ssh-keygen -R "$1" >/dev/null
+ssh-keygen -R "$IP" >/dev/null
