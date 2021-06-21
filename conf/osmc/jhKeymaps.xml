@@ -1,0 +1,17 @@
+<keymap>
+	<!-- https://kodi.wiki/view/Window_IDs -->
+	<!-- https://github.com/xbmc/xbmc/blob/master/system/keymaps/keyboard.xml -->
+	<FullscreenVideo>
+		<remote>
+             <!-- red / green / yellow / blue -->
+			<!-- https://kodi.wiki/view/CEC -->
+			<!-- https://github.com/xbmc/xbmc/blob/master/system/keymaps/remote.xml -->
+			<red>AudioNextLanguage</red>
+			<!-- <green>ShowSubtitles</green> -->
+			<!-- <yellow>NextSubtitle</yellow> -->
+            <green>NextSubtitle</green>
+			<yellow>SubtitleDelayMinus</yellow>
+			<blue>SubtitleDelayPlus</blue>
+		</remote>
+	</FullscreenVideo>
+</keymap>

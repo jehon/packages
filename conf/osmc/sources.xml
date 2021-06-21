@@ -1,0 +1,46 @@
+<sources>
+    <video>
+        <default pathversion="1"></default>
+        <source>
+            <name>Auto-mounted drives</name>
+            <path pathversion="1">/media/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Films (Français)</name>
+            <path pathversion="1">smb://$NAS_IP/video/films</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Movies (English)</name>
+            <path pathversion="1">smb://$NAS_IP/video/movies</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Compositions</name>
+            <path pathversion="1">smb://$NAS_IP/photo/films</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Temporary</name>
+            <path pathversion="1">smb://$NAS_IP/transferts/videos</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </video>
+    <music>
+        <default pathversion="1"></default>
+        <source>
+            <name>Auto-mounted drives</name>
+            <path pathversion="1">/media/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>music (synology)</name>
+            <path>smb://$NAS_IP/music</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </music>
+    <files>
+        <default pathversion="1"></default>
+    </files>
+</sources>
