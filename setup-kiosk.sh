@@ -7,6 +7,10 @@ set -o errexit
 
 SSH_HOST="kiosk"
 
+header_start "Remove previous key"
+jh-ssh-forget "$SSH_HOST"
+header_done
+
 header_start "Setup remote start..."
 ./setup-remote.sh $SSH_HOST pi raspberry
 header_done

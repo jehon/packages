@@ -28,9 +28,8 @@ SSH_USER="$2"
 SSH_PASS="$3"
 
 header_start "Forget previous ssh key..."
-ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "$SSH_HOST"
-ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "$(dig +short "$SSH_HOST")"
-jh-ping-ssh.sh "$SSH_HOST"
+jh-ssh-forget "$SSH_HOST"
+jh-ping-ssh "$SSH_HOST"
 header_done
 
 header_start "Run Start on remote $HOST..."
