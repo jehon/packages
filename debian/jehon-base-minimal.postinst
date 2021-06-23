@@ -14,59 +14,72 @@ apply_special() {
 	if [ -x /usr/sbin/jh-system-apply-special ]; then
 		/usr/sbin/jh-system-apply-special
 
-		# Only if ssh is installed:
+		# We are patching SSH (at least), so we need to restart it
+		# but only if ssh is installed:
 		if systemctl list-units --full -all | grep -Fq "ssh.service"; then
-	   		service ssh restart
+			service ssh restart
 		fi
 	fi
 }
 
 case "$1" in
-	configure)
 
-		# Do we have a password?
+configure)
+	# Do we have a password?
+	db_get jehon/jehon_password
+	if [ "$RES" = "" ]; then
+
+		db_input critical jehon/jehon_password || true
+		db_go
+
 		db_get jehon/jehon_password
-		if [ "$RES" = "" ]; then
-
-			db_input critical jehon/jehon_password || true
-			db_go
-
-			db_get jehon/jehon_password
-			PASSWD="$RET"
-			if [ "$PWD" != "" ]; then
-				echo "Setting the password of account jehon"
-				echo "jehon:$PASSWD" | chpasswd
-				echo "Setting the samba passord of account jehon"
-				printf "$PASSWD\n$PASSWD\n" | smbpasswd -s -a jehon > /dev/null
-			else
-				echo "Bypassing setting the password of account jehon"
-			fi
+		PASSWD="$RET"
+		if [ "$PWD" != "" ]; then
+			echo "Setting the password of account jehon"
+			echo "jehon:$PASSWD" | chpasswd
+			echo "Setting the samba passord of account jehon"
+			printf "$PASSWD\n$PASSWD\n" | smbpasswd -s -a jehon >/dev/null
+		else
+			echo "Bypassing setting the password of account jehon"
 		fi
+	fi
 
-		groupadd -f docker || true
+	groupadd -f docker || true
 
-		apply_special
+	/usr/bin/jh-apt-configure-repositories.sh
 
-		/usr/bin/jh-apt-configure-repositories.sh
+	if ! find /etc/ssh/ssh_host_ 1>/dev/null 2>/dev/null; then
+		echo "Generating host keys for ssh"
+		cd /etc/ssh && ssh-keygen -A
+	fi
 
-		if [ "$(virt-what)" = "hyperv" ]; then
-			/usr/sbin/jh-hyperv-setup
+	if [ -z "$(virt-what)" ]; then
+		if timedatectl show | grep "Timezone=Europe/Brussels" 2>/dev/null >/dev/null; then
+			timedatectl set-timezone Europe/Brussels
 		fi
+	fi
 
-    	;;
+	apply_special
 
-	triggered)
-		apply_special
-		configureUserJehon
-		;;
+	if [ "$(virt-what)" = "hyperv" ]; then
+		/usr/sbin/jh-hyperv-setup
+	fi
 
-	abort-upgrade|abort-remove|abort-deconfigure)
-	    ;;
+	;;
 
-	*)
-	    echo "postinst called with unknown argument \`$1'" >&2
-	    exit 1
-	    ;;
+triggered)
+	# Trigger name is available at $2
+	apply_special
+	;;
+
+abort-upgrade | abort-remove | abort-deconfigure)
+	true
+	;;
+
+*)
+	echo "postinst called with unknown argument \`$1'" >&2
+	exit 1
+	;;
 esac
 
 exit 0

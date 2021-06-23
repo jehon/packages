@@ -1,4 +1,6 @@
 # http://eric.van-der-vlist.com/blog/owark/473/
+# https://sources.debian.org/src/dpkg/1.19.7/doc/triggers.txt/
 # man db-triggers
 interest-noawait /usr/lib/jehon
 interest-noawait /etc/group
+interest-noawait /boot
