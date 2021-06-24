@@ -47,11 +47,11 @@ pipeline {
         sh 'make ${MAKEOPT} ${STAGE_NAME}'
       }
     }
-    stage('all-lint') {
-      steps {
-        sh 'make ${MAKEOPT} ${STAGE_NAME}'
-      }
-    }
+    // stage('all-lint') {
+    //   steps {
+    //     sh 'make ${MAKEOPT} ${STAGE_NAME}'
+    //   }
+    // }
     stage('Deploy') {
       when {
         branch 'main'
