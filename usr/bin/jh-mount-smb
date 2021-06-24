@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+# shellcheck source=../bin/jh-lib
+. jh-lib
+
+set -o errexit
+
+export JH_SMB_MOUNTED
+
+HOST="$1"
+SHARE="$2"
+USERNAME="$3"
+PASSWORD="$4"
+TARGET="$5"
+
+#
+# Hidden env:
+#   JH_SMB_OPTS (for mount -o ...)
+#
+
+JH_SMB_MOUNTED=~/tmp/"$HOST/$SHARE"
+declare _JH_SMB_MOUNTED="$JH_SMB_MOUNTED"
+#JH_SMB_MOUNTED="/run/user/$(id -u)/gvfs/smb-share:server=${HOST},share=${SHARE},user=${USERNAME}"
+
+if [[ -z "$USERNAME" ]]; then
+    echo "Usage: $0 host share username password"
+    exit 1
+fi
+
+mkdir -p "$JH_SMB_MOUNTED"
+
+# Thanks to https://unix.stackexchange.com/a/88292/240487
+
+# header "Launching dbus"
+
+# if [ -r "$HOME/.dbus_settings" ]; then
+#     # shellcheck source=/dev/null
+#     . "$HOME/.dbus_settings"
+# fi
+
+# if [ -n "$DBUS_SESSION_BUS_PID" ]; then
+#     if kill -0 "$DBUS_SESSION_BUS_PID" 2>/dev/null; then
+#         echo "We should start"
+#         dbus-launch --sh-syntax >"$HOME/.dbus_settings"
+
+#         # shellcheck source=/dev/null
+#         . "$HOME/.dbus_settings"
+#     fi
+# fi
+
+# Thanks to https://unix.stackexchange.com/a/44318/240487
+
+# # Type password
+# #echo "$PASSWORD" |
+# gio mount "smb://$USERNAME@$HOST/$SHARE"
+
+header "Launching the mount"
+
+jh_smb_unmount() {
+    # TODO: this will not work in case of multiple mounts
+    exit_code=$?
+    header "Cleaning up..."
+    if mount -l | grep "$_JH_SMB_MOUNTED"; then
+        header "Unmounting samba share $_JH_SMB_MOUNTED"
+        sudo umount --lazy "$_JH_SMB_MOUNTED"
+    fi
+    ok "Cleaning done"
+    exit $exit_code
+}
+
+trap jh_smb_unmount EXIT INT TERM
+
+# sudo mount -t cifs -o username=<win_share_user> //WIN_SHARE_IP/<share_name> /mnt/win_share
+sudo mount -t cifs -o "username=$USERNAME,password=$PASSWORD,uid=$(id -u),gid=$(id -g),nosetuids,noperm,$JH_SMB_OPTS" "//$HOST/$SHARE" "$JH_SMB_MOUNTED"
+chmod 777 "$JH_SMB_MOUNTED"
+
+ok "mounted"

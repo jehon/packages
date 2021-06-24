@@ -25,5 +25,5 @@ debian.1
 #
 
 conf/generated/
-jehon-base-minimal/usr/bin/shuttle-go
-jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+usr/bin/shuttle-go
+usr/share/jehon/etc/ssh/authorized_keys/jehon

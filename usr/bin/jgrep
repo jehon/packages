@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+clear
+
+if [ "$2" = "" ]; then
+	FILES="*"
+else
+	FILES="$2"
+fi
+
+grep \
+	$3 \
+	--recursive \
+	--line-number \
+	--exclude-dir=.svn \
+	--exclude-dir=old* \
+	--exclude=*~ \
+	--exclude=*.bak \
+	--color=auto \
+	-F \
+	"$1" $FILES

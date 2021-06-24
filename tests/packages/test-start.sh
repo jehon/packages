@@ -38,7 +38,7 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
     exit $?
 fi
 
-assert_file_exists "$ROOT/repo/jehon-base-minimal.deb"
+assert_file_exists "$ROOT/repo/jehon.deb"
 
 echo "Launching docker"
 # SCRIPT_NAME=""

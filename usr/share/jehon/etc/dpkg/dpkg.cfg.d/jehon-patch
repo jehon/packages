@@ -1,0 +1,1 @@
+post-invoke=if [ -x /usr/sbin/jh-system-apply-special ]; then /usr/sbin/jh-system-apply-special; fi

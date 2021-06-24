@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# shellcheck source=../usr/bin/jh-lib
+. jh-lib
+
+PROBLEM=0
+PROBLEMS=()
+
+runOnSetupBySSH() {
+    HOST="$1"
+    shift
+
+    header_start "Run on $HOST"
+
+    # shellcheck disable=SC2029
+    if ! ssh "$HOST" "$@"; then
+        ((PROBLEM++))
+        PROBLEMS+=("$HOST")
+        echo "Problem" >&2
+    fi
+    header_done
+}
+
+runOnSetupBySSH "localhost" "$@"
+runOnSetupBySSH "kiosk" "$@"
+
+if [ "$PROBLEM" -gt 0 ]; then
+    header "Problems !!"
+    echo "!! Found problems !!" >&2
+    echo "${PROBLEMS[@]}" >&2
+    exit 1
+fi

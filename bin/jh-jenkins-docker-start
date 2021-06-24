@@ -2,7 +2,7 @@
 
 set -o errexit
 
-# shellcheck source=../jehon-base-minimal/usr/bin/jh-lib
+# shellcheck source=../usr/bin/jh-lib
 . jh-lib
 
 # See https://www.jenkins.io/doc/book/installing/docker/
@@ -35,8 +35,6 @@ if [ "$1" = "-f" ]; then
 fi
 
 make dockers/jenkins/.dockerbuild
-
-ssh-keygen -f "/home/jehon/.ssh/known_hosts" -R "[localhost]:2022"
 
 cat <<EOT
 
@@ -73,6 +71,8 @@ while ! nc -vz 127.0.0.1 $WEB; do
     header "Waiting for service to be up..."
     sleep 1s
 done
+
+jh-ssh-forget "localhost[$WEB]"
 
 jh-jenkins-job all "wait_ready"
 jh-jenkins-job all "set"

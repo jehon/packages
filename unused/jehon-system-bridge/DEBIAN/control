@@ -6,7 +6,7 @@ Version: 1
 Architecture: all
 Conflicts: jehon-bridge
 Replaces: jehon-bridge
-Pre-Depends: jehon-base-minimal
+Pre-Depends: jehon
 Depends: jehon-env-common,
 	iptables,
   net-tools,

@@ -35,7 +35,7 @@
 			"backup": "/target/{key}/{user}/backup/{timestamp}"
 		},
 		{
-			"key": "/bitbucket/packages/bin/jehon-base-minimal",
+			"key": "/bitbucket/packages/bin/jehon",
 			"path": "/target"
 		},
 		{

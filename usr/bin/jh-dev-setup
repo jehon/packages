@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+# shellcheck source=../bin/jh-lib
+. jh-lib
+
+KEY="bin/packages-cryp-key"
+if [ ! -r "$KEY" ]; then
+    echo "Please store "$KEY" for git-crypt" >&2
+    exit 1
+fi
+
+header "Configuring git"
+jh-git-config-global
+
+curl --silent --show-error "https://api.github.com/users/jehon/repos?page=1&per_page=100" |
+    jq -c ".[] | select (.archived == false) | select(.)" |
+    while read -r L; do
+
+        NAME="$(echo "$L" | jq -r ".name")"
+        URL="$(echo "$L" | jq -r ".ssh_url")"
+
+        # echo "$L"
+        header "$NAME ($URL)"
+        # echo "Url: $URL"
+
+        if [ -r "$NAME" ]; then
+            ok "Already checked out: $NAME"
+            (cd "$NAME" && git pull) >/dev/null
+            continue
+        else
+            git clone "$URL" "$NAME" >/dev/null
+            ok "Checked out at $NAME"
+        fi
+    done
+
+#
+# Live result
+#
+
+#  {
+#     "id": 48380578,
+#     "node_id": "MDEwOlJlcG9zaXRvcnk0ODM4MDU3OA==",
+#     "name": "php-loader",
+#     "full_name": "jehon/php-loader",
+#     "private": false,
+#     "owner": {
+#       "login": "jehon",
+#       "id": 1582670,
+#       "node_id": "MDQ6VXNlcjE1ODI2NzA=",
+#       "avatar_url": "https://avatars.githubusercontent.com/u/1582670?v=4",
+#       "gravatar_id": "",
+#       "url": "https://api.github.com/users/jehon",
+#       "html_url": "https://github.com/jehon",
+#       "followers_url": "https://api.github.com/users/jehon/followers",
+#       "following_url": "https://api.github.com/users/jehon/following{/other_user}",
+#       "gists_url": "https://api.github.com/users/jehon/gists{/gist_id}",
+#       "starred_url": "https://api.github.com/users/jehon/starred{/owner}{/repo}",
+#       "subscriptions_url": "https://api.github.com/users/jehon/subscriptions",
+#       "organizations_url": "https://api.github.com/users/jehon/orgs",
+#       "repos_url": "https://api.github.com/users/jehon/repos",
+#       "events_url": "https://api.github.com/users/jehon/events{/privacy}",
+#       "received_events_url": "https://api.github.com/users/jehon/received_events",
+#       "type": "User",
+#       "site_admin": false
+#     },
+#     "html_url": "https://github.com/jehon/php-loader",
+#     "description": "raw loader module for webpack",
+#     "fork": true,
+#     "url": "https://api.github.com/repos/jehon/php-loader",
+#     "forks_url": "https://api.github.com/repos/jehon/php-loader/forks",
+#     "keys_url": "https://api.github.com/repos/jehon/php-loader/keys{/key_id}",
+#     "collaborators_url": "https://api.github.com/repos/jehon/php-loader/collaborators{/collaborator}",
+#     "teams_url": "https://api.github.com/repos/jehon/php-loader/teams",
+#     "hooks_url": "https://api.github.com/repos/jehon/php-loader/hooks",
+#     "issue_events_url": "https://api.github.com/repos/jehon/php-loader/issues/events{/number}",
+#     "events_url": "https://api.github.com/repos/jehon/php-loader/events",
+#     "assignees_url": "https://api.github.com/repos/jehon/php-loader/assignees{/user}",
+#     "branches_url": "https://api.github.com/repos/jehon/php-loader/branches{/branch}",
+#     "tags_url": "https://api.github.com/repos/jehon/php-loader/tags",
+#     "blobs_url": "https://api.github.com/repos/jehon/php-loader/git/blobs{/sha}",
+#     "git_tags_url": "https://api.github.com/repos/jehon/php-loader/git/tags{/sha}",
+#     "git_refs_url": "https://api.github.com/repos/jehon/php-loader/git/refs{/sha}",
+#     "trees_url": "https://api.github.com/repos/jehon/php-loader/git/trees{/sha}",
+#     "statuses_url": "https://api.github.com/repos/jehon/php-loader/statuses/{sha}",
+#     "languages_url": "https://api.github.com/repos/jehon/php-loader/languages",
+#     "stargazers_url": "https://api.github.com/repos/jehon/php-loader/stargazers",
+#     "contributors_url": "https://api.github.com/repos/jehon/php-loader/contributors",
+#     "subscribers_url": "https://api.github.com/repos/jehon/php-loader/subscribers",
+#     "subscription_url": "https://api.github.com/repos/jehon/php-loader/subscription",
+#     "commits_url": "https://api.github.com/repos/jehon/php-loader/commits{/sha}",
+#     "git_commits_url": "https://api.github.com/repos/jehon/php-loader/git/commits{/sha}",
+#     "comments_url": "https://api.github.com/repos/jehon/php-loader/comments{/number}",
+#     "issue_comment_url": "https://api.github.com/repos/jehon/php-loader/issues/comments{/number}",
+#     "contents_url": "https://api.github.com/repos/jehon/php-loader/contents/{+path}",
+#     "compare_url": "https://api.github.com/repos/jehon/php-loader/compare/{base}...{head}",
+#     "merges_url": "https://api.github.com/repos/jehon/php-loader/merges",
+#     "archive_url": "https://api.github.com/repos/jehon/php-loader/{archive_format}{/ref}",
+#     "downloads_url": "https://api.github.com/repos/jehon/php-loader/downloads",
+#     "issues_url": "https://api.github.com/repos/jehon/php-loader/issues{/number}",
+#     "pulls_url": "https://api.github.com/repos/jehon/php-loader/pulls{/number}",
+#     "milestones_url": "https://api.github.com/repos/jehon/php-loader/milestones{/number}",
+#     "notifications_url": "https://api.github.com/repos/jehon/php-loader/notifications{?since,all,participating}",
+#     "labels_url": "https://api.github.com/repos/jehon/php-loader/labels{/name}",
+#     "releases_url": "https://api.github.com/repos/jehon/php-loader/releases{/id}",
+#     "deployments_url": "https://api.github.com/repos/jehon/php-loader/deployments",
+#     "created_at": "2015-12-21T15:56:50Z",
+#     "updated_at": "2020-12-08T02:52:08Z",
+#     "pushed_at": "2020-02-10T11:36:05Z",
+#     "git_url": "git://github.com/jehon/php-loader.git",
+#     "ssh_url": "git@github.com:jehon/php-loader.git",
+#     "clone_url": "https://github.com/jehon/php-loader.git",
+#     "svn_url": "https://github.com/jehon/php-loader",
+#     "homepage": "",
+#     "size": 18,
+#     "stargazers_count": 1,
+#     "watchers_count": 1,
+#     "language": "JavaScript",
+#     "has_issues": false,
+#     "has_projects": true,
+#     "has_downloads": true,
+#     "has_wiki": true,
+#     "has_pages": false,
+#     "forks_count": 5,
+#     "mirror_url": null,
+#     "archived": true,
+#     "disabled": false,
+#     "open_issues_count": 0,
+#     "license": null,
+#     "forks": 5,
+#     "open_issues": 0,
+#     "watchers": 1,
+#     "default_branch": "master"
+#   }
+
+if [ -x packages/setup-profile.sh ]; then
+    header "** Configure APT **"
+    FILE="/etc/apt/sources.list.d/jehon-package-repo.list"
+
+    LINE="deb [trusted=yes] file://$(pwd -L)/packages/repo /"
+    ORIGINAL="$(cat "$FILE")"
+
+    if [ "$ORIGINAL" != "$LINE" ]; then
+        warning "!! Need to update $FILE (as root) !!"
+        echo "original :  $ORIGINAL" >&2
+        echo "should be: $LINE" >&2
+        echo "--- Do that as root ---"
+        if [ -w /etc/apt/sources.list.d/jehon-package-repo.list ]; then
+            echo "$LINE" | sudo tee /etc/apt/sources.list.d/jehon-package-repo.list
+        else
+            echo "$LINE" >~/jehon-package-repo.list
+            echo "Copy it to target:"
+            echo "sudo cp jehon-package-repo.list /etc/apt/sources.list.d"
+        fi
+    fi
+fi
+
+for F in ./*; do
+    if [ -r "$F/.git/git-crypt/keys/default" ]; then
+        header "Uncrypting $F"
+        pushd "$F" >/dev/null
+        git-crypt unlock "../$KEY" || ko "Could not use git-crypt, repository $F not clean"
+        popd >/dev/null
+    fi
+done
+
+header "Done"

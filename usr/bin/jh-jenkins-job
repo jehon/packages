@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+
+# See https://support.cloudbees.com/hc/en-us/articles/220857567-How-to-create-a-job-using-the-REST-API-and-cURL-
+# See https://www.jenkins.io/doc/book/using/remote-access-api/
+
+set -o errexit
+
+# shellcheck source=/dev/null
+. jh-lib
+
+# shellcheck source=/dev/null
+. jh-secrets
+
+if [ -z "$2" ]; then
+    echo "Usage: $(basename "$0") job_name action"
+    exit 255
+fi
+
+JENKINS_URI="http://$JENKINS_HOST:$JENKINS_PORT"
+TMP_COOKIE_JAR=$(mktemp /tmp/"$(basename "$0")-XXXXXXXXXXX")
+
+JOB="$1"
+ACTION="$2"
+JOB_FOLDER="$JH_PKG_FOLDER/conf/jenkins/jobs"
+FILE="$JOB_FOLDER/$JOB.xml"
+mkdir -p "$(dirname "$FILE")"
+
+if [ "$JOB" == "all" ]; then
+    for C in "$JOB_FOLDER"/*.xml; do
+        N=$(basename "$C")
+        N=${N//.xml/}
+        header "Treating $N"
+        "$0" "$N" "$ACTION"
+    done
+    exit 0
+fi
+
+call_jenkins() {
+    local URI="$1"
+    shift
+
+    # Remove the cookie jar
+    rm -fr "$TMP_COOKIE_JAR"
+
+    # Get a crumb
+    CRUMB=$(curl -s -c "$TMP_COOKIE_JAR" "${JENKINS_URI}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)" -u "$JH_JENKINS_USER":"$JH_JENKINS_PASS")
+
+    # Make the real command
+    curl -s -b "$TMP_COOKIE_JAR" "${JENKINS_URI}${URI}" -u "$JH_JENKINS_USER":"$JH_JENKINS_PASS" -H "$CRUMB" "$@"
+    rm -fr "$TMP_COOKIE_JAR"
+}
+
+case "$ACTION" in
+"wait_ready")
+    header "Waiting for the server to be ready"
+    while ! call_jenkins "/cli" --head --silent --fail >/dev/null; do
+        echo -n "."
+    done
+    ok "Ready"
+    ;;
+"get")
+    header "Downloading '$JOB' to '$FILE'"
+    call_jenkins "/job/$JOB/config.xml" -o "$FILE"
+    ok "done"
+    ;;
+"set")
+    if [ ! -r "$FILE" ]; then
+        echo "File not found" >&2
+        exit 1
+    fi
+    "$0" "$JOB" "delete"
+
+    header "Creating '$JOB' from '$FILE'"
+    call_jenkins "/createItem?name=$JOB" -X POST -H "Content-Type:text/xml" --data-binary "@${FILE}"
+    ok "done"
+    ;;
+"delete")
+    header "Delete '$JOB'"
+    # call_jenkins "/job/$JOB/doDelete" -X POST || true
+    call_jenkins "/job/$JOB/" -X DELETE || true
+    ok "done"
+    ;;
+"run")
+    #
+    # See https://www.jenkins.io/doc/book/using/remote-access-api/
+    #
+    #
+    # Submitting jobs
+    ##  Jobs without parameters
+    #
+    # You merely need to perform an HTTP POST on JENKINS_URL/job/JOBNAME/build.
+    #
+    ## Jobs with parameters
+    # Simple example - sending "String Parameters":
+    #
+    # curl JENKINS_URL/job/JOB_NAME/buildWithParameters \
+    #   --user USER:TOKEN \
+    #   --data id=123 --data verbosity=high
+    #
+
+    header "Launching job $JOB"
+    call_jenkins "/job/$JOB/build" -X POST
+    ok "done"
+    ;;
+
+"scan-sub")
+    # http://192.168.100.2:8080/job/github/api/json?tree=jobs[name]
+    ;;
+*)
+    echo "Action invalid!"
+    exit 1
+    ;;
+esac

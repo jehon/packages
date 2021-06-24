@@ -6,97 +6,119 @@ Build-Depends: debhelper (>= 10)
 Standards-Version: 4.1.2
 Homepage: http://www.github.org/jehon/packages/
 Vcs-Git: git@github.org:jehon/packages.git
-Vcs-Browser: https://wwW.github.org/jehon/packages/
+Vcs-Browser: https://www.github.org/jehon/packages/
 
-
-##########################
-#
-# Base
-#
-##########################
 
 Package: jehon-base-minimal
+Depends: jehon, jehon-packages
+Architecture: all
+Description: transitional to jehon and jehon-packages
+
+Package: jehon
+## Provides: jehon-base-minimal
+## Replaces: jehon-base-minimal
+## Conflicts: jehon-base-minimal
 Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 	dpkg (>= 1.17.14)
 Depends: ${misc:Depends},
-	debconf, sed,
+	apt-transport-https,
 	bash,
-	sudo,
-	sshpass,
-	curl,
-	lsb-release,
- 	apt-transport-https,
-	debfoster,
-	ntp,
-	openssh-server, openssh-client,
-	nmap,
-	parted,
-	screen,
-	multitail,
-	less,
-	fdupes,
 	cifs-utils,
+	curl,
+	debconf,
+	gnupg2,
 	htop,
-	libexiv2-dev, exiftran,
-	python-pkg-resources,
-	jq,
+	less,
+	lsb-release,
+	openssh-server,
 	samba,
-	lftp,
-	entr,
-	gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly,
-	exif, libimage-exiftool-perl,
-	gnupg2, dirmngr,
-	rsync,
-	git,
-	gettext-base,
-	xvfb,
-	shellcheck,
-	libnss3-dev,
-	libatk1.0-dev,
-	encfs,
-	thefuck,
+	screen,
+	sed,
+	sudo,
 	ufw,
-	git-crypt,
-	imagemagick-6.q16,
-	make, gcc, xdotool, exiv2,
-	chromium-browser | chromium,
-	virt-what,
-	dialog
-Description: Jehon minimal hooks
+	virt-what
+Description: Jehon scripts and security
 
-Package: jehon-base-thirdparties
+Package: jehon-packages
 Architecture: all
+Provides: jehon-base-thirdparties
+Replaces: jehon-base-thirdparties
+Breaks: jehon-base-thirdparties
 Pre-Depends: ${misc:Pre-Depends}
 	dpkg (>= 1.17.14)
-Depends: jehon-base-minimal,
-	nodejs
-Description:
-	Install third parties from external sources
-
-##########################
-#
-# Env
-#
-##########################
+Depends: ${misc:Depends}, jehon,
+	debfoster,
+	dialog,
+	dirmngr,
+	entr,
+	exif,
+	exiftran,
+	exiv2,
+	fdupes,
+	gcc,
+	gettext-base,
+	git,
+	git-crypt,
+	imagemagick-6.q16,
+	jq,
+	less,
+	lftp,
+	libatk1.0-dev,
+	libexiv2-dev,
+	libimage-exiftool-perl,
+	libnss3-dev,
+	lsb-release,
+	make,
+	multitail,
+	nmap,
+	nodejs,
+	ntp,
+	openssh-client,
+	parted,
+	python-pkg-resources,
+	rsync,
+	shellcheck,
+	sshpass,
+	thefuck,
+	traceroute,
+	xdotool
+Description: Jehon minimal hooks
 
 Package: jehon-env-desktop
 Architecture: all
+Depends: jehon-desktop
+Description: transitional to jehon-desktop
+
+Package: jehon-desktop
+Architecture: all
+## Provides: jehon-env-desktop
+## Replaces: jehon-env-desktop
+## Breaks: jehon-env-desktop
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}
-	jehon-base-minimal,
-	git-cola,
-	xclip,
-	gparted,
-	pdfsam,
+Depends: ${misc:Depends}, jehon, jehon-packages,
 	activity-log-manager,
-	terminator,
-	xtermcontrol,
-	meld,
-	exfat-fuse, exfat-utils,
-	xprintidle,
-	snapd,
-	libgtk2.0-0, libnotify-dev, libgconf-2-4, libnss3, libxss1, libasound2,
+	chromium-browser | chromium,
+	encfs,
+	exfat-fuse,
+	exfat-utils,
+	git-cola,
 	google-chrome-stable,
-	smbnetfs
+	gparted,
+	gstreamer1.0-plugins-bad,
+	gstreamer1.0-plugins-ugly,
+	libasound2,
+	libgconf-2-4,
+	libgtk2.0-0,
+	libnotify-dev,
+	libnss3,
+	libxss1,
+	meld,
+	pdfsam,
+	snapd,
+	terminator,
+	xclip,
+	xprintidle,
+	xtermcontrol,
+	xvfb
 Description: Jehon environnement

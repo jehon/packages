@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+# shellcheck source=../usr/bin/jh-lib
+. jh-lib
+
 shopt -s nullglob
 
-JH_THIS_ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+JH_THIS_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 #
 # must_run: 0 -> call the topic on this one
@@ -32,25 +35,25 @@ treatDir() {
 		# shellcheck source=/dev/null
 		if source "$F" "must_run"; then
 			# shellcheck source=/dev/null
-			source "$F" "$@" \
-				|& jh-tag-stdin.sh "$PWD" "$(basename "$F" )"
+			source "$F" "$@" |&
+				jh-tag-stdin "$PWD" "$(basename "$F")"
 		fi
 	done
 
-	for d in ./* ; do
-	    [ -r "$d" ] || continue
-	    [ -d "$d" ] || continue
+	for d in ./*; do
+		[ -r "$d" ] || continue
+		[ -d "$d" ] || continue
 		N=$(basename "$d")
 
-		if ! myRunParts "is_content" "$N" ; then
+		if ! myRunParts "is_content" "$N"; then
 			continue
 		fi
 
 		# Recurse (deep first)
 
-		pushd "$d" > /dev/null || exit 255
+		pushd "$d" >/dev/null || exit 255
 		treatDir "$@"
-		popd > /dev/null || exit 255
+		popd >/dev/null || exit 255
 
 	done
 }

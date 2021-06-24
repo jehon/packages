@@ -8,7 +8,7 @@ SWD="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 # shellcheck source=../lib/test-helpers.sh
 . "$SWD/../lib/test-helpers.sh"
 
-SCRIPT="$JH_ROOT/jehon-base-minimal/usr/bin/jh-disk-space-test.sh"
+SCRIPT="$JH_ROOT/usr/bin/jh-disk-space-test.sh"
 
 test_capture run "$SCRIPT" / 1
 assert_captured_success "should be successfull"

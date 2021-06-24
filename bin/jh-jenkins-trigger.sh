@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 set -o errexit
+
+# shellcheck source=../usr/bin/jh-lib
+. jh-lib
+
 # shellcheck source=/dev/null
 . jh-jenkins-status.sh
 

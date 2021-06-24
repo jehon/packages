@@ -6,8 +6,8 @@ set -o errexit
 JH_ROOT="$(dirname "$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")")"
 export JH_ROOT
 
-# shellcheck source=../../jehon-base-minimal/usr/bin/jh-lib
-. "$JH_ROOT/jehon-base-minimal/usr/bin/jh-lib"
+# shellcheck source=../../usr/bin/jh-lib
+. "$JH_ROOT/usr/bin/jh-lib"
 
 # TODO: use jh-lib and factorized facilities
 

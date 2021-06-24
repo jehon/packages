@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script Working Directory
-SWD="$( dirname "${BASH_SOURCE[0]}" )"
+SWD="$(dirname "${BASH_SOURCE[0]}")"
 
 # shellcheck source=../lib/test-helpers.sh
 . "$SWD/../lib/test-helpers.sh"
@@ -14,7 +14,7 @@ BACKUP="$TARGET-before-patch-file"
 	# Setup the source file
 	echo "This is the file"
 	echo "This is the end"
-) > "$TARGET"
+) >"$TARGET"
 
 cat <<-EOF >"$PATCH"
 	#
@@ -26,7 +26,7 @@ cat <<-EOF >"$PATCH"
 	Hello world
 EOF
 
-test_capture "jh-patch-file-patch" "$JH_ROOT"/jehon-base-minimal/usr/bin/jh-patch-file "$PATCH"
+test_capture "jh-patch-file-patch" "$JH_ROOT"/usr/bin/jh-patch-file "$PATCH"
 assert_captured_success "should be successfull"
 
 test_capture "jh-patch-file-patch read" cat "$TARGET"
@@ -40,7 +40,7 @@ assert_captured_output_contains "This is the file"
 assert_captured_output_contains "Hello world"
 test_capture_empty
 
-test_capture "jh-patch-file-patch" $JH_ROOT/jehon-base-minimal/usr/bin/jh-patch-file "uninstall" "$TARGET" "test"
+test_capture "jh-patch-file-patch" $JH_ROOT/usr/bin/jh-patch-file "uninstall" "$TARGET" "test"
 assert_captured_success "should be successfull"
 
 test_capture_file "read the generated file" "$TARGET"

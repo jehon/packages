@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# shellcheck source=/dev/null
+. jh-lib
+
+set -o errexit
+
+EXE="/usr/bin/shuttle-go"
+CFG="/usr/share/jehon/shuttle-go.json"
+
+if [ -n "$JH_PKG_FOLDER" ]; then
+    EXE="$JH_PKG_FOLDER/externals/shuttle-go/shuttle-go"
+    CFG="$JH_PKG_FOLDER/usr/share/jehon/shuttle-go.json"
+fi
+
+# echo "EXE: $EXE"
+# echo "CFG: $CFG"
+
+"$EXE" \
+    -config "$CFG" \
+    -debug

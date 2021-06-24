@@ -2,6 +2,9 @@
 
 # NOT TESTED
 
+# shellcheck source=../usr/bin/jh-lib
+. jh-lib
+
 # Backups
 mkdir -p /var/backups/jenkins
 chown -R jenkins /var/backups/jenkins
@@ -11,7 +14,7 @@ usermod -a -G docker jenkins
 
 # Allow http access
 # Wait for xtable lock to be available
-iptables -L -n --wait > /dev/null
+iptables -L -n --wait >/dev/null
 ufw allow Jenkins
 
 #
@@ -22,7 +25,7 @@ ufw allow Jenkins
 cp /etc/default/jenkins /etc/default/jenkins.bak
 sed -i "s/JENKINS_HOME=.*/JENKINS_HOME=\/home\/jenkins/" /etc/default/jenkins
 
-if [ -d /var/lib/jenkins ] ; then
+if [ -d /var/lib/jenkins ]; then
     mv /var/lib/jenkins /home
 fi
 
@@ -30,8 +33,6 @@ mkdir -p /home/jenkins
 chown jenkins /home/jenkins
 
 # End
-
-
 
 # upload ssh key: https://gist.github.com/hayderimran7/d6ab8a6a770cb970349e
 # https://nickcharlton.net/posts/setting-jenkins-credentials-with-groovy.html

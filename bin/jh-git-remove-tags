@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# shellcheck source=../jehon-base-minimal/usr/bin/jh-lib
+# shellcheck source=../usr/bin/jh-lib
 . jh-lib
 
 set -o errexit

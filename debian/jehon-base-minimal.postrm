@@ -1,4 +1,0 @@
-#!/bin/sh
-
-dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_direct_access.sh -- "$@"
-dpkg-maintscript-helper rm_conffile /etc/profile.d/jehon_custom.sh -- "$@"

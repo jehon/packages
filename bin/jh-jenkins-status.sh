@@ -2,7 +2,7 @@
 
 set -o errexit
 
-# shellcheck source=/dev/null
+# shellcheck source=../usr/bin/jh-lib
 . jh-lib
 
 # shellcheck source=/dev/null

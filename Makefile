@@ -7,6 +7,9 @@
 #
 auto:
 
+clear:
+	clear
+
 #
 #
 # Generic configuration
@@ -36,10 +39,10 @@ else
 	VERSION=$(VERSION_LAST_GIT).$(VERSION_CURRENT_TIME_TAG)
 endif
 
-export PATH := $(ROOT)/jehon-base-minimal/usr/bin:$(PATH)
+export PATH := $(ROOT)/usr/bin:$(PATH)
 
 # Path to local crypted informations
-SECRETS ?= $(shell jh-lib; echo "$$JH_SECRETS_FOLDER")
+SECRETS ?= $(shell jh-lib && echo "$$JH_SECRETS_FOLDER" 2> /dev/null)
 
 #
 #
@@ -206,20 +209,20 @@ all-lint: files-lint
 files-clean:
 	rm -fr conf/generated
 	rm -fr dockers/jenkins/shared/generated/
-#	rm -f jehon-base-minimal/usr/bin/shuttle-go
-	rm -f jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+#	rm -f usr/bin/shuttle-go
+	rm -f usr/share/jehon/etc/ssh/authorized_keys/jehon
 
 .PHONY: files-build
 files-build: \
-		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon \
+		usr/share/jehon/etc/ssh/authorized_keys/jehon \
 
-#		jehon-base-minimal/usr/bin/shuttle-go
+#		usr/bin/shuttle-go
 
 	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
 	find bin -exec "chmod" "+x" "{}" ";"
-	find jehon-base-minimal -name "*.sh" -exec "chmod" "+x" "{}" ";"
-	find jehon-base-minimal/usr/bin -exec "chmod" "+x" "{}" ";"
-	find jehon-base-minimal/usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
+	find usr -name "*.sh" -exec "chmod" "+x" "{}" ";"
+	find usr/bin -exec "chmod" "+x" "{}" ";"
+	find usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
 
 .PHONY: files-test
 files-test: files-shell-test
@@ -243,7 +246,7 @@ $(GPG_KEYRING): $(SECRETS)/crypted/jenkins/packages-gpg
 	@rm -f $(GPG_KEYRING)
 	gpg --no-default-keyring --keyring="$@" --import "$<"
 
-dockers/jenkins/shared/generated/authorized_keys: jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+dockers/jenkins/shared/generated/authorized_keys: usr/share/jehon/etc/ssh/authorized_keys/jehon
 	@mkdir -p "$(dir $@)"
 	cat "$<" | grep -v -e "^#" | grep -v -e "^\$$"> "$@"
 
@@ -263,15 +266,15 @@ dockers/jenkins/shared/generated/secrets.yml: $(SECRETS)/crypted/jenkins/jenkins
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
 
-dockers/jenkins/shared/generated/timezone: jehon-base-minimal/usr/share/jehon-base-minimal/etc/timezone
+dockers/jenkins/shared/generated/timezone: usr/share/jehon/etc/timezone
 	@mkdir -p "$(dir $@)"
 	cat "$<" | tr -d '\n' > "$@"
 
-# jehon-base-minimal/usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
+# usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 # 	@mkdir -p "$(dir $@)"
 # 	cp externals/shuttle-go/shuttle-go "$@"
 
-jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon: $(call recursive-dependencies,conf/keys/admin,$@)
+usr/share/jehon/etc/ssh/authorized_keys/jehon: $(call recursive-dependencies,conf/keys/admin,$@)
 	@mkdir -p "$(dir $@)"
 	( \
 		echo -e "\n\n#\n#\n# Access \n#\n#   Generated on $$(date)\n#\n";\
@@ -309,7 +312,7 @@ all-test: packages-test
 .PHONY: packages-clean
 packages-clean:
 	make -f debian/rules clean
-	rm -f  $(ROOT)/debian/jehon-base-minimal.links
+	rm -f  $(ROOT)/debian/jehon.links
 	rm -f  $(ROOT)/debian/*.debhelper
 	rm -f  $(ROOT)/debian/*.substvars
 	rm -fr $(ROOT)/repo
@@ -329,7 +332,7 @@ repo/Release.gpg: repo/Release $(GPG_KEYRING)
 repo/Release: repo/Packages dockers/jehon-docker-build/.dockerbuild
 	$(RUN_IN_DOCKER) "cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release ." > "$@"
 
-repo/Packages: repo/index.html repo/jehon-base-minimal.deb
+repo/Packages: repo/index.html repo/jehon.deb
 	$(RUN_IN_DOCKER) "cd repo && dpkg-scanpackages -m ." | sed -e "s%./%%" > "$@"
 
 repo/index.html: repo/.built
@@ -340,9 +343,9 @@ repo/index.html: repo/.built
 	done; \
 	echo "</html>" >> "$@";
 
-repo/jehon-base-minimal.deb: repo/.built
-# create jehon-base-minimal.deb for /start...
-	LD="$$( find repo/ -name "jehon-base-minimal_*" | sort -r | head -n 1 )" && cp "$$LD" "$@"
+repo/jehon.deb: repo/.built
+# create jehon.deb for /start...
+	LD="$$( find repo/ -name "jehon_*.deb" | sort -r | head -n 1 )" && cp "$$LD" "$@"
 
 repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		debian/control \
@@ -350,30 +353,28 @@ repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		debian/*.install \
 		debian/*.templates \
 		debian/*.triggers \
-		debian/jehon-base-minimal.links \
+		debian/jehon.links \
 		$(shell find . -path "./jehon-*" -type f) \
-		jehon-base-minimal/usr/share/jehon-base-minimal/etc/ssh/authorized_keys/jehon
+		usr/share/jehon/etc/ssh/authorized_keys/jehon
 
-#		jehon-base-minimal/usr/bin/shuttle-go
+#		usr/bin/shuttle-go
 
 	$(call itself,files-build)
 	@rm -fr repo
 	@mkdir -p "$(dir $@)"
-#echo "************ build indep ******************"
 	$(RUN_IN_DOCKER) "rsync -a /app /tmp/ \
 		&& cd /tmp/app \
 		&& gbp dch --git-author --ignore-branch --new-version=$(VERSION) --distribution main \
 		&& debuild -rsudo --no-lintian -uc -us --build=binary \
-		&& cp ../jehon-*.deb /app/repo/ "
+		&& cp ../jehon*.deb /app/repo/ "
 
 #echo "************ build arch:armhf *************"
 # && debuild -rsudo --no-lintian -uc -us --build=any --host-arch armhf && ls -l /tmp && cp ../jehon-*.deb /app/repo/
 	touch "$@"
 
-debian/jehon-base-minimal.links: $(shell find jehon-base-minimal/usr/share/jehon-base-minimal/etc -type f )
-
-	(cd jehon-base-minimal/usr/share/jehon-base-minimal/etc \
-		&& find * -type "f,l" -exec "echo" "/usr/share/jehon-base-minimal/etc/{} /etc/{}" ";" ) > "$@"
+debian/jehon.links: $(shell find usr/share/jehon/etc -type f )
+	(cd usr/share/jehon/etc \
+		&& find * -type "f,l" -exec "echo" "/usr/share/jehon/etc/{} /etc/{}" ";" ) > "$@"
 
 ######################################
 #
