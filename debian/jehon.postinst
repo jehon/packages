@@ -65,11 +65,21 @@ configure)
 		/usr/sbin/jh-hyperv-setup
 	fi
 
+	/usr/sbin/jh-users-add-jehon
+	/usr/sbin/jh-firewall-setup
+
 	;;
 
 triggered)
 	# Trigger name is available at $2
-	apply_special
+	case "$2" in
+	"/boot")
+		/usr/sbin/jh-backup-boot
+		;;
+	*)
+		apply_special
+		;;
+	esac
 	;;
 
 abort-upgrade | abort-remove | abort-deconfigure)

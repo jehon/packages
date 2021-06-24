@@ -32,7 +32,7 @@ jh-ssh-forget "$SSH_HOST"
 jh-ping-ssh "$SSH_HOST"
 header_done
 
-header_start "Run Start on remote $HOST..."
+header_start "Run Start on remote $SSH_HOST..."
 sshpass -p"$SSH_PASS" scp start "$SSH_USER@$SSH_HOST":/tmp/start
 sshpass -p"$SSH_PASS" ssh "$SSH_USER@$SSH_HOST" "chmod +x /tmp/start; sudo /tmp/start"
 header_done

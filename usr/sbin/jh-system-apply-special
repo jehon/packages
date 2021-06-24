@@ -54,13 +54,3 @@ done < <(diff --new-file "$PATCHED" "$PATCHING" | grep "<")
 #
 cp "$PATCHING" "$PATCHED"
 rm -f "$PATCHING"
-
-################################
-#
-# Script
-#
-
-for S in "$ROOT"/postUpdate/*; do
-	chmod +x "$S"
-	"$S" || echo "** Failed in $S **"
-done

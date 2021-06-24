@@ -36,6 +36,16 @@ apt-get install --yes "$LOCAL_DEB"
 apt-get --yes update
 apt-get --yes upgrade
 
+#
+# Now we have our traditional setup
+#
+#
+
+# shellcheck source=/dev/null
+. jh-lib
+
+/usr/sbin/jh-backup-boot
+
 cat <<EOD
 
 *** Install done ***
