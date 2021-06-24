@@ -1,25 +1,32 @@
 #!/usr/bin/env bash
 
+# shellcheck source=./jh-lib
+. jh-lib
+
 TARGET_HOST="$1"
 
-echo "=== Pinging host ==="
+header_start "Pinging host $TARGET_HOST"
 if ! ping -w 1 -c 1 "$TARGET_HOST"; then
   echo "ICMP ping: '$TARGET_HOST' is not reachable" >&2
   exit 2
 fi
+header_done
 
-echo "=== Trying to open an ssh connection ==="
+header_start "Adding key"
+ssh-keyscan "$TARGET_HOST" >>~/.ssh/known_hosts
+header_done
+
+header_start "Trying to open an ssh connection"
 status=$(
   ssh \
     -o BatchMode=yes \
     -o CheckHostIP=no \
     -o StrictHostKeyChecking=no \
     -o HashKnownHosts=no \
-    -o ConnectTimeout=10 \
+    -o ConnectTimeout=20 \
     "$TARGET_HOST" echo pong 2>&1 | grep -oE 'pong|denied|sftp'
 )
-
-ssh-keyscan "$TARGET_HOST" >>~/.ssh/known_hosts
+header_done
 
 if [[ $status != pong && $status != denied && $status != sftp ]]; then
   echo "SSH ping: failed with status: $status"
