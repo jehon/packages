@@ -155,8 +155,7 @@ dockers/jenkins/.dockerbuild: \
 	dockers/jenkins/shared/generated/authorized_keys \
 	dockers/jenkins/shared/generated/jenkins-github-ssh \
 	dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh \
-	dockers/jenkins/shared/generated/secrets.properties \
-	dockers/jenkins/shared/generated/timezone
+	dockers/jenkins/shared/generated/secrets.properties
 
 .PHONY: dockers-stop
 dockers-stop:
@@ -222,7 +221,6 @@ files-build: \
 	find bin -exec "chmod" "+x" "{}" ";"
 	find usr -name "*.sh" -exec "chmod" "+x" "{}" ";"
 	find usr/bin -exec "chmod" "+x" "{}" ";"
-	find usr/lib/jehon/postUpdate -exec "chmod" "+x" "{}" ";"
 
 .PHONY: files-test
 files-test: files-shell-test
@@ -235,7 +233,7 @@ files-shell-test: files-build
 files-lint:
 	@shopt -s globstar; \
 	RES=0; \
-	for f in jehon-*/**/*.sh bin/**/*.sh; do \
+	for f in **/*.sh usr/bin/* usr/sbin/* bin/**; do \
 		shellcheck -x "$$f"; RES=$$? || $$RES; \
 	done ; \
 	exit $$RES
@@ -265,10 +263,6 @@ dockers/jenkins/shared/generated/jenkins-master-to-slave-ssh: $(SECRETS)/crypted
 dockers/jenkins/shared/generated/secrets.yml: $(SECRETS)/crypted/jenkins/jenkins-secrets.yml
 	@mkdir -p "$(dir $@)"
 	cp "$<" "$@"
-
-dockers/jenkins/shared/generated/timezone: usr/share/jehon/etc/timezone
-	@mkdir -p "$(dir $@)"
-	cat "$<" | tr -d '\n' > "$@"
 
 # usr/bin/shuttle-go: externals/shuttle-go/shuttle-go
 # 	@mkdir -p "$(dir $@)"

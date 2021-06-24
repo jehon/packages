@@ -22,8 +22,8 @@ jenkins:
           name: ${ADMIN_USER}
           password: ${ADMIN_PASSWORD}
           properties:
-            - timezone:
-                timeZoneName: ${readFile:/conf/generated/timezone}
+            # - timezone:
+            #     timeZoneName: ${readFile:/conf/generated/timezone}
             - sshPublicKey:
                 authorizedKeys: ${readFile:/conf/generated/authorized_keys}
 
