@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+clear
+
 set -o errexit
 
 # shellcheck source=../usr/bin/jh-lib
@@ -76,7 +78,7 @@ jh-ssh-forget "localhost[$WEB]"
 
 jh-jenkins-job all "wait_ready"
 jh-jenkins-job all "set"
-jh-jenkins-job clean_up "run"
+# jh-jenkins-job clean_up "run"
 jh-jenkins-job github "run"
 
 header "*** Service is up and running! ***"
