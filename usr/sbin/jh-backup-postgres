@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-if [ ! -t 1 ] ; then
-	exec > >(systemd-cat -t "$(realpath "$0")" -p info ) \
-	    2> >(systemd-cat -t "$(realpath "$0")" -p err  )
+if [ ! -t 1 ]; then
+	exec > >(systemd-cat -t "$(realpath "$0")" -p info) \
+	2> >(systemd-cat -t "$(realpath "$0")" -p err)
 fi
 
 ROOT="/var/backups/live"
@@ -13,7 +13,7 @@ backupOne() {
 	# http://stackoverflow.com/a/16783253/1954789
 	if runuser -u postgres psql -lqt | cut -d \| -f 1 | grep -qw "$db"; then
 		echo "[$db] Start backup database"
-		FILE=$( echo "$db" | sed "s/[^[:alnum:]]/_/g" )
+		FILE="${db//[^[:alnum:]]/_/}"
 		FILE="$ROOT/postgres-$FILE"
 		if [ -r "$FILE.gz" ]; then
 			rm "$FILE.gz"
@@ -24,12 +24,12 @@ backupOne() {
 
 		echo "[$db] Backup the database into $FILE"
 		# --format=c
-		runuser -u postgres pg_dump -x --no-security-labels --blobs "$db" > "$FILE"
+		runuser -u postgres pg_dump -x --no-security-labels --blobs "$db" >"$FILE"
 		if [ -r "$FILE" ]; then
 			if [ ! -s "$FILE" ]; then
 				echo "[$db] File is empty ! Removing it"
 				rm "$FILE"
-				return;
+				return
 			fi
 			echo "[$db] Compress backup"
 			gzip --no-name "$FILE"
@@ -53,7 +53,7 @@ mkdir -p "$ROOT"
 
 if [ -z "$2" ]; then
 	# for db in "${monthlyBackups[@]}"; do
-	runuser -u postgres psql -q -l -t | cut -d "|" -f 1 | while read db; do
+	runuser -u postgres psql -q -l -t | cut -d "|" -f 1 | while read -r db; do
 		if [ -z "$db" ]; then return; fi
 		if [ "$db" = "test" ]; then return; fi
 		if [ "$db" = "template0" ]; then return; fi

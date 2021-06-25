@@ -19,7 +19,7 @@ fi
 
 if [ ! -r /etc/ssh/authorized_keys/jenkins ]; then
     header "SSH access: no jenkins key configured, you will not be able to launch agent"
-    sudo bash -c "$(which jh-ssh-generate-authorized-keys) jenkins > /etc/ssh/authorized_keys/jenkins"
+    sudo bash -c "$(command -v jh-ssh-generate-authorized-keys) jenkins > /etc/ssh/authorized_keys/jenkins"
     ok "SSH access configured"
 fi
 

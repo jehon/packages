@@ -37,7 +37,7 @@ done
 #   For all files that where previously patched (see list in $PATCHED)
 #   and that are not patched anymore (not in $PATCHING)
 #
-while read L; do
+while read -r L; do
 	I=${L:2}
 	FILE=${I%:*}
 	TAG=${I#*:}

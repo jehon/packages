@@ -7,7 +7,7 @@ set -o errexit
 
 KEY="bin/packages-cryp-key"
 if [ ! -r "$KEY" ]; then
-    echo "Please store "$KEY" for git-crypt" >&2
+    echo "Please store '$KEY' for git-crypt" >&2
     exit 1
 fi
 

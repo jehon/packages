@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 clear
 
-if [ "$2" = "" ]; then
-	FILES="*"
-else
-	FILES="$2"
-fi
+FILES="$2"
 
 grep \
-	$3 \
+	"$3" \
 	--recursive \
 	--line-number \
 	--exclude-dir=.svn \
@@ -17,4 +13,4 @@ grep \
 	--exclude=*.bak \
 	--color=auto \
 	-F \
-	"$1" $FILES
+	"$1" "${FILES[@]}"

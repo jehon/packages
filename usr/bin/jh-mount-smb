@@ -11,7 +11,7 @@ HOST="$1"
 SHARE="$2"
 USERNAME="$3"
 PASSWORD="$4"
-TARGET="$5"
+# TARGET="$5"
 
 #
 # Hidden env:

@@ -233,8 +233,10 @@ files-shell-test: files-build
 files-lint:
 	@shopt -s globstar; \
 	RES=0; \
-	for f in **/*.sh usr/bin/* usr/sbin/* bin/**; do \
-		shellcheck -x "$$f"; RES=$$? || $$RES; \
+	for F in usr/bin/* usr/sbin/* bin/**; do \
+		if file "$$F" | grep "shell script" > /dev/null ; then \
+			( cd $$( dirname "$$F" ) && shellcheck -x "$$( basename "$$F" )"; RES=$$? || $$RES; ); \
+		fi;\
 	done ; \
 	exit $$RES
 
