@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 
+clear
+
 set -o errexit
 
 # shellcheck source=/dev/null
 . jh-lib
 
-SSH_HOST="kiosk"
+# shellcheck source=/dev/null
+. jh-secrets
+
+SSH_HOST="$JH_HOST_KIOSK"
 
 header_start "Remove previous key"
 jh-ssh-forget "$SSH_HOST"
 header_done
 
 header_start "Setup remote start..."
-./setup-remote.sh $SSH_HOST pi raspberry
+./setup-remote.sh "$SSH_HOST" "$JH_HOST_KIOSK_USER" "$JH_HOST_KIOSK_PASS"
 header_done
 
 header_start "Run kickstart from kiosk github"

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+clear
+
 set -o errexit
 
 # shellcheck source=/dev/null
