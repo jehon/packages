@@ -347,7 +347,6 @@ repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		debian/control \
 		debian/*.postinst \
 		debian/*.install \
-		debian/*.templates \
 		debian/*.triggers \
 		debian/jehon.links \
 		$(shell find . -path "./jehon-*" -type f) \
