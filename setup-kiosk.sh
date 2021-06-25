@@ -29,5 +29,7 @@ ssh "root@$SSH_HOST" -T <<EOS
 EOS
 header_done
 
+"$JH_PKG_FOLDER"/bin/jh-kiosk-configure-shares kiosk
+
 # TODO: copy fstab file from local repo
 # TODO: copy config file from local repo

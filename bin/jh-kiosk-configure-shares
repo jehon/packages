@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# shellcheck source=/dev/null
+. jh-lib
+
+# shellcheck source=/dev/null
+. jh-secrets
+
+SSH_HOST=kiosk
+
+header_start "Configuring fstab"
+scp "$JH_SECRETS_FOLDER"/crypted/kiosk/synology.credentials "root@$SSH_HOST":/etc/jehon/restricted/
+ssh "root@$SSH_HOST" chmod 500 /etc/jehon/restricted/synology.credentials
+
+scp "$JH_SECRETS_FOLDER"/crypted/kiosk/kiosk.fstab "root@$SSH_HOST":/etc/jehon/
+ssh "root@$SSH_HOST" jh-patch-file /etc/jehon/kiosk.fstab
+header_done
+
+header_start "Mounting folders"
+ssh "root@$SSH_HOST" "mkdir -p /media/photo && mount /media/photo && ls /media/photo"
+# ssh "root@$SSH_HOST" "mkdir -p /media/exploits && mount /media/exploits && ls /media/exploits"
+header_done
