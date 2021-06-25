@@ -25,25 +25,6 @@ apply_special() {
 case "$1" in
 
 configure)
-	# Do we have a password?
-	db_get jehon/jehon_password
-	if [ "$RES" = "" ]; then
-
-		db_input critical jehon/jehon_password || true
-		db_go
-
-		db_get jehon/jehon_password
-		PASSWD="$RET"
-		if [ "$PWD" != "" ]; then
-			echo "Setting the password of account jehon"
-			echo "jehon:$PASSWD" | chpasswd
-			echo "Setting the samba passord of account jehon"
-			printf "%s\n%s\n" "$PASSWD" "$PASSWD" | smbpasswd -s -a jehon >/dev/null
-		else
-			echo "Bypassing setting the password of account jehon"
-		fi
-	fi
-
 	groupadd -f docker || true
 
 	/usr/bin/jh-apt-configure-repositories
@@ -55,6 +36,8 @@ configure)
 
 	if [ -z "$(virt-what)" ]; then
 		if timedatectl show | grep "Timezone=Europe/Brussels" 2>/dev/null >/dev/null; then
+			true
+		else
 			timedatectl set-timezone Europe/Brussels
 		fi
 	fi
@@ -68,6 +51,8 @@ configure)
 	/usr/sbin/jh-users-add-jehon
 	/usr/sbin/jh-firewall-setup
 
+	mkdir -p /etc/jehon/restricted/
+	chmod 500 /etc/jehon/restricted
 	;;
 
 triggered)

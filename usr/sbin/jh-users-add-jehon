@@ -4,25 +4,23 @@
 if ! id -u jehon >/dev/null 2>&1; then
     U1000GRPS=$(id -Gn 1000 | sed -e 's/ /,/g')
 
-    useradd --groups "$U1000GRPS" jehon || true
+    useradd --groups "$U1000GRPS" --create-home jehon || true
 
     if [ -x /bin/bash ]; then
         usermod -s /bin/bash jehon
     fi
 fi
 
-usermod -a -G "docker" "jehon" || true
-
-mkdir -p /etc/jehon/restricted/
-chmod 500 /etc/jehon/restricted
-
-if getent group "sudo" >/dev/null; then
-    usermod -a -G "sudo" "jehon" || true
+if ! getent group "docker" >/dev/null; then
+    groupadd "docker"
 fi
 
 if ! getent group "fuse" >/dev/null; then
     groupadd "fuse"
 fi
+
+usermod -a -G "sudo" "jehon" || true
+usermod -a -G "docker" "jehon" || true
 usermod -a -G "fuse" "jehon" || true
 
 # Fix ssh rights

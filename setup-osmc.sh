@@ -23,9 +23,9 @@ jh-ssh-forget "$SSH_HOST"
 jh-ping-ssh "$SSH_HOST"
 header_done
 
-# header_start "Setup remote start..."
-# ./setup-remote.sh $SSH_HOST "$SSH_USER" "$SSH_PASS"
-# header_done
+header_start "Setup remote start..."
+./setup-remote.sh $SSH_HOST "$SSH_USER" "$SSH_PASS" "osmc"
+header_done
 
 header_start "Building config..."
 envsubst <"$JH_PKG_FOLDER"/conf/osmc/sources.xml >"$OSMC_TMP/sources.xml"
