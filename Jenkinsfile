@@ -17,13 +17,17 @@ pipeline {
         sh 'rm -fr tmp/'
       }
     }
-    stage('all-setup') {
+    stage('setup') {
       steps {
         sshagent(credentials: ['jenkins-github-ssh']) {
           sh 'mkdir -p "${SECRETS}"'
           sh 'git clone git@github.com:jehon/secrets.git tmp/secrets'
           sh '${SECRETS}/start ${SECRETS_PASSWORD}'
         }
+      }
+    }
+    stage('all-setup') {
+      steps {
         sh 'make ${MAKEOPT} ${STAGE_NAME}'
       }
     }
