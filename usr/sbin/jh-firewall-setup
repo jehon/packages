@@ -15,6 +15,6 @@ echo "*** Firewall: adapting"
 iptables -L -n --wait >/dev/null
 ufw allow ssh
 ufw allow OpenSSH
-ufw --force enable
 # ufw status
-echo "*** Firewall: adapted"
+echo "*** Firewall: adapted but not enabled"
+ufw status

@@ -36,6 +36,12 @@ apt-get install --yes "$LOCAL_DEB"
 apt-get --yes update
 apt-get --yes upgrade
 
+if ! jh-in-docker && ! jh-in-wsl; then
+    echo "*** Enabling firewall"
+    # Wait for xtable lock to be available
+    iptables -L -n --wait >/dev/null
+    ufw --force enable
+fi
 #
 # Now we have our traditional setup
 #
