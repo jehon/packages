@@ -38,7 +38,10 @@ Depends: ${misc:Depends},
 	sudo,
 	ufw,
 	virt-what
+Recommands: openssh-server (>= 8.4)
 Description: Jehon scripts and security
+  ! we need openssh-server >= 8.2 for openssh config to be applied
+  ! we need openssh-server >= 8.4 for known hosts to be taken into account
 
 Package: jehon-packages
 Architecture: all
