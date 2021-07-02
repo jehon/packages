@@ -42,6 +42,13 @@ if ! jh-in-docker && ! jh-in-wsl; then
     iptables -L -n --wait >/dev/null
     ufw --force enable
 fi
+
+if [ -n "$(virt-what)" ]; then
+    echo "*** Disable gui on startup $(virt-what)"
+    echo " could be reenabled with systemctl set-default graphical"
+    systemctl set-default multi-user.target
+fi
+
 #
 # Now we have our traditional setup
 #
