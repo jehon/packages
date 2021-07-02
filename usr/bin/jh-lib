@@ -124,15 +124,15 @@ warning() {
 }
 
 ok_ko() {
-    T1="$1"
-    T2="$2"
-    shift
+    msg="$1"
     shift
 
-    if [[ "$T1" == "$T2" ]]; then
-        ok "$@"
+    if "$@"; then
+        ok "$msg"
+        return 0
     else
-        ko "$@"
+        ko "$msg"
+        return 1
     fi
 }
 

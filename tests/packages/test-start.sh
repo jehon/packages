@@ -35,6 +35,9 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
     assert_file_exists "/etc/apt/sources.list.d/jehon-github.list"
     assert_file_exists "/etc/cron.daily/jh-backup-computer"
 
+    ok_ko "sshd config applied" bash -c "sshd -T | grep 'permitrootlogin without-password' >/dev/null"
+    ok_ko "ssh_config applied" bash -c "ssh -G synology-e | grep 'jehon.synology.me' >/dev/null"
+
     exit $?
 fi
 

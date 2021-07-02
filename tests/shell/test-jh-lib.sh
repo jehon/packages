@@ -30,3 +30,8 @@ assert_equals "jhGetSharedFile from share" \
     "$(jhGetSharedFile "/usr/share/jehon/hyperv")"
 
 assert_file_exists "/etc/hosts"
+
+if ok_ko "test" true >/dev/null 2>&1; then ok "test ok_ko true"; else false; fi
+if ok_ko "test" false >/dev/null 2>&1; then false; else ok "test ok_ko false"; fi
+if ok_ko "test" ls /etc >/dev/null 2>&1; then ok "test ok_ko ls /etc"; else false; fi
+if ok_ko "test" ls /anything >/dev/null 2>&1; then false; else ok "test ok_ko ls /anything"; fi
