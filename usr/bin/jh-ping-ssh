@@ -17,7 +17,7 @@ header_done
 # header_done
 
 header_start "Trying to open an ssh connection"
-status=$(
+time status=$(
   ssh \
     -o ConnectTimeout=20 \
     -o HashKnownHosts=no \
