@@ -76,9 +76,10 @@ done
 
 jh-ssh-forget "localhost[$WEB]"
 
-sleep 5s
+sleep 2s
+jh-jenkins-job system "wait_ready"
 
-jh-jenkins-job all "wait_ready"
+sleep 2s
 jh-jenkins-job all "set"
 # jh-jenkins-job clean_up "run"
 jh-jenkins-job github "run"

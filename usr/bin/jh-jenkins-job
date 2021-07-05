@@ -47,7 +47,9 @@ call_jenkins() {
 
     # Make the real command
     curl -s -b "$TMP_COOKIE_JAR" "${JENKINS_URI}${URI}" -u "$JH_JENKINS_USER":"$JH_JENKINS_PASS" -H "$CRUMB" "$@"
+    R=$?
     rm -fr "$TMP_COOKIE_JAR"
+    return $R
 }
 
 case "$ACTION" in
@@ -55,6 +57,7 @@ case "$ACTION" in
     header "Waiting for the server to be ready"
     while ! call_jenkins "/cli" --head --silent --fail >/dev/null; do
         echo -n "."
+        sleep 1s
     done
     ok "Ready"
     ;;
