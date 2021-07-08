@@ -20,7 +20,7 @@ mkdir -p "$OSMC_TMP"
 
 header_start "Remove previous key"
 jh-ssh-forget "$SSH_HOST"
-jh-ping-ssh "$SSH_HOST"
+jh-ssh-ping "$SSH_HOST"
 header_done
 
 header_start "Setup remote start..."

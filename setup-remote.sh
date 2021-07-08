@@ -35,7 +35,7 @@ fi
 
 header_start "Forget previous ssh key..."
 jh-ssh-forget "$SSH_HOST"
-jh-ping-ssh "$SSH_HOST"
+jh-ssh-ping "$SSH_HOST"
 header_done
 
 header_start "Run Start on remote $SSH_HOST..."

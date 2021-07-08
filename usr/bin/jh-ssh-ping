@@ -5,6 +5,12 @@
 
 TARGET_HOST="$1"
 
+if [ "$1" = "-w" ]; then
+  while ! jh-ssh-ping "$2"; do
+    sleep 2s
+  done
+fi
+
 header_start "Pinging host $TARGET_HOST"
 if ! ping -w 1 -c 1 "$TARGET_HOST"; then
   echo "ICMP ping: '$TARGET_HOST' is not reachable" >&2
