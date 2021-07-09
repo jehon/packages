@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# shellcheck source=../usr/bin/jh-lib
+. jh-lib
+
+if [ -z "$1" ]; then
+    echo "Need host as $1"
+fi
+HOST="$1"
+FILE="$1"
+
+if [ -n "$2" ]; then
+    FILE="$1[$2]"
+    CMD=("-p" "$2")
+fi
+
+header "Scanning $HOST to $FILE"
+TARGET="usr/share/jehon/etc/ssh/known_hosts.d/$FILE"
+ssh-keyscan "${CMD[@]}" "$HOST" >"$JH_PKG_FOLDER/$TARGET"
+
+header "Installing on host"
+sudo cp -v "$JH_PKG_FOLDER/$TARGET" "/$TARGET"
