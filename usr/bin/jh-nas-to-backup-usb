@@ -22,7 +22,7 @@ syncThis() {
 		--exclude "@eaDir" \
 		--exclude "#recycle" \
 		--chmod=ugo=rwX \
-		"$JH_NAS_USER@$JH_NAS_IP::$1/" "$ROOT/$1"
+		"$JH_NAS_USER@$JH_NAS_HOST::$1/" "$ROOT/$1"
 }
 
 echo "************************************************"

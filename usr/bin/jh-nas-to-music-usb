@@ -22,4 +22,4 @@ SSHPASS="$JH_NAS_PASS" sshpass -e \
 	--delete --delete-excluded \
 	--exclude .music --filter "P .music" \
 	--exclude "#recycle" \
-	"$JH_NAS_USER@$JH_NAS_IP::music/" .
+	"$JH_NAS_USER@$JH_NAS_HOST::music/" .

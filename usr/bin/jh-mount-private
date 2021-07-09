@@ -8,7 +8,7 @@ set -o errexit
 # shellcheck source=/dev/null
 . jh-secrets
 
-. jh-mount-smb "$JH_NAS_IP" "home" "$JH_NAS_USER" "$JH_NAS_PASS"
+. jh-mount-smb "$JH_NAS_HOST" "home" "$JH_NAS_USER" "$JH_NAS_PASS"
 ok "Mounted at $JH_SMB_MOUNTED"
 
 CRYPTED_SOURCE="$JH_SMB_MOUNTED/restricted"
