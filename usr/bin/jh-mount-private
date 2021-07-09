@@ -8,6 +8,8 @@ set -o errexit
 # shellcheck source=/dev/null
 . jh-secrets
 
+jh-secrets-require "2021-07-09 07-41-24"
+
 . jh-mount-smb "$JH_NAS_HOST" "home" "$JH_NAS_USER" "$JH_NAS_PASS"
 ok "Mounted at $JH_SMB_MOUNTED"
 
