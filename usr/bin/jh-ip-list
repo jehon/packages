@@ -8,5 +8,6 @@ if [ "$1" = "ext" ]; then
     FILTER="!/^[0-9]*: ?lo|link\/ether/ "
 fi
 
-ip -o addr \
-    | awk "$FILTER "'{p=index($4,"/"); print $2" "substr($4,0,p-1)}'
+ip -o addr |
+    awk "$FILTER "'{p=index($4,"/"); print $2" "substr($4,0,p-1)}' |
+    column -t
