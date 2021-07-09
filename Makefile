@@ -377,7 +377,7 @@ debian/jehon.links: $(shell find usr/share/jehon/etc -type f )
 #
 #
 .PHONY: deploy
-deploy: deploy-local deploy-synology
+deploy: deploy-local
 
 .PHONY: deploy-github
 deploy-github: repo/Release.gpg node-setup
@@ -407,27 +407,3 @@ deploy-local: packages-build
 	sudo ./setup-profile.sh
 	sudo apt update || true
 	sudo apt upgrade -y
-
-.PHONY: deploy-synology
-deploy-synology:
-	. jh-lib; \
-	. jh-secrets; \
-	set -o xtrace ; \
-	SSHPASS=$$JH_NAS_ADMIN_PASS sshpass -e \
-		rsync \
-			"synology/scripts/" "$$JH_NAS_ADMIN_USER@$$JH_NAS_IP::scripts/synology" \
-			-e ssh \
-			--recursive --times \
-			--omit-dir-times \
-			--itemize-changes \
-			--modify-window=2 \
-			--delete \
-			--copy-links \
-			--exclude ".git" \
-			--exclude "tmp" \
-		 	--chmod=F755 --chmod=D755
-
-## fix it:
-# ln -s /volume3/scripts/synology/authorized_keys /root/.ssh/authorized_keys
-# chmod 644 /volume3/scripts/synology/authorized_keys
-# chmod 755 /volume3/scripts/synology/
