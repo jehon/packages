@@ -11,7 +11,7 @@ sudo apt install openssh-server
 
 Launch the start script:
 ```
-wget https://raw.githubusercontent.com/jehon/packages/master/start; chmod +x start; less start; ./start
+wget https://raw.githubusercontent.com/jehon/packages/master/start; chmod +x start; less start; sudo ./start
 ```
 
 ## Ubuntu
