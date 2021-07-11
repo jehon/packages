@@ -28,6 +28,7 @@ time status=$(
   ssh \
     -o ConnectTimeout=20 \
     -o HashKnownHosts=no \
+    -o BatchMode=yes \
     "$TARGET_HOST" echo pong 2>&1 | grep -oE 'pong|denied|sftp'
 )
 header_done
