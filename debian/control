@@ -84,8 +84,7 @@ Depends: ${misc:Depends}, jehon,
 	shellcheck,
 	sshpass,
 	thefuck,
-	traceroute,
-	xdotool
+	traceroute
 Description: Jehon minimal hooks
 
 Package: jehon-env-desktop
