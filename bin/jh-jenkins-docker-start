@@ -24,7 +24,7 @@ if [ ! -r /etc/ssh/authorized_keys/jenkins ]; then
 fi
 
 WEB=8080
-REVERSE_IP="$(jh-ip-list | grep docker | grep 172 | cut -f 2 -d ' ')"
+REVERSE_IP="$(jh-ip-list | grep docker | grep 172 | awk '{ print $2 }')"
 
 pushd "$JH_PKG_FOLDER" >/dev/null
 
