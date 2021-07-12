@@ -6,7 +6,8 @@
 TARGET_HOST="$1"
 
 if [ "$1" = "-w" ]; then
-  while ! jh-ssh-ping "$2"; do
+  shift
+  while ! jh-ssh-ping "$@"; do
     sleep 2s
   done
   exit 0
@@ -19,24 +20,16 @@ if ! ping -w 1 -c 1 "$TARGET_HOST" >/dev/null; then
 fi
 header_done
 
-# header_start "Adding key"
-# ssh-keyscan "$TARGET_HOST" >>~/.ssh/known_hosts
-# header_done
-
 header_start "Trying to open an ssh connection"
 time status=$(
   ssh \
     -o ConnectTimeout=20 \
     -o HashKnownHosts=no \
     -o BatchMode=yes \
-    "$TARGET_HOST" echo pong 2>&1 | grep -oE 'pong|denied|sftp'
+    -o PasswordAuthentication=no \
+    "anybody@$TARGET_HOST" echo pong 2>&1 | grep -oE 'pong|denied|sftp'
 )
 header_done
-
-# -o BatchMode=yes \
-# -o CheckHostIP=no \
-# -o StrictHostKeyChecking=no \
-# -o HashKnownHosts=no \
 
 if [[ $status != pong && $status != denied && $status != sftp ]]; then
   echo "SSH ping: failed with status: $status"
