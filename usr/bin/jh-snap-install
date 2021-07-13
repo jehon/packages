@@ -74,6 +74,7 @@ ensure_snap_installed "code" classic
 ensure_snap_installed "mkvtoolnix-jz"
 ensure_snap_installed "wifi-ap"
 ensure_snap_installed "docker"
+ensure_snap_installed "node" classic
 
 # ensure_snap_installed "git-cola" classic
 # ensure_snap_installed "shellcheck"

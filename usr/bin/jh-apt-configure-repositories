@@ -17,7 +17,6 @@ SWD="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 #
 jh-apt-add-key "1397BC53640DB551" "Chrome (ubuntu)"
 jh-apt-add-key "78BD65473CB3BD13" "Chrome (raspberrypi)"
-jh-apt-add-key "1655A0AB68576280" "nodejs"
 jh-apt-add-key "FCEF32E745F2C3D5" "jenkins"
 
 "$SWD"/jh-apt-add-packages-key
