@@ -10,17 +10,11 @@ SWD="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 #
 #
 
-# SD="/etc/apt/sources.list.d/"
-
-# echo "*** Generating sources.list files"
-# echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" >"$SD/docker.list"
-
 #
 #
 # Keys
 #
 #
-
 jh-apt-add-key "1397BC53640DB551" "Chrome (ubuntu)"
 jh-apt-add-key "78BD65473CB3BD13" "Chrome (raspberrypi)"
 jh-apt-add-key "1655A0AB68576280" "nodejs"
