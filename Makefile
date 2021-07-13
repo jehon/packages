@@ -171,31 +171,6 @@ dockers-kill:
 
 #
 #
-# Externals
-#
-#
-# all-clean: externals-clean
-# all-build: externals-build
-
-# .PHONY: externals-clean
-# externals-clean:
-# 	rm -f externals/shuttle-go/shuttle-go
-
-# .PHONY: externals-update
-# externals-update:
-# 	# TODO: check this !
-# 	git subtree pull --prefix externals/shuttle-go git@github.com:abourget/shuttle-go.git master --squash
-
-# .PHONY: externals-build
-# externals-build: externals/shuttle-go/shuttle-go
-
-# externals/shuttle-go/shuttle-go: externals/shuttle-go/*.go
-# TODO: in docker !
-# 	cd externals/shuttle-go && ./build.sh
-
-
-#
-#
 # Files
 #
 #
