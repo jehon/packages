@@ -301,7 +301,9 @@ repo/Release.gpg: repo/Release $(GPG_KEYRING)
 	gpg --sign --armor --detach-sign --no-default-keyring --keyring=$(GPG_KEYRING) --default-key "$(GPG_KEY)" --output repo/Release.gpg repo/Release
 
 repo/Release: repo/Packages dockers/jehon-docker-build/.dockerbuild
-	$(RUN_IN_DOCKER) "cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" release ." > "$@"
+# -o: APT::FTPArchive::Release::* => Origin, Label, Suite, Version, Codename, Date, NotAutomatic, ButAutomaticUpgrades, Acquire-By-Hash, Valid-Until, Signed-By, Architectures, Components and Description.
+# See https://manpages.debian.org/testing/apt-utils/apt-ftparchive.1.en.html
+	$(RUN_IN_DOCKER) "cd repo && apt-ftparchive -o "APT::FTPArchive::Release::Origin=jehon" -o APT::FTPArchive::Release::Suite=stable release ." > "$@"
 
 repo/Packages: repo/index.html repo/jehon.deb
 	$(RUN_IN_DOCKER) "cd repo && dpkg-scanpackages -m ." | sed -e "s%./%%" > "$@"
