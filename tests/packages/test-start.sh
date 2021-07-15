@@ -43,7 +43,6 @@ fi
 assert_file_exists "$ROOT/repo/jehon.deb"
 
 echo "Launching docker"
-# SCRIPT_NAME=""
-docker run -v "$(realpath "$ROOT"):/app:ro" -w "/app" ubuntu:latest "$0" "$CONSTANT_RUN_TEST"
+docker run --rm -v "$(realpath "$ROOT"):/app:ro" -w "/app" ubuntu:latest "$0" "$CONSTANT_RUN_TEST"
 
 echo "Finished docker"
