@@ -131,7 +131,7 @@ all-stop: dockers-stop
 *: docker-init
 
 docker-init:
-	@for L in dockers/* ; do I="jehon/$$(basename $$L)"; if docker image ls | grep "$$I" > /dev/null; then echo "$$I"; else rm -f $$L/.dockerbuild ; fi; done
+	@for L in dockers/* ; do I="jehon/$$(basename $$L)"; if docker image ls | grep "$$I" > /dev/null; then echo "$$I" >/dev/null; else rm -f $$L/.dockerbuild ; fi; done
 
 .PHONY: dockers-clean
 dockers-clean: dockers-stop
