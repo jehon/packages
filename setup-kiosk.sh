@@ -71,18 +71,7 @@ header_start "Install as root"
 # rm -f /etc/systemd/system/default.target
 # ln -s /lib/systemd/system/graphical.target /etc/systemd/system/default.target
 ssh "root@$SSH_HOST" -T <<EOS
-	# remove the toastr warning about battery
-	# (we still have the lightnight bolt to warn about power)
-	apt remove lxplug-ptbatt
-
-	# Install the auto-login
-	jh-patch /etc/jehon/lightdm-autostart.conf
-
 	kiosk/bin/kiosk-install-sudo.sh
-
-	echo "Redirect sound output to jack first card"
-	cp /usr/share/jehon/rasperry/asound.conf /etc/
-	chmod 640 /etc/asound.conf
 EOS
 header_done
 
