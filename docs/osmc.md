@@ -8,9 +8,3 @@ See https://discourse.osmc.tv/t/file-sharing-with-a-nas-media-server-windows-sha
 ## Logs
 
 tail -f /home/osmc/.kodi/temp/kodi.log
-
-## TODO
-
-- Make deploy-all => deploy everything everywhere (by config) ==> jenkins job?
-- Install osmc from remote
-- Install ssh key from remote
