@@ -353,8 +353,23 @@ debian/jehon.links: $(shell find usr/share/jehon/etc -type f )
 # Deploy
 #
 #
+define deploy_cmd
+	ssh root@"$1" "apt-get update; apt-get dist-upgrade -y" || echo "Deploy to $1 failed"
+endef
+
 .PHONY: deploy
 deploy: deploy-local
+
+.PHONY: deploy-home
+deploy-home: deploy-local deploy-kiosk deploy-latitude
+
+.PHONY: deploy-kiosk
+deploy-kiosk:
+	$(call deploy_cmd,kiosk)
+
+.PHONY: deploy-latitude
+deploy-latitude:
+	$(call deploy_cmd,latitude)
 
 .PHONY: deploy-github
 deploy-github: repo/Release.gpg node-setup
