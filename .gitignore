@@ -27,3 +27,4 @@ debian.1
 conf/generated/
 usr/bin/shuttle-go
 usr/share/jehon/etc/ssh/authorized_keys/jehon
+usr/share/jehon/etc/apt/trusted.gpg.d/jehon.gpg

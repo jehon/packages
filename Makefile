@@ -183,14 +183,13 @@ all-lint: files-lint
 files-clean:
 	rm -fr conf/generated
 	rm -fr dockers/jenkins/shared/generated/
-#	rm -f usr/bin/shuttle-go
 	rm -f usr/share/jehon/etc/ssh/authorized_keys/jehon
+	rm -f usr/share/jehon/etc/apt/trusted.gpg.d/jehon.gpg
 
 .PHONY: files-build
 files-build: \
 		usr/share/jehon/etc/ssh/authorized_keys/jehon \
-
-#		usr/bin/shuttle-go
+		usr/share/jehon/etc/apt/trusted.gpg.d/jehon.gpg
 
 	find tests -name "*.sh" -exec "chmod" "+x" "{}" ";"
 	find bin -exec "chmod" "+x" "{}" ";"
@@ -224,6 +223,27 @@ $(GPG_KEYRING): $(SECRETS)/crypted/jenkins/packages-gpg
 dockers/jenkins/shared/generated/authorized_keys: usr/share/jehon/etc/ssh/authorized_keys/jehon
 	@mkdir -p "$(dir $@)"
 	cat "$<" | grep -v -e "^#" | grep -v -e "^\$$"> "$@"
+
+define trusted_get_key
+	@echo "Getting key for $3"
+	apt-key --keyring "$1" adv --recv-keys --keyserver keyserver.ubuntu.com "$2"
+endef
+
+usr/share/jehon/etc/apt/trusted.gpg.d/jehon.gpg: $(SECRETS)/crypted/jenkins/packages-gpg
+	mkdir -p "$(dir $@)"
+
+	$(call trusted_get_key,$@, 1397BC53640DB551, Chrome (ubuntu))
+	$(call trusted_get_key,$@, 78BD65473CB3BD13, Chrome (raspberrypi))
+	$(call trusted_get_key,$@, FCEF32E745F2C3D5, jenkins)
+
+	@echo "Getting key for Chrome (ubuntu)"
+	apt-key --keyring "$@" adv --recv-keys --keyserver keyserver.ubuntu.com "1397BC53640DB551"
+
+	gpg --no-default-keyring --keyring="$@" --import "$<"
+	@echo "** List of included keys:"
+	gpg "$@"
+# Remove gpg automatic backup
+	rm -f "$@~"
 
 dockers/jenkins/shared/generated/secrets.properties: $(SECRETS)/crypted/jenkins/jenkins-secrets.properties
 	@mkdir -p "$(dir $@)"
@@ -327,9 +347,8 @@ repo/.built: dockers/jehon-docker-build/.dockerbuild \
 		debian/*.triggers \
 		debian/jehon.links \
 		$(shell find . -path "./jehon-*" -type f) \
-		usr/share/jehon/etc/ssh/authorized_keys/jehon
-
-#		usr/bin/shuttle-go
+		usr/share/jehon/etc/ssh/authorized_keys/jehon \
+		usr/share/jehon/etc/apt/trusted.gpg.d/jehon.gpg
 
 	$(call itself,files-build)
 	@rm -fr repo
