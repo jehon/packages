@@ -8,9 +8,9 @@ Pre-Depends: dpkg (>= 1.17.14)
 Depends: apt-transport-https, bash, cifs-utils, curl, debconf, gnupg2, htop, less, lsb-release, openssh-server, samba, screen, sed, sudo, ufw, virt-what
 Filename: jehon.deb
 Size: 47896
-MD5sum: 9470aead05f7994db6aa628f52fff5f9
-SHA1: 253a28f775dc115891e4bcb35206329863355c46
-SHA256: c4883aa1f6a49eed35ea1d20165eb2c4c1c9a75e8cbfa0507c75fb2b997d3d44
+MD5sum: 204b072501b490620f6eadeeabd3f2fe
+SHA1: 512ef744bb44855e5f65187a581dfa3dbef04075
+SHA256: 8ad31343ec344a6033a9cdb1dc71ef7175792edfe238353226b3f0f1b85c8792
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -28,9 +28,9 @@ Pre-Depends: dpkg (>= 1.17.14)
 Depends: apt-transport-https, bash, cifs-utils, curl, debconf, gnupg2, htop, less, lsb-release, openssh-server, samba, screen, sed, sudo, ufw, virt-what
 Filename: jehon_2021.07.15.09.05.10_all.deb
 Size: 47896
-MD5sum: 9470aead05f7994db6aa628f52fff5f9
-SHA1: 253a28f775dc115891e4bcb35206329863355c46
-SHA256: c4883aa1f6a49eed35ea1d20165eb2c4c1c9a75e8cbfa0507c75fb2b997d3d44
+MD5sum: 204b072501b490620f6eadeeabd3f2fe
+SHA1: 512ef744bb44855e5f65187a581dfa3dbef04075
+SHA256: 8ad31343ec344a6033a9cdb1dc71ef7175792edfe238353226b3f0f1b85c8792
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -46,10 +46,10 @@ Maintainer: Jean Honlet <jeanhonlet@gmail.com>
 Installed-Size: 9
 Depends: jehon, jehon-packages
 Filename: jehon-base-minimal_2021.07.15.09.05.10_all.deb
-Size: 1972
-MD5sum: 20c96442dfbd3cb6dbc2bd2143f23948
-SHA1: b784835c13eeb98995b106efda163d06b5b88ab5
-SHA256: a171534af6a1df5ad077ea681b558f509af85f2a1b42cf494531ac8a7c6510fe
+Size: 1976
+MD5sum: 2075f5dd067dfd86fedb1f6bb7d62214
+SHA1: cefffb41ae9b8c189e5153cefd6d4acb2da32679
+SHA256: 0f5698dad58e4be3c483f606b93d8b23e76bc0861d40d8e1002fe1a61e929ecd
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -63,10 +63,10 @@ Maintainer: Jean Honlet <jeanhonlet@gmail.com>
 Installed-Size: 9
 Depends: jehon, jehon-packages, activity-log-manager, chromium-browser | chromium, encfs, exfat-fuse, exfat-utils, git-cola, google-chrome-stable, gparted, gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly, libasound2, libgconf-2-4, libgtk2.0-0, libnotify-dev, libnss3, libxss1, meld, pdfsam, snapd, terminator, xclip, xprintidle, xtermcontrol, xvfb
 Filename: jehon-desktop_2021.07.15.09.05.10_all.deb
-Size: 2156
-MD5sum: 92d5e6ae40f91ffe60d202949e999dc5
-SHA1: 399f9f8b027354e6969db7dd5a932041ad3b710d
-SHA256: bef9b802aec57e0445f2fbbb588149a68f5bc463e3fe0ab4462061b02e15f8e7
+Size: 2160
+MD5sum: 7924eabef61edfe6e090922bb5298eee
+SHA1: 6a6c25bda3d54fe2625014394bd3a1b46773150f
+SHA256: 5850aeb538c39a212e1f9b38df0ee467c8e8608ecfcf589d4b96b25311b6db1d
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -81,9 +81,9 @@ Installed-Size: 9
 Depends: jehon-desktop
 Filename: jehon-env-desktop_2021.07.15.09.05.10_all.deb
 Size: 1968
-MD5sum: 6fd128834728bfe8dbf694e69a6f627f
-SHA1: d1fa406be614fad54ea4476f71e95fdcc8121992
-SHA256: f870d776f12342108cc582844c2f1d3e10d3bd3aaa950dde57c61f45902ff13b
+MD5sum: 4a4a41d157b26a035b765d4af6a02f50
+SHA1: b467a339a55d5f97178fc0df057600e896f511e6
+SHA256: e0e220b68afcb075a93afa44f090fb37ee14d67a8d1b090a38f78c12b5b89957
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
@@ -101,10 +101,10 @@ Breaks: jehon-base-thirdparties
 Replaces: jehon-base-thirdparties
 Provides: jehon-base-thirdparties
 Filename: jehon-packages_2021.07.15.09.05.10_all.deb
-Size: 2212
-MD5sum: 0764ddc3459b18973f163714d586bc61
-SHA1: 7cd4b479e8924c645a1926094cdd51f7ca8f8da3
-SHA256: 9fbe31daaf69d4a0e18e4cd32c0974a4ea861064c285d34b0164f4584cb40179
+Size: 2220
+MD5sum: 9dc1c844bdf4c0477cd3382295c39665
+SHA1: cf9ae3d904e1345c193883474006ddd51e0087c0
+SHA256: 7ee50aa2d63a3a15d007711376bc5c6cbefebba27bad38d5c83e32236f1df77f
 Section: unknown
 Priority: extra
 Homepage: http/www.github.org/jehon/packages/
