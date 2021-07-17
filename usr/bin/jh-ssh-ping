@@ -31,7 +31,10 @@ time status=$(
 )
 header_done
 
-if [[ $status != pong && $status != denied && $status != sftp ]]; then
+if [[ "$status" != "pong" ]] &&
+  [[ "$status" != "denied" ]] &&
+  [[ "$status" != "sftp" ]] &&
+  [[ "$status" != "permission denied*" ]]; then
   echo "SSH ping: failed with status: $status"
   exit 2
 fi
