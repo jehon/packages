@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+#
+# Burn an "raspberry pi Desktop image"
+# Add the "ssh" file at the root to allow ssh at first boot
+#
+
 clear
 
 set -o errexit
@@ -11,9 +16,6 @@ set -o errexit
 . jh-secrets
 
 SSH_HOST="${JH_HOSTS_KIOSK['IP']}"
-SSH_USER="${JH_HOSTS_KIOSK['USER']}"
-SSH_PASS="${JH_HOSTS_KIOSK['PASS']}"
-
 SSH_USER="pi"
 SSH_PASS="raspberry"
 
@@ -29,7 +31,7 @@ header_start "Preparing setup"
 header_start "Push files"
 scp "$JH_SECRETS_FOLDER"/crypted/kiosk/synology.credentials "root@$SSH_HOST":/etc/jehon/restricted/
 scp "$JH_SECRETS_FOLDER"/crypted/kiosk/kiosk.fstab "root@$SSH_HOST":/etc/jehon/
-scp "usr/share/jehon/rasperry/lightdm-autostart.conf" /etc/jehon
+scp "usr/share/jehon/rasperry/lightdm-autostart.conf" "root@$SSH_HOST":/etc/jehon
 header_done
 
 header_start "Run scripts on setup"
@@ -49,7 +51,7 @@ ssh "root@$SSH_HOST" -T <<EOS
 	ln -s /etc/ssh/authorized_keys/jehon /etc/ssh/authorized_keys/kiosk
 
 	echo "* Patching sshd the old way"
-	jh-patch /usr/share/jehon/etc/ssh/sshd_config.d/jehon.conf
+	jh-patch-file /usr/share/jehon/etc/ssh/sshd_config.d/jehon.conf
 
 # echo "* Disabling pi user"
 # passwd -l pi
@@ -71,7 +73,8 @@ header_start "Install as root"
 # rm -f /etc/systemd/system/default.target
 # ln -s /lib/systemd/system/graphical.target /etc/systemd/system/default.target
 ssh "root@$SSH_HOST" -T <<EOS
-	kiosk/bin/kiosk-install-sudo.sh
+	chmod +x /home/kiosk/kiosk/bin/kiosk-install-sudo.sh
+	/home/kiosk/kiosk/bin/kiosk-install-sudo.sh
 EOS
 header_done
 
@@ -84,5 +87,5 @@ EOS
 header_done
 
 header_start "Starting the kiosk"
-ssh "kiosk@$SSH_HOST" "kiosk/kiosk-start.sh"
+ssh "root@$SSH_HOST" "reboot"
 header_done
