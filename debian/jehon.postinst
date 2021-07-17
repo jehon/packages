@@ -53,6 +53,11 @@ configure)
 
 	mkdir -p /etc/jehon/restricted/
 	chmod 500 /etc/jehon/restricted
+
+	if sshd -version 2>&1 | grep "OpenSSH_7.9"; then
+		echo "*** OLD SSHD VERSION ***"
+		jh-patch-file /usr/share/jehon/etc/ssh/sshd_config.d/jehon.conf
+	fi
 	;;
 
 triggered)
