@@ -34,7 +34,7 @@ if [ -z "$SSH_PASS" ]; then
 fi
 
 header_start "Forget previous ssh key..."
-jh-ssh-forget "$SSH_HOST"
+jh-ssh-update-key "$SSH_HOST"
 jh-ssh-ping "$SSH_HOST"
 header_done
 

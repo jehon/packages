@@ -74,7 +74,7 @@ while ! nc -vz 127.0.0.1 $WEB; do
     sleep 1s
 done
 
-jh-ssh-forget "localhost[$WEB]"
+jh-ssh-update-key "localhost[$WEB]"
 
 sleep 2s
 jh-jenkins-job system "wait_ready"

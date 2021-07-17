@@ -19,10 +19,6 @@ SSH_HOST="${JH_HOSTS_KIOSK['IP']}"
 SSH_USER="pi"
 SSH_PASS="raspberry"
 
-header_start "Remove previous key"
-jh-ssh-forget "$SSH_HOST"
-header_done
-
 header_start "Setup remote start..."
 ./setup-remote.sh "$SSH_HOST" "$SSH_USER" "$SSH_PASS" "kiosk"
 header_done

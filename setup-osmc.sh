@@ -19,7 +19,7 @@ OSMC_TMP="$JH_PKG_FOLDER/tmp/osmc"
 mkdir -p "$OSMC_TMP"
 
 header_start "Remove previous key"
-jh-ssh-forget "$SSH_HOST"
+jh-ssh-update-key "$SSH_HOST"
 jh-ssh-ping "$SSH_HOST"
 header_done
 
