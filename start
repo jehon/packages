@@ -40,7 +40,7 @@ apt-get install --yes "$LOCAL_DEB"
 . jh-lib
 
 apt-get --yes update
-apt-get --yes upgrade
+apt-get --yes dist-upgrade
 
 if [ -n "$HOSTNAME" ]; then
     header_start "Setting the hostname to $HOSTNAME"
