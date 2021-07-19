@@ -36,11 +36,17 @@ echo "*** Using deb: $LOCAL_DEB"
 apt-get --yes update
 apt-get --yes install "$LOCAL_DEB"
 
+#
+# Now we have our traditional setup
+#
+
 # shellcheck source=/dev/null
 . jh-lib
 
+header_start "Upgrading the system"
 apt-get --yes update
 apt-get --yes dist-upgrade
+header_done
 
 if [ -n "$HOSTNAME" ]; then
     header_start "Setting the hostname to $HOSTNAME"
@@ -57,27 +63,22 @@ if [ -n "$JH_DEFAULT_PWD" ]; then
 fi
 
 if ! jh-in-docker && ! jh-in-wsl; then
-    echo "*** Enabling firewall"
+    header_start "Enabling firewall"
     # Wait for xtable lock to be available
     iptables -L -n --wait >/dev/null
     ufw --force enable
+    header_done
 fi
 
 if [ -n "$(virt-what)" ]; then
-    echo "*** Disable gui on startup $(virt-what)"
+    header_start "Disable gui on startup $(virt-what)"
     echo " could be reenabled with systemctl set-default graphical"
     systemctl set-default multi-user.target
+    header_done
 fi
 
-#
-# Now we have our traditional setup
-#
-#
-
-# shellcheck source=/dev/null
-. jh-lib
-
 if sshd -version 2>&1 | grep "OpenSSH_7.9"; then
+    header_start "Upgrading openssh"
     echo ""
     echo "*****************************"
     echo "***                       ***"
@@ -90,9 +91,12 @@ if sshd -version 2>&1 | grep "OpenSSH_7.9"; then
     apt update
     apt install -y -t buster-backports openssh-server
     echo "***"
+    header_done
 fi
 
+header_start "backup root"
 /usr/sbin/jh-backup-boot
+header_done
 
 cat <<EOD
 
@@ -110,3 +114,5 @@ You may now install:
 You also need to logout/login to jump into docker group before testing repositories
 
 EOD
+
+ok "Script 'start' done"
