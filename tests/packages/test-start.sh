@@ -42,7 +42,19 @@ fi
 
 assert_file_exists "$ROOT/repo/jehon.deb"
 
-echo "Launching docker"
-docker run --rm -v "$(realpath "$ROOT"):/app:ro" -w "/app" ubuntu:latest "$0" "$CONSTANT_RUN_TEST"
+test_in_docker() {
+    echo "**************************************"
+    echo "***                                ***"
+    echo "*** Launching docker $1"
+    echo "***                                ***"
+    echo "**************************************"
 
-echo "Finished docker"
+    set -o pipefail
+    docker run --rm -v "$(realpath "$ROOT"):/app:ro" -w "/app" "$1" "$0" "$CONSTANT_RUN_TEST" | jh-tag-stdin "$1"
+    echo "ok $1 $?"
+}
+
+test_in_docker "debian:stable"
+test_in_docker "ubuntu:latest"
+
+echo "Finished docker's tests"
