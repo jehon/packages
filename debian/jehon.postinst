@@ -45,7 +45,7 @@ configure)
 	apply_special
 
 	if [ "$(virt-what)" = "hyperv" ]; then
-		/usr/sbin/jh-hyperv-setup
+		/usr/bin/jh-hyperv-setup
 	fi
 
 	/usr/sbin/jh-users-add-jehon
