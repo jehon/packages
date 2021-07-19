@@ -34,7 +34,7 @@ fi
 echo "*** Using deb: $LOCAL_DEB"
 
 apt-get --yes update
-apt-get install --yes "$LOCAL_DEB"
+apt-get --yes install "$LOCAL_DEB"
 
 # shellcheck source=/dev/null
 . jh-lib
