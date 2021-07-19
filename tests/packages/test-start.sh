@@ -35,6 +35,9 @@ if [ "$1" == "$CONSTANT_RUN_TEST" ]; then
     assert_file_exists "/etc/apt/sources.list.d/jehon-github.list"
     assert_file_exists "/etc/cron.daily/jh-backup-computer"
 
+    sshd_version="$(ssh -V 2>&1 | awk -F '[^0-9.]+' '{print $2}')"
+    ok_ko "Sshd version is above 8.1 (detected: $sshd_version)" bash -c "[[ \"$sshd_version\" > \"8.1\" ]]"
+
     ok_ko "ssh_config applied" bash -c "ssh -G synology-e | grep 'jehon.synology.me' >/dev/null"
 
     exit $?
@@ -51,10 +54,10 @@ test_in_docker() {
 
     set -o pipefail
     docker run --rm -v "$(realpath "$ROOT"):/app:ro" -w "/app" "$1" "$0" "$CONSTANT_RUN_TEST" | jh-tag-stdin "$1"
-    echo "ok $1 $?"
+    ok "docker test $1"
 }
 
 test_in_docker "debian:stable"
 test_in_docker "ubuntu:latest"
 
-echo "Finished docker's tests"
+ok "Finished docker's tests"
