@@ -9,6 +9,9 @@ if [[ "$(whoami)" != "root" ]]; then
     exit 255
 fi
 
+HOSTNAME="$1"
+JH_DEFAULT_PWD="$2"
+
 export DEBIAN_FRONTEND=noninteractive
 export JH_PKG_MINIMAL_NAME="jehon"
 
@@ -33,8 +36,25 @@ echo "*** Using deb: $LOCAL_DEB"
 apt-get --yes update
 apt-get install --yes "$LOCAL_DEB"
 
+# shellcheck source=/dev/null
+. jh-lib
+
 apt-get --yes update
 apt-get --yes upgrade
+
+if [ -n "$HOSTNAME" ]; then
+    header_start "Setting the hostname to $HOSTNAME"
+    # shellcheck disable=SC2029
+    hostnamectl set-hostname "$HOSTNAME"
+    header_done
+fi
+
+if [ -n "$JH_DEFAULT_PWD" ]; then
+    header_start "Setup password for user jehon"
+    echo "jehon:$JH_DEFAULT_PWD" | passwd jehon
+    printf "%s\n%s\n" "$JH_DEFAULT_PWD" "$JH_DEFAULT_PWD" | smbpasswd -s -a jehon
+    header_done
+fi
 
 if ! jh-in-docker && ! jh-in-wsl; then
     echo "*** Enabling firewall"

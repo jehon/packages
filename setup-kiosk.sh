@@ -20,7 +20,7 @@ SSH_USER="pi"
 SSH_PASS="raspberry"
 
 header_start "Setup remote start..."
-./setup-remote.sh "$SSH_HOST" "$SSH_USER" "$SSH_PASS" "kiosk"
+sshpass -p "$SSH_PASS" ./setup-remote.sh "$SSH_HOST" "$SSH_USER" "kiosk"
 header_done
 
 header_start "Preparing setup"

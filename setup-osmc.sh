@@ -24,7 +24,7 @@ jh-ssh-ping "$SSH_HOST"
 header_done
 
 header_start "Setup remote start..."
-./setup-remote.sh $SSH_HOST "$SSH_USER" "$SSH_PASS" "osmc"
+sshpass -p "$SSH_PASS" ./setup-remote.sh "$SSH_HOST" "$SSH_USER" "osmc"
 header_done
 
 header_start "Building config..."
