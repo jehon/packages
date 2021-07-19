@@ -14,30 +14,76 @@
 # Default priority: 500
 # Default priority for target release: 990
 #
+
+############################################################################
+#
+# P > 990:
+#     Install even if there is another package in current release
+#     (if using configured release => this should be external repositories level)
+#
+#   => configured release not used => this level is not used
+#
+
+############################################################################
+#
+# 990 = P: the configured release used
+#     see /etc/apt/apt.conf.d/?
+#         APT::Default-Release "stable";
+#
+#   => configured release not used => this level is not used
+#
+
+############################################################################
+#
 # 500 <= P < 990: causes a version to be installed unless there is a
-# version available belonging to the target release or the installed
+# version available belonging to the target release (990) or the installed
 # version is more recent
+#
+#   => not used
+#
+
+############################################################################
+#
+# 500 = P: all default repositories
+#   => stable + external: at same priorities
+#
+
+#Package: *
+#Pin: release a=stable
+#Pin-Priority: 500
+
+############################################################################
 #
 # 100 <= P < 500: causes a version to be installed unless there is a
 # version available belonging to some other distribution or the installed
 # version is more recent
 #
-# 0 < P < 100: causes a version to be installed only if there is no
-# installed version of the package
+#   => testing: as soon as installed from testing, it keep on on this track
 #
-
-#Package: *
-#Pin: release a=stable
-#Pin-Priority: 900
 
 Package: *
 Pin: release a=testing
-Pin-Priority: 400
+Pin-Priority: 150
 
+############################################################################
+#
+# 0 = 100: automatically set for backport via ButAutomaticUpgrades: yes
+#
+#   => backport
+#
+
+############################################################################
+#
+# 0 < P < 100: causes a version to be installed only if there is no
+# installed version of the package
+#
+#   => unstable: one shot install, no update
+#      + as soon as available in testing, will follow testing flow (and update)
+#
 
 Package: *
 Pin: release a=unstable
-Pin-Priority: 350
+Pin-Priority: 50
 
 Package: *
 Pin: release a=experimental
