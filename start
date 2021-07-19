@@ -77,6 +77,21 @@ fi
 # shellcheck source=/dev/null
 . jh-lib
 
+if sshd -version 2>&1 | grep "OpenSSH_7.9"; then
+    echo ""
+    echo "*****************************"
+    echo "***                       ***"
+    echo "*** OLD SSHD VERSION 7.9  ***"
+    echo "*** Configuring backports ***"
+    echo "***                       ***"
+    echo "*****************************"
+    echo ""
+    echo "deb http://deb.debian.org/debian buster-backports main" >/etc/apt/sources.list.d/backport.list
+    apt update
+    apt install -y -t buster-backports openssh-server
+    echo "***"
+fi
+
 /usr/sbin/jh-backup-boot
 
 cat <<EOD
